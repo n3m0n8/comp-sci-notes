@@ -1,0 +1,527 @@
+/////////////Basics   \\\\\\\\\\\\\\\\\\\\\\\\\\\
+conventions:
+NameSpaces- written as UpperCamelCased i.e. always Caps starting:
+Assemblies - if the assembly has only one NameSpace, then it takes the samename. Otherwise also UpperCamCased
+
+Classes -as UsualCapped - same with ExceptionClasses
+ etc..
+
+statemetns blocks are as usual . 
+comments are as usual except for XML documentation which can be generated from C# using the following notation: 
+/** //open xml documentatio
+*<summary>this is the xml way</summary>
+*<remarks> 
+* a star for each line
+* </remarks>
+*/ //close out with only one * 
+
+case-sensitive as usual
+
++++++++Fields or class-level vars (global vars)
+
+instance var is associated with an instance of a class or structure
+
+static var is declared with the STATIC keyword
+
+constants declared with const are another type of field assocaited with their class but with the extra condition that their value is immutable.
+
+fields, like classes have five possible access mods: public, protected, internal, protected internal, private
+
++++++++local vars
+local vars, like fields, can be a const. 
+const local vars are stored in assembly data mem space.
+non-const standard local vars are stored on the stack. 
+they live and die with the function's runtime exec and only within its scope.
+
++++++++ paras ## COME BACK TO DISENTANGLE
+this refere to those local vars associated with a method within a function block.
+
+an 'in' para can have its value passed to it in two ways depending on its type:
+value-based types - ints, doubles, strings are passed-by-value meaning that the in para's value is passed to it via the relevant method in the function construct's header
+
+reference types - i.e. objects are passed by reference. What this means is that the incoming objectVar whose value is implemented into the function construct header's relevant method will CHANGE the value of the parameter variable because it is passing a reference to the underlying object in memory.
+
+an 'out' para 
+
+
++++++++ types
+value types
+-small, frequently used, low mem, stay on stack
+- should remain small for optimal use (under 16bytes)
+
+-value types are always copied before being passed to a method, thus the underlying original is not affected by method
+-value types always initialise to 0 or null if undefined.
+-value types can't be given a NULL value explcitly
+-consistent size on memory, regardless of platform.
+
+reference types
+- these are the key-value(stack-heap) objects in memory.
+-usually bigger in size and need management/garbage collection
+-but the positive of having pointers refereing to these objects makes them more singular and 'tangible' than the value types which make a copy of themselves every time they are operated on.
+- can be either an OBJECT, or a STRING.
+
+integral types
+this refers to those types that are inter-changeable with other .Net family langs. 
+-objects created in assembly space written in another .Net lang like Visual Basic can be bound to a C# var.
+
+NOTE, value types can be sometimes converted to reference types (boxing) and vice-versa (unboxing) BUT this won't always be correctly done and NOTE THAT THE COMPILER WILL NOT THROW AN EXCEPTION FOR SUCH CASTING ERRORS - thus it should be avoided.
+
+Builtins (primitives):
+
+the usuals(with some additions) with usual fixed mem-space
+sbyte 
+byte
+short
+ushort (unsigned i.e. 0 + positive nums only )
+char
+int
+uint(unsigned)
+long
+ulong(unsigned)
+float
+double
+decimal (for monetary math)
+bool
+
+the reference types:
+object
+string
+
+custom types
+
+arrays - declared with type followed by array symbol [] then the name of the array object. 
+
+string[] stringArray1
+
+We can also pass a number within array symbol to say how many initial array elements we want it to contain. A 5 string array will be (remember 0base indexPos counting): 
+
+string[] stringArray1 = new string[5]
+
++++++++ operands
+
+arithmetic
+usuals + - * / % a++ a-- ++a --a
+
+boolean/logical
+
+& bitwise and which conjoins integral elements
+&& returns fales or true 
+| bitwise which disjoins
+|| OR
+a^b  XOR exclusive or
+!a NOT
+
+bitwise
+A << b left shift
+a >> b right shift
+
+relational binary
+==  !=  < > <= >=
+
+assignment/binding
+= 
+a = b = c
++= -= *= /= %= &= |= ^= <<= >>=
+
+informational
+
+IS i.e a is string/int/etc  returns TRUE if a is of that passed type
+AS i.e. a as string/int/double... 
+
+sizeof(x)  - returns byte size of given value (can only be value not reference type).
+
+other operators
+
+checking for overflow (like a mini exception throw for index/other types of data overflow):
+checked(a) - implements overflow checking on a
+unchecked(a) - doesn't implement overflow checking
+
+. concatanation is used for namespace separation
+a[indexPos]  
+new a 
+(a)string - casts a to a string type
+stringA + stringB concatanates strings
+a ? b : c     ternary
+a ?? b      if a is null, returns b , otherwise a 
+
++++++++ initialisers
+enums
+enums (enumerations) nominate a set of items by assigning each of them an identifier while also creating an underlying indexPos which, unlike an array or other sets, doesn;t have to be an int (although it defaults to that) and can be any integral type except a char (and thus can't be a string either). 
+they are declared with ENUM keyword. They are useful for setting out a fixed list of items in a collection that also have an underlying indexPos key that can be an int or other integral:
+
+enum Weekday{Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday}
+NOTE that these elements are each treated as consts and can be referred to using concatenation:
+Console.WriteLine('Today is' + Weekday.Thursday.ToString()); // we need ToString because the date const is still just an element and not a string to be concatt'd
+NOTE the default underlying indexPos is base0 so Weekday.3.ToString() would also work
+
+struct
+
+Structurs (structs) are defined by STRUCT keyword.
+these are light weight which are similar to classes but with core differences:
+1. structs are based on VALUE TYPES, classes are OBJECT TYPE
+2. no inheritance with structs
+3. structs must ALWAYS have a constructor meth, whereas with a class we can hide it away with a private access mod marking.
+
+Example:
+
+struct Person{
+	public string name;
+	public System.DateTime birthDate;
+	public int height;
+	public int weight;
+}
+
+person John = new person() //constructor deployed
+John.name = 'John Marks';
+John.birthDate = new DateTime(1929, 6, 18);
+etc..
+
+we can also create a permanent constructor within the struct, allowing us to deploy new instances of the structure:
+
+using System;
+struct Person{
+	string name;
+	System.DateTime birthDate;
+	int height;
+	int weight;
+
+	public Person(string name, DateTime birthDate int heightCM, int weightKG){
+		this.name = name;
+		this.birthDate = birthDate;
+		this.height = height;
+		this.weight. weight;
+	}
+}
+public class structImplement{
+	public static void Main(){
+		Person whoever = new person('whatever name', new DateTime(1972, 12, 23), 170, 58)
+	}
+}
+
+Mostly structs are superseded by classes but they are useful for low memory use.
+
+array 
+
+usual array concept. Initialised as noted before.
+NOTE There is an important quirk with C# arrays- ONCE SET THEIR SIZE IS FINAL, IT CANNOT BE CHANGED AFTERWARD
+BASICALLY ARRAYS SUCK IN C# BOTH IN DECLARATION AND USE
+
+
++++++++ loops
+
+con loops as usual 
+
+if - else..
+as usual 
+if a{
+	then b
+	then c
+	
+}
+
+example:
+
+using System;
+
+public class ifExample{
+
+	public void IfClass{
+		if (condition1 == condition2){
+			para1DoThis;
+			para2;
+			Console.WriteLine('Condition Achieved');
+		}
+		else if(otherCondition1 <= otherCond2){
+			do this alternative;
+		} 
+		else if(yetAnothCond3 != yetAnothCond4){
+			do this alternative;
+		} 
+		else{
+			do this final alternative;
+		}
+	}
+}
+
+switch
+
+usual structure: switch case case case 
+
+NOTE empty case will FALL THROUGH - I.E PARSER passes over them like a SKIP btn
+
+BREAK IS USED TO END SWITCH
+case doesn't have to be an int (i.e case 1, case 2, case 3 etc)- it can be a string also:
+
+switch {
+	case 'one':
+		Console.WriteLine('You chose the first 
+											path');
+	case 'two':
+		Console.WriteLine('You chose the second 
+											path');
+	case 'three':
+		Console.WriteLine('You chose the third 
+											path');
+	break
+}
+
+do.... while
+
+NOTE only RUNS FOR ONE ITERATION
+usual structure but can come with PARAS FIRST BEFORE  CONDITIONALS ARGS:
+
+	do{
+		paras1... Console.WritLine etc..;
+	}
+	while(a <= b);
+
+for 
+
+for (conditionals){
+	do this stuff ... ;
+}
+
+foreach
+
+like for as usual but with the additional aspect that it ITERATES OVER EVERY ENCOUNTER OF THE GIVEN ELEMENT- WHETHER INT, STRING OR WHATEVER. USEFUL FOR ITERATING THROUGH THE ELEMENTS OF A COLLECTION AS USUAL:
+
+using System;
+
+class Looper{
+	private Int[] myIntArr = new Int[10];
+		
+	public void Iterator(){
+		myIntArr[0] = 1;
+		for each (i in myIntArr) {
+			i = i++
+			if(i == myIntArr.(length-1)){
+				break;
+			}
+		}
+	}
+}
+
+while
+as usual, it's a SO LONG AS A, THEN B
+
+while (DateTime.Now == DateTime.Now){
+	Console.WriteLine(DateTime.Now);
+}
+
+break
+usual role, stopgap on loop
+
+continue
+refresh the loop WHERE IT WAS, NOT A RESTART BUT A CONTINUATION
+
+return
+returns output of relevant function block AND TERMINATES THAT BLOCK'S ACTIONS, ANY FURTHER ACTION IS JUST WHATEVER COMES NEXT IN SOURCE CODE
+
+yield
+
+Is a variation of RETURN that isn't present in JAVA, PYTHON or C++. In C# it's role is to act as a LOOPING RETURN for ITERATORS. It is used, usually, in conjunction with classes/methods deploying/inheriting from the IEnumerable builtin Interface Class usually in order to create iterators:
+
+using System;
+using System.Collections;
+
+class MyIteratorClass{
+	public IEnumerable TheCounter(int end, int 
+																hop){
+//note this is the implementation of the 
+//IEnumerable interface (no need to write USING 
+//or Implementing in C#, just list the interface 
+//class name then followed by custom class name)
+		int i; 
+			for (i=0; i < end, i+=hop){
+				yield return i;
+			}				
+	}
+//NOTE the YIELD now will RETURN EVERY LOOPED 
+//INSTANCE OF THE	HOPS WITHOUT EXITING THE FUNCT
+//BLOCK LIKE A STANDRD RETURN.s
+	static void Main(){
+		foreach (int n in TheCounter(18, 3)){
+			Console.WriteLine('{n}/n');
+		}
+	}			
+}
+>>
+3
+9
+12
+15
+18
+STOP
++++++++ Exception handling
+
+throw 
+plays usual role of setting out the relevant exceptions
+
+namespace ExceptionExample{
+ 	public class Inputs{
+		private string myString = 'whatever';
+		
+		public doStuff(myString)
+			whatevers...;
+			throw new IndexRangeException('whatever 
+																message out we 
+																want for caught 
+																exception');
+	}
+
+DEPLOY THE TRY AND CATCH BLOCKS AT RUNTIME EXECUTION:
+	public static void Main(){
+		try{
+			function1(myString){
+				try this stuff;
+			}
+		}
+		catch(IndexRangeException IndxExcpt){
+			catch1 
+				Console.WriteLine(IndxExcpt.Message);
+		}
+		catch(TypeErrorException typExcpt){
+			catch2
+		}
+		catch(Exception gnricExcpt){
+			catchAll 
+				Console.WriteLine(gnricExcept.Message);
+		}
+		finally{
+			DO THIS STUFF NO MATTER WHAT REGARDLESS OF 
+			CAUGHT EXCEPTS
+		}
+	}
+}
+try/finally
+
+with try...finally we have a slight twist to the usual discharging of the stack because the CATCH isn't explicitly included. this means that the catchign is left to default processes (we don't explicitly define our catch block) and runtime thus executes, any erros caught by default are thrown up the call stack and will appear in the stacktrace IMPLICITLY
+
+good/ bad practices 
+
+broadly, there are some core practices to avoid:
+1. NEVER LEAVE A CATCH BLOCK UNDEFINED. IF YOU DON'T WANT CUSTOM CATCH DEFINIION, THEN LEAVE IT UndEcLARED AND HAVE THE DEFAULTS DEAL WITH IT.
+2.DON'T THROW AN EXCEPTION INSIDE A CATCH BLOCK - YOU WILL MISLEAD THE CLR. THROW IT IN THE FUNCTION BLOCK DEFINING ACTIVITIES AT THE COMPILATION LEVEL. LEAVE THE TRY-CATCH FOR RUNTIME.
+3. A GOOD PRACTICE IS TO BE GRANULAR ABOUT EXCEPTION INFORMATION- AND LEAVE THE GENERIC ALL EXCEPTIONS CATCHER (EXECPTION SUPERCLASS INSTANCE) TO THE END BECAUSE OF THE PARSING PRIORITY RULE
+
+//////////////////CLASSES\\\\\\\\\\\\\\\\\\\\\
++++++++ namspaces
+
+works like python modules/directory organisation... whole of .Net works on namespacing- useful in networked contexts where many existing functionalities already created and shared. 
+template:
+
+namespace nameOfNamespace {
+	public class classOne{
+	
+	}
+
+	namespace nestedNamespace{
+	
+		public class classtwo{
+	
+		}	
+	}
+}
+
+usual concepts apply: access mods, ope and para overloading, polymorphism etc.
+
+As with JAVA ,etc there is the option of deploying DESTRUCTOR METH() just as is used in C++ and C, but mostly this is pointless due to AUTO GARBAGE COLLECTION OF DE-REFERENCED MEMORY OBJECTS.
+
+
+getters, setters as usual : get(){...} ... set(){...}
+
+structs also supported... declared with STRUCT keyword ... as usual, unlike classes STRUCT has no inheritance- based on the FUNCTIONAL PROGRAMMING PARADIGM, NOT OOP
+
+
+static classes will have all of their vars and meths as static. Useful in polymorphic contexts, or as abstract classes for inheritance by superclasses.
+
+USUAL OOP PRINCITIPLES, ACCESS MODS etc.
+
+///////////////////ADVANCED\\\\\\\\\\\\\\\\\\\\\
++++++++ virtual/overloaded/polymorphic meths
+
+As with usual inheritance concepts we can  polymorphically overload the methods of a super- and sub-class in order to achieve the same processes with alternating outcomes. 
+In the C# world, for some reason this is termed 'virtual' meths. But essentially works like any normal overloaded polymorphic meth
+
+obviously we'll need the NEW and the OVERRIDE keyword to deploy a constructor and to signal that this is a polymorphically over-ridden meth (inherited from a broader constructor).
+
++++++++DELEGATES
+
+the delegate method is an 'umbrella' method that 'covers' a range of meths that are defined in the same sourcecode. 
+We declare the delegate 'umbrella' method and to attach to it any meths we can simply += add-equals those standard meths to the delegate umbrella. when it comes to runtime, we can access each of those std meths with the name of the relevant 'standard' methods to be applied being placed in the delegate meth's args. We can access these standard methods in several ways as can be seen below:
+
+using System; 
+
+delegate void MyDely();
+
+class DelyExample  {
+
+	public static void stdMeth1() {
+		//do stuff;
+	}
+
+	public static void stdMeth2() {
+		//do stuff;
+	}
+		public static void stdMeth3() {
+		//do stuff;
+	}	
+
+// now we can access them in many ways from within the class of the same source code:
+
+	public static void main () {
+	
+	MyDely deliedMeth = null;
+
+//NOTE that we addition-add the standard meths to the umbrella delegate:
+//here we access via class.methd concatanation
+	deliedMeth  += new MyDely(DelyExample.stdMeth1) 
+// but we don't have to. Now we add standard method2 but just use the direct reference (we are in the same class anyway and delegate meth is a global accss mod)	
+	deliedMeth  += new MyDely(stdMeth2) 
+	}
+}
+
+now at runtime, if we execute deliedMeth() we will get BOTH stdMeth1 and 2 executed with whatever they were doing.
+
+
++++++++LAMBDAS
+
+another mechanism for delegate style umbrella mething ops but with much simpler denotation:
+
+(typeDeclr arg1, typeDeclr arg2,...) => expression 
+
+COME BACK AFTER PY
+
++++++ EVENTS 
+ Just lkike javascript, this refers to certain INBUILT event object classes tied to some kind of 'hard coded' event trigger (like input-output events like clicking on a mouse).
+ These are hard coded into C# and instantiating such an event object can allow us to respond to such inbuilt actions. 
+ 
++++++++PARTIAL CLASSES
+Simple refers to directory/namespace split classes. For instance we don't have to have CLASS 1 only defined in ONE PIECED OF SOURCE CODE (i.e. ap y style module). We can instead have the samename class defined in multiple files, with different pieces of defintion. this won't affect any inheriting/linked source code that runtim execs that split class.
+
++++++++ GENERICS - Classes, interfaces, meths
+
+
+///////////////////DOTNET\\\\\\\\\\\\\\\\\\\\\\
++++++++
+
+
++++++++
+
+
++++++++
+
+
++++++++
+
+
++++++++
+
+
++++++++
+
++++++++
+
++++++++
+
+

@@ -1,0 +1,3387 @@
+//////////////////////// OReilly py 	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
+Learning Python by Mark Lutz OReilly, 2009.
+///////////////DOCUMENTATION\\\\\\\\\\\\\\\\\
+
+
+
++++++++++++++++++++REMEMBER+++++++++
+Type					ChildrenName	MemoryStatus	marker
+string     -> FRAGMENTS  - IMMUTABLE			""or''
+set 			 -> ITEMS	  	 - MUTABLE        {}   			
+array 	   -> ELEMENTS   - MUTABLE				[]
+list       -> MEMBER     - MUTABLE				[]
+dictionary -> ENTRIES    - MUTABLE				{}
+tuple 		 -> PARTS      - IMMUTABLE      ()
+number		 -> ENUMS			 - IMMUTABLE
+frozenset	 -> ITEMS      - IMMUTABLE			{}
+
++++++++++++++++++++++++++++++++++++++++++++++++	
+
+data types:
+ string, number (including ints, floats, fractions), lists (arrays), dictionaries, tuples, files, sets, booleans, none (null),  
+
+NOTE however that the numbers have different sub-types as might be expected:
+floats, ints, fractions, and python also accomodated complex numbers for instance those that have imaginary elements or, for instance, sets of numbers.
+
+We can also import modules that allow us to add further functionality to the math ops.... using the standard import statement.
+
+Sequence types include strings, lists (which are arrays), and tuples:
+they are sequences because they represented a sequenced array of numbers or chars (in the case of strings). Certain in-built functionalities allow for examining and manipulating these sequences. 
+For instance, the len method allows for examining the length of a sequence:
+
+len(stringName)
+we can also specify which char or num we would like to isolate in our sequence using the [array brackets] base 0 count of course
+a useful notation is the -1 -2 or +1 +2 +3 notation used within the array brackets... This allows for finding the initial, second or third or, conversely, the ultimate or penultimate number or char in the sequence.
+
+Slicing is the process of cutting elements out of a sequence either from the initial point or from the end point.
+We use the array brackets but, in this instance we demarcate the start/endpoint number of chars or numbers to be removed using the colon as separator: [numberOfSequenceElementsToBeRemovedFromStartpoint:NumberUntilNewEndpoint]
+ie:
+
+string n = "This is our string" 
+  n[4:8]
+print(n)
+
+consolesout:
+ is 
+
+since they are considered an array of separate elements, sequences can be concatanated using the + operator or repetiton using multiplier *
+
+
+Some object types are immutable, this includes strings, numbers, tuples. Once invoked in memory, they remain there... the memory reference to them may change if we assign a new value under their name but their remain in place until automatic garbage collection.
+Other objects are mutable, lists(arrays) and dictionaries.
+
+NOTE also that python has a few built-in methods/functions that relate to specific object types only. An excellent example of this is the string type which has a series of type-specific methods that can act on strings such as FIND, ISALPHA, ISDIGIT, SPLIT, REPLACE, UPPER, LOWER, RSTRIP(remove whitespaces).  We simply invoke these inbuilt functions by invoking the string object's name and thereafter concatanating the function:
+
+stringObject1.find("WHATEVER")
+stringObject1.isDigit("WHATEVER")					#returns false
+stringObject1.split(".") 		#specify a delimiter to split string, for 
+								#example the . in the strings in this case 
+
+There is an inbuilt manual within any python function that works by simply invoking the dir() function. We use dir(objectName)	
+it will list a range of properties of that object.
+
+
+//////////////Basic Statements\\\\\\\\\\\\\\\\\
+
+++++Assignment
+
+assignments come in a range of flavours
+
+assignments create object references 
+-i.e. references to memory spaces via pointers
+-they don't copy the underlying memory space holding the originally created objects, but rather they make new references to an object that has mem space allocated (in transition)
+
+some ops can undertake implicit assignment
+
+forms:
+variable1 = 'whatver'  - basic form
+hi, bye  = 'no', 'way'  - tuple assignment
+[spam, ham] = ['yes', 'please'] -list assignment
+
+basic form is most common: right to left assign.
+the list and tuple assignment do the same but unpack multiple collection members into the multiple variables/placeholders on the leftside
+
+++++sequence assignment
+
+sequence assignments are when the right side collection members are aligned in order so that they are parsed and assigned one at a time by python engine according to their respective placeholders on the leftside.
+-note that types can be mixed here, they don't have to be same types but the respective placeholders do have to be the RIGHT type to hold the respective right-side value
+
+a,b,c,d = 'spam'  - sequence assignment, general
+
+var1 = 1 #simple assign
+var2 = 2
+A,B = var1, var2 #tuple sequence assign
+A,B
+>> 1,2
+[C,D] = var1, var2 #list sequence assign
+>>1,2
+var3 = var1
+var4 = var2		#remember pointers in mem manage
+E,F = var3, var4 #so python transfers value
+>> 1,2 	#to new placeholders var3,4
+# we can mix tuples and list assignment:
+
+[a,b,c] = (1,2,3)
+c
+>>3
+(1,2,3) = 'abc'  #string will also get parsed
+2
+>> b
+
+NOTE although we can undertake this rapid assignment, it must be noted that NORMALLY the number of right hand values and left hand palceholders MUST MATCH
+the only exception to this is with python 3+ unpacked sequences (examined later).  
+
+++++ var naming rules and conventions
+The usual name rules apply with PY having its own set of reserved keywords
+
+placeholder right hand side variable names must conform to the rules  like:
+-case status matters
+-must not be a reserved keyword
+-must start with underscore and letter + whatever other letters digits or underscores but NOT special symbols etc
+-NOTE that, when we import a module into our sourcecode, then the imported filenames/package names need to be styled as files otherwise they will be hardcoded as left hand placeholder vars
+
+Usual naming conventions apply:
+- names beginnign with a single underscoe signify that they have not been imported via the form moduleName import* ....process
+- names with double underscores before/after are special system-defined names with a special meaning for py engine: __special__
+- names beginning with two underscores __name are localised or 'mangled' to enclosing classes(pseudoprivate attributes?)
+- name with a single underscore _name will retain the result of the preceding expression when working interactively
+-self acts as "this" in JS and PHP. it's not actually a reserved keyword but convention keeps it apart
+
+NOTE that NAMES DO NOT HAVE ANY TYPES, as opposed to OBJECTS THAT ALWAYS HAVE  TYPE
+
+NAMES are just the symbols of the LEFTHAND SIDE PLACEHOLDER VARS
+wherease THE RIGHT HAND SIDE VALUES, POINTER-LOCATED, MEMORY REFERENCES TO OBJECTS
+
+names can thus be constantly assigned to CHANGING values (garbage collector will deal with deprecated mem references of those orphan objects left behind)
+
+++++++Augmented assignment:
+
+x += y	pre-increment x with y
+x -= y	pre-decrement x with y	
+x |= y  x or value y
+x &= y	x and value equal to y
+x *= y  pre-multiply x with y
+x /= y 	pre-divide x with y
+x %= y	pre-modulus op x with y
+x ^= y	pre-raise x with y
+x //= y	pre x root'd by y
+x **= y pre x squared by y
+x <<= y 
+x >>= y
+
++++++ BOOLEANS
+
+usual boolean logic and truth conditions
+Python deploys special keywords: AND, OR and NOT
+
+condition X AND Y = holds true if both are true
+condition X OR Y = holds true if one is true
+condition NOT X = holds true if x if false
+
+python uses short-circuit evaluation meaning it evaluates operands left-to-right and returns first true value it finds.
+
+the bool() construct allows us to test the boolean 1/0 true/false value of a given var or value:
+
+bool(1) => True
+bool([]) => False
+
+numbers are TRUE if nonzero
+other objects are true if not empty
+'hello' = TRUE
+'' = FALSE
+1 = TRUE
+0.0 = FALSE
+{} = FALSE
+None = FALSe
+
+
+The None object is python's equivalent of NULL. it is an empty placeholder value
+Useful, for example, if we decide to populate a list with 100 pre-assigned to empty members  in order to later fill them with actual values later:
+list = [None]*100
+#list is now 100 members strong all with None value
+
+
+++++Expression statements
+
+basically any statemetns that also contain some sort of expression that will undertake some runtime action.
+procedural ones are those returning a VOID return, ie. achieve a lot without return
+the print() function is an expression statemnt that returns something to the console
+typical others are:
+
+classOrObjectfunction(arg1, arg2 etc) -function
+
+classOrObject.methodName(arg1, arg2) - method
+
+simply calling a var will return it to COnsole
+
+print('directly', varName, sep='separate')
+
+yield x**2 - generator function on ops
+
++++print ops
+
+print is also a generator function but it is hardcoded as an expression statement. 
+it interacts with file file.write(str) and outputstream (stdout) meths
+
+it's only since PY 3.0 that print has become a function, it was previously only an expression statement.
+full template is:
+
+print('directly', varName, sep='separate'[NOTE the default is to have a whitespace between string fragments but we can overrid it with a '' no space marker], end='string like \n or empty space', file='fileNameOrDirectory location[note that this defaults to sys.stdout console output][note also that the file can take the open(arg1FileNameOrLocation, arg2ModifierLikeWOrWB) method]')
+
+NOTE that there is a print redirection mechanism that forces print to output to a specifed internal system-scope output like sdtout or stderr. to do so we just pass file='sys.stderr/stdout' to the file optArg.
+
+++++ use of {} and ; 
+
+unlike Java, C etc, PY doesn't deploy {} or ; as demarcators of function/compound statement blocks. It relies on indentation and ends of line
+BUT, the ; does get used as a statement separator, to demarcate multiple separate statements in one line like:
+
+a = 2; b = 3; x = a + b ; print(x)
+
+the curlies and other brackets can be deployed also, but not as markers for function/compound blocks. Instead, they are used to drag out a singular right-hand side value through multiple lines deep :
+
+a = ['a
+				haiku
+					style	
+						string	
+		']
+b = {[1,2,3],
+		 [4,5,6],
+		 [7,8,9],
+		 [10,11,12]
+		}
+
+though this bracketed style can also be used with compound blocks:
+
+if [a == b and
+		b == a and
+		c !== a]:
+			print(b)
+
+
+
+////////////////////////Sequence OPS\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Lists are arrays and thus can be manipulated and dealt with as such using the usual array sequence ops. NOTE python doesn't care about declaring types and doesn't care about mixing types of values within an array:
+
+array1 = ['string', 'array', 'values', 1, 3, 2.5] #array declared 
+												  #and filled
+												  
+lists can be easily indexed:
+array1[]   #outputs the array values above
+
+we can slice our array either going positively or negatively:
+
+array1[:-1]  #slices out the 2.5 value
+array1[:0]	 #slices out first value, namely 'string'
+
+we can concatanate array values to the existing array
+array1 + ['more array values', 4, 8, 'like so']
+print(array1)
+
+
+'string', 'array', 'values', 1, 3, 2.5, 'more array values', 4, 8, 'like so'
+
+we can also append further items to our list:
+
+array1.append('value1', 29)
+
+we can pop out items based on our list count: 
+
+array1.popout(1)			# will popout of the list the first val
+
+we can sort the list in normal and reverse order with inbuilt methods:
+
+array1.sort()
+
+array1.reverse() 
+
+Lists can be nested arbitrarily:
+
+nestedArray = [[1,2,3]
+    		   [4,5,6]
+			   [7,8,9]]		# array is nested
+
+when we refer to this nested array, the first array reference [] will refer to the meta array. The second array reference, second [] will refer to specific values within the nested sub-arrays.
+eg:
+print(nestedArray[2][1]) 		# second row array, second (1) val
+consoles out: 5
+
+
+Evidently arrays can find their values extracted and evaluated as a sequence, i.e horizontally, making isolating rows not complex. 
+However, dealing with vertical values is actually simplified in py
+this is thanks to LIST COMPREHENSION EXPRESSIONS.
+
+In the nested array example above the columns can indeed be evaluated and extracted vertically. This is done using the row keyword again, but when used in combination with existing row, it is considered as a column by python:
+
+column2OfNestedArray = [row[1] for row in m] 
+column2OfNestedArray = 2, 5, 8
+# notice that we first locate the column number (1- meaning col2)
+
+we can deal with these values individually. For example, we can undertake operations on the array values themselves as part of this array. For instance if we simply add one as an increment of the above column values, we will get a changed column:
+
+column2OfNestedArray = [row[1] + 1 for row in nestedArray]
+column2OfNestedArray = 3, 6, 9
+
+print(nestedArray)
+consoles out	1,2,3
+    		    4,5,6
+			    7,8,9
+
+We have the option to undertake more complex array operations to filter out either rows or columns. For instance an easy way to get rid of integers that are even numbers is via the DIVISIBLE BY TWO characteristic.
+
+[row[1]for row in nestedArray if row[1]%2 == 0] 
+# column here - fetch column 2 (1) in array ONLY IF divisible by 2
+[row[2] in nestedArray if row[2]%2 == 0]
+# row itself if divisible by 2 then fetch 
+
+
+diagonalNestedArray = [nestedArray[i][i] for i in[0, 1, 2]]
+				   [i]			  					
+				0  1  2
+			0	[1],2,3  
+    	[i]	1   4,[5],6
+			2   7,8,[9]
+
+
+python's flexibility also extends to the extrapolation of non-number arrays - such as strings, which can nevertheless by manipulated as though they were numbers, yet console out chars:
+
+stringArray1 = 'Hello'
+doubledStringArray1 = [c * 2 for c in stringArray1]
+
+consoles out HH EE LL OO 
+
+Python supports generators based on the nested arrays structure. This is done by outlining the relevant array values and then invoking an inbuilt function such as SUM:
+
+generatorVar = (sum(row) for row in nestedArray)
+next(generatorVar)
+consoles out: 6   
+next(generatorVar)
+consoles out: 15 
+
+another generator function built in is the MAP function: 
+list(map(sum,generatorVar))
+consoles out the row sums: 6,15,24
+
+In python,dictionaries are not treated as lists but rather as mappings. We instantiate a dictionary by using curly brackets. We will the mappings-to-values using colons as separators.
+
+dictionary1 = {'mappingName1': valueAsStringIntOrOthwerwise ...}
+we can deal with this dictionary and its values now. We can print out one of the mapping's values using: 
+dictionary1['mappingName1']
+	consoles out the value
+	
+we can also add to integer values:
+dictionary1['mappingName1'] += 1
+
+if the value is an int, then there will be an increment.
+We can instantiate an empty dictionary and fill it in on the go:
+
+emptyDictionary = {}
+
+emptyDictionary['mapping1'] = 1
+emptyDictionary['mapping2'] = 'string' 
+
+
+As we saw with the nestedArray previously, we can also nest dictionary lists as well as dictionary keys:
+
+doubleNested = {'key1': {'subkey1': value1, 'subkey2': value2},
+			   'key2': ['listValue1', 'listValue2' etc]
+			   'nonArrayedKey3': nonArrayValue1, nonArrayValue2}
+
+One issue with dictionary lists is that they are unordered lists when consoled out. This is different to a simple array. 
+Thus we have to try to impose order on the list.
+
+We can deploy the .sort inbuilt method to force sort the list:
+
+dictionaryList1 = {'value1', 'value2', 'value3'}
+print(dictionaryList1)
+consoles out randomly : 
+
+BUT
+dictionaryList1.sort()
+will put in alphabetical order.. 
+
+We can sort through the dictionary list array's values using for loops. To do this, we align our list entries to  simple array of ints.
+
+We then can manipulate the ints as if it were a mathematical operation. 
+
+sortedDictionaryListA = {'one': 1, 'two': 2, 'three': 3}
+
+for key in sorted(sortedDictionaryListA) 
+						#for EVERY key found in the sorted list
+										#sorted method(arg is list)
+print(key, '=>', sortedDictionaryListA[key])
+#prints list key name (sorted now), string, key array value 
+#consoles out
+one => 1
+two => 2
+three => 3
+
+using this alignment to ints will allow use to multiply keys fir repetition etc..
+
+We can use the IF conditional to loop a test on a missing key in a dictionary list. Simply we create a conditional if-based error printout on the list, with the key value as that being looked for:
+
+if 'keyValue' in listName
+print('found')
+
+if not 'keyValue' in listName
+print('not found')
+
+TUPLES
+-retarded arrays - fast processing. Declared using simple elliptical brackets instead of usual arrays [ ]
+
+tuple1HatesPython = ('does','not','care','about','type',)
+tuple3HatesPython = ('2','mixed','string','and','434',)
+
+tuple3HatesPython[0] #indexing
+ 
+consoles out : 2 
+
+tuple1HatesPython + ('one more')		# concatenation
+len(tuple1HatesPython)  #length
+ consoles out : 6
+
+An important distinction between tupple nad usual array is that former is immutable in memory once created... you can simply overwrite their space in mem. SO it's useful for cases of need for permanency and avoidance of deletion, for example, client lists, important details.
+
+Python is integratative with OS processes in many cases so it allows us to interact with OS-based file-manipulation processes. We can open, edit and close files using the 'w' processing mode string for writing data. Other basic inbuilt methods allow further manipulation:
+
+f = open('data.txt','w') #not 'w' write data 
+ 
+f = write('text inside') #writing within the file
+
+and so on... run dir('w') to see variations...
+
+////////////////////NUM TYPES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Usual num types: floats, ints, short/longs used to exist prior to 3.0 but now all unde rumbrella of ints/floats
+
+ints/floats can be given in decimal (base 10), binary (base 2), hex(base 16), or octodecimal (base 8). 
+
+python is especially  good at handling complex numbers, even imaginary num in maths. We signal the imaginary num by finishing the number with a j or J.
+
+we also have the option of the usual special operators such as POW (powered), sqrt (rooted), random (pseudorandom between 0 and 1) and all the usual operans *, + ++ -- etc
+
+also usual comparators > < etc >= 
+
+Py is much richer than other langs for this and has a range of math expressions even out of the box without importing any modules like numPy
+
+usual arithmetic order prevails...
+
+Same process as PHP for conversion of types (within reason), It is also loose. We call the inbuilt conversion by calling the type we want and then adding the existing value as it is as a parameter:
+type(existingValue).. int(3.164)>>3.2 | float(4)>> consoles out 4.0
+HOWEVER NOTE THAT, unlike PHP, python isn't loose enough to convert to and from strings to nums... only between num types.
+
+
+Division is available in three modes: classic(/)
+floor division (//)
+and true division ()
+there is also truncation - no need to deal with that now. 
+
+Python is also known for being able to deal with very precise numbers to many decimals...
+
+converter operands like HEX, OCTAL, and BIN can convert base 10 ints/floats into hex, octal or binary formats.
+
+Eval will evaluate the string by breaking it down into its hex or octal equivalent.
+
+We can undertake simple fractions using the Fraction reserved keyword followed by the parameters (the ints we want fractioned):
+c = Fraction(5,9)
+we can equally fraction floats:
+a = Fraction(4.2, 9.2)
+
+There are then multiple different fraction type options based on rational numbers etc..
+
+There are various rules regarding mixing fractions with other types of ints/floats... 
+also there are some consequences of mixing, primarily that there is a loss in precision of calculation. 
+
+Py also has the option for sets. Unlike arrays, sets are not simply lists of alphanumeric/string variables... sets are actually like containers and all of the values they hold are taken and considered together.
+
+x = set('abcd')
+
+because sets are actually items entirely contained within the set object, they have some clear differences between the arrays and sets. Unlike array sub-objects, set items are intrinsically considered together with the set object's other items. 
+
+However, sets' items can also be compared to other sets' items. There various operators designed for this purpose:
+
+a = set(a, h, n, p, t, d, e)
+b = set(b, d, n, x, w, l, y)
+'y' in b  >> true		#membership check
+a - b >>  h, p, t, e 	#comparison and removal of duplicates
+a | b >> #merges all items together 
+a & b >> #finds the common items
+	NOTE an alternative syntax is: c = a.intersection(b)
+a ^ b >> #xor/symmetric difference - finds differing items
+a > b, a < b   #checks for subset/superset.
+
+Further ops:
+a.add(g) #add an item into the set (i.e. like popping something on 			 the array stack) 
+a.remove(b) #pop out the stack
+c.update(set[a,b])  # merges in order the two sets
+
+
+Sets are different from lists because, unlike lists/arrays, they are not fundamentally ordered batches of sub-items. They are JUST containers. That means we can operate on all the sub-items concurrently but we cannot isolate one sub-item. So we can undertake overall operations such as LEN to count the length of the container sub-items, or multiplication for instance, to iterate the container sub-items' values in memory. 
+
+But we cannot isolate specific elements and thus cannot change order, index or slice them as if they were a list.
+
+Thus, when we operate on sets, we have to follow the same rules of operation. We can iterate with any type of variable regarding the set type var but if we have to index/slice/annex, we must be dealing with two sets, not mixing them. Again, that's because these are sub-items in a basket, not separately existing units in memory.
+
+A quirk of python 3 onward is that sets are now by default a list of empty dictionaries. This allows us to have the option to create a real set (with contained values) while not automatically triggering a set until the empty dictionary is filled.
+since it is considered an empty dictionary, the set is no longer consoled out with traditional brackets. Instead it is consol'd out with the curlies. This is because it is by default, when empty, considered to be an empty dictionary list. When filled up, then it takes up the form of a set:
+
+s = set(1, 2, 3, 4)
+s
+consoles out : {1,2,3,4}
+
+now we clear out that set and it again reverts to empty diction type:
+s - {1,2,3,4}
+type(s)
+consoledout : class 'dict'
+
+since 3.0 we can now undertake the usual checks and operands but instead of dealing with the sets directly called as above, we can simply note the set as an empty dict {} and concatenate the written operands for what we wish to achieve:
+
+{1,2,4}.union{3,5}  >> consoledout new set: {1,2,3,4,5} 
+
+or for example with intersection:
+{1,4,2,3}.intersection{2,3} >> consoles out 2 3
+
+Sets can have vars contained within them, or appended to them, but this cannot be done unless the var is HASHABLE, meaning it must be an IMMUTABLE var type. Thus only tuples are allowable to be appended into sets. Other sets, lists, dicts cannot be put into the set "bag":
+
+s = set(1,2,3)
+t = (4,5,6)
+s.add(t)	#tuple works
+s
+>> consoledout: 123456
+
+One use of this is when we have a requirement for fixed list of nums but also require them to change as a group. For example, with IP addressing, dates, record ID numbers- we can save them as tuples within a set and thereby ensure that they are not dealt with separately.
+
+clientDatabaseSet = set()		# create empty set
+id = (42973256, 239573207, 329752375) # create tuple list with IDs
+ip = (1169266, 189876444, 27284887)	# tuple with IP addressing
+
+#now we integrate tuple lists into set:
+
+clientDatabaseSet.add(id, ip)
+
+
+Sets are particularly useful for dealing with overlapping lists of data, since we can compare the set's members.
+
+
+++++++++++++++DYNAMIC TYPING INTERLUDE
+Python is loosely typed, dynamically bound. The binding process occurs only at RUNTIME EXECUTION, not during the compilation.
+The reason this can work is because python is entirely OOP oriented. Thus every binding process assigns a value to an object in memory rather than to a named reference. In other words, python works on the "backend" rather than the "frontend"- not the frontend names, but rather the backend memory spaces of the objects themselves. 
+
+Thanks to this, the type recognition is PREFIXED and INBUILT into the objects/memory side- and thus when we pass a reference to a memory space via the name reference, python recognises the type of the reference being created. Each object actually has a header field which is created upon being instantiated that informs the python compiler what type of object is being instantiated.
+
+we are able to create multiple references to the same object and this is allowed thanks to this earlier pointed division between naming and object instantiation. We simply create a reference o f a reference.
+
+Just as with JS, we have to be careful about shared references. Changing the value of either the original or subseuqent named references will ONLY change that one... the original and subsequent child references will stay with the original bound value in memory. 
+HOWEVER, in some cases, for example, in the case of an array or list where the full value is not changed but rather the contents of the array are modified, then that will indeed change the original and the subsequent child named references.
+we use the IS keyword to compare different named references to check if their content is the same in memory:
+a = 54 
+b = a
+a is b 
+TRUE
+ 
+like many other recent languages, garbage collection is automatic. 
+Whenever we reassign an object's value, then that object's space in mem is automatically reclaimed.
+Python's engine keeps track of the pointers linking to an object in memory via a stacked counter... when the number of pointers drops to zero, the garbage collector kicks in.
+
++++++shared references
+
+We can, however, create multiple chains of linked references that lead toward the "base" object. Shared references mean that the pointers count remains, even if we delete the base object or revalue it. In other words, once an object has been "tagged on" to a shared reference to a base object's value, changing the base or primordial object doesn't change the derivative object's attachement to that base/primordial object's value. Eg:
+
+a = 1
+b = a 
+a = 2
+
+print(a + b)
+
+>>consol'd>>> 3 // NOT 4 because b = 1 still.
+
+The reason for this is because py is DYNAMICALLY typed: variables are always fundamentally just pointers toward assigned objects either directly or indirectly; they are NOT areas of memory that are labelled/assigned to objects. In other words, so long as an area in memory has a pointer being assigned to it, Python only cares about working out where that pointer is originating from as a variable, not whether the object itself has changed. The object is a PLACEHOLDER for mutable variable values, it's role is to carve a space in memory that allows a variable to hold a value but only so long as a value is being (in)directly assigned to that variable. As mentioned, if no more variables are pointing/assigning a value to that object's memory space, the garbage collector kicks in and wipes that memory and object placeholder. Thus, (re)assignment of a variable's value cannot impact the placeholding object but rather is constricted to that variable's value. If variable's value changes, then its corresponding pointer counter to the originally placeholding object in memory drops, while a new space in memory carves out another placeholding object that is now linked via a pointer to the newly assigned variable with its new value.
+NOTE that this doesn't always apply since some objects are mutable:
+
+++++Shared References and in-place changes
+
+some objects and operations in Py allow for in-situ changes. An example would be an assignment to an offset in a list which changes the object's list order itself, rather than generating a new object with a newly ordered list.
+
+In such cases, shared references are more tricky because changing a an indirect reference from one variable could change the base/primordial variable's reference to the undelrying object memory space.  
+
+consider the example
+L1 = [2, 3, 4] //list
+L2 = L1  //shared reference
+
+// if we simple reassign L1 to a new object, then not problem, a new space in memory is carved out:
+
+L1 = 34
+
+print(L2)
+>>>>consoles out 2, 3, 4
+
+// but if we have L1 or L2 changed in terms of the actual contents WITHIN the "macro"Object list i.e. if one of the "micro"object list item is changed within the macro object list first pointed to/generated by L1, then the L2 macro object will ALSO change IN-SITU leading to a different value for its relevant changed micro object values:
+
+L1 = [4, 5, 4]
+
+print(L2)
+>>>>> consolesOut [4, 5, 4]
+
+This is the default py behaviour but we can use vairous ways, most notably SLICING, to avoid this undelrying memory change and instead to make a new copy of the originally generated list that can now be changed as a newly pointed to object in memory:
+To make simple sliced copy we use [:]
+eg:
+
+L1 = [1, 2, 3, ,4]
+L2 = L1[:]
+
+L1 = [4, 5, 6, 7]
+ 
+print(L2)
+>>>consol'd out  1, 2, 3, 4
+ 
+print(L1)
+>>>consol'd out  4, 5, 6, 7
+
+NOTE however, that slicing ONLY WORKS ON LISTS because they are sequences:
+
+for dictionary lists and sets we can instead use the x.copy() function which needs to be imported using import copy
+
+copy has two modes: standard/shallow and deep. shallow will naively copy the "top level" of the dictionary list/set... whereas deep will make a copy of all levels including the nested lists contained within the macro list:
+
+import copy 
+x = copy.copy(objectY)
+c = copy.deepcopy(objectY)
+
+
+NOTE that if we wanted to check the reference of one variable to one place in memory and thereby compare two variable's equivalence in memory space, we could use the IS keyword... i.e.:
+
+a = 1
+b = a
+c = b
+d = f
+a is b >>> returns TRUE
+a is c >>>> TRUE
+d is b >>>> FALSE
+
+technically python allows us to check how many pointers are refering to object memory space using the inbuilt imported system function 
+import sys
+sys.getrefcount(objectY)
+
+
+///////////////STRINGS\\\\\\\\\\\\\\\\\\\\
+
+In Python, strings are actually a type, they are just considered and stored as a sequence of chars. Thus they are immutable and do not change their left-right positional order IN SITU... only through overwrite or copying. This same restriction on IN SITU changes to order or membership also applies to tuples but not to lists and dictionaries.
+
+strings accept either "" or '' and if we nest them we can use one then the other. but using the same ones for next will require escape sequence: 
+string = "this is \"escaped\" string"
+
+escape sequences are special bytes reserved in memory for such purposes Here they are:
+
+\\ backslash
+\' or "
+\a bell/alarm
+\b backspace
+\f formfeed
+\n newline 
+\r carriage return
+\t horizontal tab
+\v vertical tab
+\x.. -hex value char with the .. being its val
+\ooo - octal char with ooo standing for the octal
+\0 NULL - binary null
+\u....  - 16 bit hex
+\u........  - 32 bit hex
+\N{unicodeIDNumber}
+
+NOTE if python doesn't recognise a backslash esc sequence  then it will produce subsequent char as as is.
+
+NOTE another issue here is that any char that is deployed in the string will be picked up if it is preceded by an escape sequence symbol (\). So, we have to be careful to "double" escape the escape sequence if we truly want the char to be deployed as is and not parsed as an esc seq directive to the python engine. For example, with a directory location that inclused a \n directoryOpen = open('c\home\newFolder\text.txt')  will have the \n interpeted as newline and the \t as horitzontal tab.
+
+This is achieved using r standing for raw being deployed just before the string quotes start:
+directoryOpen = open(r'c\home\newFolder\text.txt')
+
+OR we can simply double up the backslashes:
+'c\home\\newFolder\\text.txt'
+
+Python includes a triple quoting (' or ") scheme which enables block string output that respects the strings presentational scheme:
+
+blockString = 
+"""  This will now
+respect the newlines,
+without a need for special escapes"""
+
+This is particularly useful for long block paragraph or messages that would need to be written along multiple lines - for example any messages for errors or embedding long HTML/XML segments within a python source code.
+
+NOTE that since python doesn't deploy the C style comment markers like // /* */ then with python we are forced to use the single line # comment marker.
+But with the """ quotes, we can in fact create large spaces of comment in our python code. Because if we just deploy the """  without any relation to python actions, then the code will be neutral and simply act as either commentary or disabling segments of code that we want to temporarily disable.
+
+++++ basic operations
+
+The following are simple string ops:
+
+len($stringName) or len("string fully written")
+will return the length (number of chars).
+
+"strings" + "can" + 'easily" + "be concataned"
+
+"or repeated" * 4 
+print("or repeated" * 4)
+
+a basic search of a string that checks if a passed substring element is present in longString can be achieved by using the for... in construct:
+
+longString = 'Hi this is longString'
+for c in longString: print(sub, end=' ')  
+
+'k' in longString
+FALSE
+'i' in longString
+TRUE
+'long' in longString 
+TRUE
+
+Indexing / slicing++++
+
+indexing starts at 0  BUT, unlike C, py allows negative offsets which will loop back from the start to the end.
+
+string = 'string'
+string[0], string[3], string[-5]
+s, i, t
+
+Slicing cuts out a section of string and is useful for extraction of a subString from longString:
+
+longString = 'long or short string?'
+'long or sh o  r  t     s  t  r  i  n  g  ?'
+ 0123456789 10 11 12 13 14 15 16 17 18 19 20
+shortString = longString[8:]
+print(shortString)
+>>> short string?
+NOTE here that we left the slice ending undefined, which meant it sliced till the end of longString. But if we want to get rid of the ?:
+shortString = longString[8:20]
+print(shortString)
+ >>> short string
+ NOTE also that the beginning of the slice should be the index pos WHERE the char we want is (inclusive), but the ending of the slice should be index of AFTER where we want to stop (noninclusive).
+ we can also splice using empty start ([:4], or -1 on the second part ([3:-4]) OR we can even use splice to make a FULL TOP LEVEL copy of string by deploying [:] which will select all chars. This isn't useful for strings since they are immutable anyway, but for mutable types like lists, this can be useful to make a top level "hard" copy of the list before proceeding to change internal members of that list.
+
+slice has an extra arg that can be used called the "third limit" or "stride" arg. This one tells the slice operation to not only slice/extract part of the longString but gives it a number for the "hops" that it needs to perform when parsing through the extraction sub-string.
+template is: longString[start:end:hopEveryNum] like: 
+$longString = 'That's life'
+$shortString = $longString[0::2] # hop every two 
+			 until end of longString:
+>>outputs>>  Tht' lfe
+																 #char till end
+print($shortString)
+>>> Ta' ie
+
+strides/hops can be negative, reversing the hope order backward and can be fed a -indexPos to achieve this
+With  a reversed order, the first arg becomes the starting position at the end-side of longString, arg2 becomes ending position but it's more toward left or start-side of string: 
+$longString = 'That's life'
+$shortString = $longString[7:2:-2] # -hop two 
+print($shortString)
+>>>> itg
+
+
+++++type conversion
+
+Strings ,like many other types, can be simply converted- a useful thing if we want them to interact but cannot achieved this due to type-interaction limits.
+Let's say we have a number string like "43" and wish to add it to some int like 2. We cannot achieve that with + because the + could either be add OR concatanate.
+thus we can convert one or the other. Python is quite smart with conversion, recognised ints written in string format and successfully converting them to ints: 
+int("43") + 2 = 45
+
+"43" + str(2) = "432"
+
+other conversions inlude : float(...) 
+
+there is also the eval('passedString') method, which runs a code that auto recognises the passed string and converts it to any relevant type BUT this is quite insecure since it accepts arbitrary expression
+
+Note that individual chars can themselves be converted from human to ASCII  versions.
+ord() converts a char to ASCII 
+
+char = 's'
+ord(char)
+115
+
+chr(115)
+s
+
+bin(int) converts from int to binary
+
+++++manipulating strings
+
+because strings are immutable, they cannot be changed in situ. a way around this is to concatanate new strings to the original string and optional to slice parts that need deleting to store the fresh string in the original var memory space:
+
+str 'original string'
+extraStr = ' plus new string'
+print(str + extraStr)
+original string plus new string
+
+wantedStr = str[:9] + extraStr[:8]
+print(wantedStr)
+>>>original plus new
+
+a quicker way is to use the str.replace() method described below...
+
+++++ string methods
+
+methods can sometimes work between types, but generally are meant to fit to their specified type.
+methods actually contain two aspects:
+1. attribute fetches- object.attribute will fetch the value of that object's specified attribute 
+2. call expressions - an expression of the form function(args) means to invoke the function code then passing args.
+
+common methods:
+
+string.replace() -will replace a specified arg1 substring sequence with the arg2 substring sequence:
+
+longString = 'longstring is cool'
+newString = longString.replact('is cool', 'sucks bad')
+
+the replace method will replace any AND ALL found so:
+longString = 'longstring is cool is it'
+newString = longString.replact('is', 'isn\'t')
+>>> longstring isn't cool isn't it
+
+What if we don't want to replace all instances of substring? well replace() has a third arg option that can dictated how many of the found hits should be replaced:
+longString.replace('originalSubString'/$originalSubString, 'newSubString'/$newSubString, Arg3IntOfHowManyToReplaceBase0)
+
+NOTE if we don't want to replace any AND ALL finds, we can also use the string.find('subString'/$substring) method which will return the found sub-string sequence's indexPos and then use the slice string[indexPos:charLength] to extract followed by an insertion using slice again:
+
+longString = 'here is the longString but we don\'t want longString we want shortString.'
+
+findSubString = longString.find('longString')
+>>> 12
+shortString = 'now ' + longString[0:findSubString] + longString[-12:]
+print(shortString)
+>>> now here is the shortString.
+
+NOTE find only returns first instance of found sub-string and by default searchs from the 0 position forward... if it finds nothing it returns -1.
+
+longString.split() - splits longString according to the passed arg1 delimiter.
+If no delimiter is given, then it defaults to every whitespace.
+delimiter can be a char, or it can even be a substring sequence:
+longString.split(',')
+longString.split('sub')
+
+
+longString.rstrip() - removes any escape sequence or whitespace at the end of the longString
+
+longString.upper() - converts to upperCase
+longString.lower() - converts to lowerCase
+
+longString.isAlpha() - queries if longString is 
+												alphabetical only 
+												(alphabet excluding ints 
+												or !? or other such 
+												chars) gives TRUE orFALSE
+longString.endswith('sub\n') - queries ending
+																gives true or 
+																false
+startswith does the opposite
+
+and further methods...
+
+ 
+++++ string formatting
+formatting expressions are the older, C-based python mechanism to combine string processing tasks. Post 2.6 python also offers the option of  string formatting method calls, dealt with later.
+
+to format strings the old way:
+1. on the left side string, with the % operator as signal, follow it with the type of string fragment you are seeking to input. 
+	this can b a %d for digit, %s for string or 
+	several others noted below. 
+2. on the left side, the stand-in fragements to  be filled into the left side longString will be outlined in order of appearance. They must match the type signalled.
+
+NOTE that python can auto-convert the types if we use the %s signal... so the easiest thing is to just use %s.
+NOTE also that the stand in doesn't have to be just one element, a stand in can be signalled with %s but the right-side fragement can be a tuple [1,2,3,4] with several parts
+
+However, here are the type signals anyway:
+
+%s  - string or any other type
+%r - uses repr instead of str 
+%c char
+%d decimal/int
+%i  int
+%o octal int 
+%x hex int
+%X hex int but uppercase
+%e floating point exponent in lowercase
+%E floating exponent but upper case
+%f floating point decimal
+$F floating point decimal
+%% literal % printed
+
+String formatting provides more complex fragment signalling mechanisms than these. For example:
+
+print('%s = %s' % ('first', 1))
+# note that the first %s are placeholders for values of any type (rememebr that %s can convert anythin into the outputted string) and the % symbol on its own is a marker for the right-hand side injection section where we inject the string and the int:
+
+first = 1 
+
+we can create a var with %s positions and then inject using formatting expressions old style:
+
+- using simple position:
+var = '%s, a %s and a %s'
+string = 'Old MacDonald had a ' + var %('farm','cow','wife')
+print(string
+>>>Old MacDonald had a farm, a cow and a wife
+
+-using key (and note that we can add spaces
+var = '%(property)-10s, a %(animal)10s and a %(female)s'. NOTE also that we deploy a dictionary and its entries on the right, so the key doens't neet '' quote marks...
+string = 'Old MacDonald had a ' + var % dict(property='farm', animal='cow', female='wife')
+Old MacDonald had a        farm, a cow       and a wife  # note the spaces -10 before 1st %s and -10 after second %s
+
+
+it can also take offsets, attributes
+NOTE in this case, we don't use a dictioanry but a set, so we DO need the '' for the key and the value
+
+import sys
+
+string = 'My %(object) runs %(platform)' % {'object': 'laptop', 'platform': sys.platform}
+print(string)
+>>> My laptop runs linux
+
+""" note also that the sys.platform is a property attribute of the imported sys class object... so no need for quotes here, its literal.
+"""
+
++++ dictionary interaction
+
+string formatting also allows for left side fragment signals to refer to dictionary entries being imported as value fillers:
+
+dictionaryImport = 'Hello (%name). Your phone number is (telephone).'
+dictionaryEntries = {'name': 'John', 'telephone': 07218634}
+print(dictionaryImport % dictionaryEntries)
+
+Alongside this traditional format python 2.6 onward includes method calls for string formatting. 
+The format() inbuilt method allows for identifying and passing the missing string values, whether by indexPos or keyword, on the right hand side of a concatenated statment where the left hand side is either the literal or a pre-defined string:
+
+pre-defined:
+
+longString = 'First Name {firstName}, last name {lastName}, and age is {0}' 
+#mixing bother key and index
+
+longString.format(33, firstName='John', lastName='Locke')
+
+literal:    
+'The capital city of the UK is {0} , it\'s population is {pop} million people.'.format('London', pop=12)
+
+
+NOTE as with string formatting, this format() method also creates a wholly new string object as the output (since, with the exception of the aforementioned tricks, strings are immutable in-situ).
+
+format calls, like the older expressions, can add more "wildcards" in the left hand side that will add more advanced formatting manipulation of the string.
+
+For example, we can refer the left-hand side string to not just the directly present fragments injected via the right hand side but rather refer to broader, location, inbuilt/system, or scaled(like dictionary entries) inputs referred to from the right hand side.
+
+the following has a string that makes reference to and indexed and keyed set of inputs on the right but they are dictionary entries, calls to system-based locations.
+
+import sys
+
+'this string uses {0[type]} entries and imports the sys library into the code so we can run it on {sys.platform} while mixing key and indexed-type references'.format('type':'dictionary', sys=sys)
+
+String formatting can actually also apply to lists... and we use {indexed [offsets]}, as with lists, splicing and other sequences based on indexPos, but NOTE that a negative [-1]offset or range [:] of offset doesn't work in the context of string formatting methods.  We get around this limit by creating a variable that contains the wished for offset sections (including the illegal ones) and then deploying the entire var as the right-hand side injector:
+
+list = list('Hello')
+
+#here using legal offset references in the left will work fine:
+
+'first={0[0]}, third{1[2]}'.format(list)
+>>> first =H, third = l
+
+#however, using the - or : will not work. So we reate a var that contains the sequential ops we want to undertake on the list and then deploy that var on the right-hand side:
+
+operation = list[-1], list[3:4]
+
+'{1} and behold, the last letter is{0}'.format(*operation)
+>>> lo and behold, the last letter is o
+
+As with advanced formatting strings, we can also add further specific formatting beyond the import aspects.
+in the injection bracket , we are not limited to simply a referal of the {key/indexPos[value]}, there is actually a richer syntax supplemented as follows:
+
+{fieldname!conversionflag:formatspec}
+where: 
+
+FIELDNAME - is indexPos or keyword and these can be optionally followed by a .attributeName or [IndexPos] for example in the case of referring to an object's property or to a list's index pos.
+
+CONVERSIONFLAG - can take an r(repr), s(str), or a(ascii) to convert the passed value in the {} into one of those on output.
+
+FORMATSPEC - actually contains a further group of options which are contained in another set of square brackets, each option itself is bracketed off as further nested square brackets:
+
+[[fill]align][sign][#][0][width][.precision][typecode]]
+
+NOTE, the format() method approach uses the same  type codes as the %format strings old style... the list of which was: 
+
+%s  - string or any other type
+%r - uses repr instead of str 
+%c char
+%d decimal/int
+%i  int
+%o octal int 
+%x hex int
+%X hex int but uppercase
+%e floating point exponent in lowercase
+%E floating exponent but upper case
+%f floating point decimal
+$F floating point decimal
+%% literal % printed
+
+//////////////LISTS \\\\\\\\\\\\\\\\\\\\
+
+Unlike strings, lists are mutable IN SITU. THEY ARE ORDERED UNLIKE DICTIONARIES 
+
+Key characteristics of Lists:
+
+1. ORDERED grouping of arbitrarily-ordered objects. But NOTE that they maintain a left-to-right order.
+
+2.accessed by zero-based offst (base 0)
+
+3.Length is variable (in situ changes since mutable). Note also that list members are HETEROGENOUS (can include any type) and ARBITRARILY NESTABLE (Lists within lists, tuples within lists, dictionaries within lists).
+
+4.Basically lists are stored in memory as mutable sequences of sub-objects. so they do support a range of operations such as in-situ deletion that won't work on a tuple or string (even though a string is also a sequence of sub-objects).
+
+5. Fundamentally, from the viewpoint of memory, lists are like associative arrays of pointers toward memory space blocks.
+
+
++++++ basic operations:
+len([1,2,3])  # >>> 3 length of list sequence 
+
+[1,2,3,4] + [5,6,7, 7] # >> 12345677 - concat 
+#NOTE that with concatenation, you cannot simply concat a list with a string/array/ dictionary or whatever. You must first convert list to string then concat to supplementary string.
+
+['No ',['way! ']]*4
+>> No way! No way! No way! No way! # repeat
+
+Logical checks/processes: 
+
+3 in  [1,2,3] // returns TRUE since 3 is present
+
+for x in [1,2,3]:
+	print(x, end=' ')
+# >>> 1 2 3 
+
+Other logical COMPREHENSIONS also work with lists as with other types:
+
+doubleUp = [c * 2 for c in 'double']
+print(doubleUp)
+
+['dd','oo','uu','bb','ll','ee']
+
+another comprehension here is map- which reorders the sequence IN SITU using a passed arg (i.e. it maps out the sequence it encounters according to the arg given it, in this case the abs() which sorts by ascending absolute numeric order). Note the list is first converted to a list then passed via map into a reorder:
+
+NOTE: 
+#map(arg1SortOrder, [sequence])
+#list() converts the outcome of map() to a list 
+
+list(map(abs, [1,5,7,-19,-2,0,44]))
+>>> [-19,-2,0,1,5,7,44]
+
+
+Lists allow internal fetching including indexPos-based consulting and slicing as with strings (but unlike strings they do not output as new or changed strings):
+
+list1 = [1,2,3,4]
+
+list1[1]
+>>> 2
+list1[-1] 
+>>> 4
+
+#NOTE, when Fetching a slice, it will produce the result as a list, not a single value:
+L[1:]
+>> [2,3,4]
+
+NOTE that lists are particularly useful for containing matrices because 1) they allow for easy nesting and 2) the block quotes [] let us organise the format of the matrix as a real matrix and this format will be kept:
+
+1) matrixList = [[1,2,3],[4,5,6],[7,8,9]]
+2) blockMatrixList =  [
+											[1,2,3],
+											[4,5,6],
+											[7,8,9]
+										 				]
+
+changes can be made in-situ, unlike with strings:
+
+#indexPos-based changes will change the in-situ values of the list:
+
+list1 = ['one', '2', 'three']
+list1[1] = 'two'
+list1 >>> ['one','two','three']
+
+#slicing can also reassign:
+
+list1 = ['four', 'five', 'six']
+list1[1:2] = ['seven','eight']
+list1 >>>['four','seven','eight']
+
+#Like strings, we can use .methodCalls() on lists:
+
+list1.append('nine') 
+#>> ['four', 'seven', 'eight', 'nine']
+#NOTE that append only takes one object at a time (it doesn't accept a concatenation of multiple objects) BUT the difference here is that, unlike concatenation, .append() doesn't create a new list, but simply changes existing list in situ.
+list1.sort() #note that with string content 
+						 #sort() will prioritise Caps, then 
+						 #ascending abc order
+>> ['eight', 'four', 'nine', 'seven', 'ten']
+
+'''
+note we can override the preference for upper case, or lower case by using object.sort(key=str.lower) or object.sort(key=str.upper)
+the second arg of sort() is the order expected - default is ascending, but we can reverse it:
+object.sort(key=str.lower, reverse=True)
+
+NOTE that the sort() method doesn't print to console/mem the result. If we want this, we can use a new (post 2.6 py) method called sorted() with same args as for sort().
+'''
+
+#other methods:
+object.extend() - #like append() but allows 
+									#multiple additions
+
+list1.extend(['eleven', 'twelve'])
+
+object.pop()  #like a stack pop out the lastitem
+list1.pop() #gets rid of ['twelve']
+
+noted that passing a zero-based offset to pop will pop-out the selected item, not the last on stack. i.e.: list1.pop(3) ...
+object.reverse() #reverses order in-situ
+object.reversed() #reverses order in-situ and 
+									#consol'd out
+
+object.index('item'/or/ 3int) #returns indexPos
+
+object.insert(indexPosInt, 'newItemName') 
+#inserts new member into list at given indexPos
+
+object.remove('memberValue') #deletes passed Arg1 value from list. NOTE will delete all found such values.
+
+another way to delete - specifically one member in the list is to use: 
+	del listName[indexOffsetInt]
+to delete a whole section of a list in this uniform way, you can use slice:
+	#assign an empty list to the part of list that 
+	#we want slice to delete
+	list1[indexOffsetStart:indexOffsetEnd] = []
+
+
+//////////////DICTIONARIES \\\\\\\\\\\\\\\\\\\\
+
+Like lists, dictionaries are MUTABLE. unlike lists they are UNORDERED. Other characteristics:
+
+1. Accessed by KEY not by offsetPos
+
+Dictionaries are like associative arrays, they are not like lists insofar as their location is set by (key->value)
+
+2.Unordered Collections again as oppsoed to list
+
+3.like lists, variabel length, heterogenous, nestable
+
+4.NOT SEQUENTIALLY MAPPED- they are MUTABLY MAPPED. This means that they do not abide by rules that change content based on order. They are REPRESENTATIONAL MAPS of ASSOCIATIVE KEY -to-> VALUE 
+
+5.In memory they are UNORDERED ARRAY TABLES. Unlike lists that are ORDERED ARRAY POINTER Tables that are accessed by position, the dictionary is instead an UNORDERED table of object references that use the KEY NAME to find the respective pointer in memory.
+
+
+
+fundamental dictionary methods:
+
+dictionaries demarcated by {}
+#instance:
+dict1 = {KEY:INTVALUE}
+dict1 = {'KEY':'STRING_VALUE'}
+
+dict1 = {'key1':122,'key2':23,'key3':6,'key4':23}
+
+#BUT REMEMEBER IT'S UNORDERED:
+
+print(dict1)
+
+>>> {'key4':23','key1':122, key2':23,'key3':6}
+
+Usual meths :
+
+len(dict1)  # >> returns lenght (4)
+
+# KEY membership test:
+
+'key5' in dict1 
+#>>FALSE
+
+#extracting keys via list()
+
+list(dict1.keys())
+#>> outputs keys 
+
+
+# MUTABLE SO cna be changed IN SITU
+#rememebr also that they are heterogeneous
+
+dict1['key1':['nest1','nest2','nest3']]
+
+#del works:
+
+del dict1['key4']
+
+#throw in a new entry like it were an array:
+dict1['key5'] = 'new string value'
+
+
+#other methods:
+
+#in combination with list() we can use either the .values() and .items() which will return either (1) the values only or (2) the keys=>values output:
+
+list(dict1.values())
+#>> outputs values in RANDOM order
+list(dict1.items())
+#>> outputs keys=>values in RANDOM order
+
+#fetching can also be done 
+#get will search a key passed in arg1 and return its associated value. If it cannot find anything it returns NONE unless we pass arg2 which is the default value to be returned if no key is found.
+dict1.get('arg1SearchKeyName', defaultValueIfNotFound)
+
+#FOR concatenation/merging we simply pass the #dictionary that we wish to merge to the #original dict in arg #1:use .update(Arg1DictToBeAppended)
+
+dict1 = {...}
+dict2 = {....}
+dict1.update(dict2)
+#now dict1 contains the netires from dict2 also.
+
+dict1.pop('keyName') is the usual stack popper but, obviously since this is an unordered list in memory, it takes a key name for Arg1
+
+#What if we want to loop through dictionary keys? the issue is that we can't simply loop as with a list or other ordered SEQUENCE. 
+But we can hack this by 
+1)extracting the keys using the list(dict.keys()) method
+2)then looping with for... as... loop
+
+IN GENERAL, with dictionaries:
+1.sequence-based operations don't work since the list is unordered.
+	- no joining/concatenation
+2.Keys can be created either via the {key:value} mechanism or as an assignment to a new index in the dictionary: ['key'] = 'value' approach- they are equivalent
+3.Keys can be ANY IMMUTABLE object. That means a key can't be a list. But a string, tuple, integers etc are ok.
+
+One utility of dictionaries over lists is in the case that we want to create a list and are not sure about the expected length of the anticipated collection. 
+With a list, if we instantiate an empty list using list = []
+we will get an error if we then try to skip over to list's 100th item and assigning it a value using say:  list[99] = 'hello'
+we will get a traceback err_
+
+Dictionaries, on the other hand, don't have this issue ,making them flexible for unknown extent collections:
+dict = {}
+diction[99] = 'Hello'
+
+
+
+Dictionaries are thus useful for populating SPARSE DATA STRUCTURES 
+An example is multidimensional array that isn't fully filled:
+
+partialMatrix = {}
+partialMatrix[(4,5,6)] = 2
+partialMatrix[(7,8,9)] = 3
+
+partialMatrix = {(4,5,6):2, (7,8,9):3}
+#not matrix is missing first row but this doesn't affect printin out the second and third row (which are in fact just two dictionary entry which are each lists with 3 members inside).
+BUT NOTE, if we try to refer to the unset , we'll get a traceback.
+
+
++++Dictionaries as Records/structs 
+dictionaries are particularly suited for record keeping because of this flexibility and ability to store nested lists that are not necessarily complete/sparse.
+
+example:
+
+personnelRec = {}
+personnelRec['name'] = 'John'   
+personnelRec['age'] = 34
+personnelRec['role'] = 'Cleaner'
+
+print(personnelRec['name'])
+
+dictionaries can also provide multi-levels of each category and can be instanced in one go:
+
+personnelRec1 = {'name': 'John',
+								'jobs':['cleaner','reception'],
+								'website':'https://www.google.com/arge/92u2f',
+								'home':{'state': 'AL', 'zipcode': 28421}	
+							 }
+
+#now if we want to fetch   
+  personnelRec1['name']
+  >>John
+  personnelRec1['jobs'][1]
+  >> reception
+
++++++ CHANGES between Python 2.3 and 2.6/3+
+
+the extent of dictionary functions has significantly expanded since Py2.6:
+
+ COMPREHENSIONS 
+
+comprehensions are a shorthand way of doing things with dictionaries. strings etc...
+
+- the zip function is one such comrpehension, allow a shorthand way to initialize a dictionary's keys(left hand side) and values (right hand side).  
+
+NOTE this function can be deployed traditionally, within a conversion method like: list(), dict(), str() etc
+
+dict1  = dict(zip(['key1','key2','key3'],['val1','val2','val3']))
+
+However, with the latest py releases, we now have the option for using comprehensions:
+
+dict1 = {k:v for (k,v) in zip(['key1','key2','key3'],['val1','val2','val3'])} 
+
+#Note how we first create a for loop within comprehension structure. the loop says place into k:v format(i.e key:value) for evey key-value pairing you find (k,v) in zip method of the two arg1/arg2 passed lists
+
+#this is a more roundabout way of achieving what we had already achieved. However, the real utility of comprehensions is their capacity for running computations in one and the process as creating the dictionary:
+
+dict1 = {x: x**2 for x in[1,2,3,4]}
+# this will create a new dictionary with the x original ints in list on the right hand side becoming the left hand dict1 key and the computed squared equivalent of x (x**2) willb e the value on the right hand side of dict1:
+print(dict1)
+>>> {1:1,2:4,3:9,4:16}
+
+#a looped string can be achieved:
+dict1 = {x:x*4 for x in='Hello'}
+print(dict1)
+{E:EEEE, L:LLLL, H:HHHH, L:LLLL, O:OOOO}
+#note UNORDERED
+
+# dictionaries can be used to extract input from most types (other dicts, strings, lists) and then convert this into the key element while we either set a default -corresponding value:
+
+# the older manner to extract keys from a list is the fromkeys() method:
+
+keyedDict = dict1.fromkeys(['a','b','c'], 0)
+
+print(keyedDict)  {'a':0, 'b':0, 'c':0}
+#note the 0 served on arg2 as default value filler.
+
+#with comprehensions we can acheive the same, and we can also extract a string. If we leave it null, as here, then the value default as NONE:
+
+keyedDict = {k:0 for k in['a','b','c']}
+
+keyedDictFromString = {k:NONE for k in 'string'}
+print(keyedDictFromString)
+{'s':'NONE', 't':'NONE', 'r':'NONE', 'i':'NONE', 'n':'NONE', 'g':'NONE'}
+
+++++DICTIONARY VIEWS
+
+from Python 3.0 onward, methods operated on a dictionary like .keys(), .values() and .items() seen previously do NOT return FULL lists located in memory...Instead, they return ITERABLES (impressions of each list result cycled through a memory spot on demand).
+
+What is important here is that if we use something like:
+
+iterableDict1Keys = dict1.keys()
+
+this will not return anything. it only creates a view object instruction in memory which can serve up iterable instances of the list on demand.
+but we can override this by forcing it into a list:
+
+list(iterableDict1Keys) 
+#returns keys list from dict1
+
+
+# WHY DICTIONARY VIEWS? 
+#The main utility is that, unlike older constructs using the trad methods the dictionary views construct under the hood actually dynamically reflects any changes to the dictionary's order/entries as they are changed. So any changes on the dictionary's original order WILL BE AUTOMATICALLY REFLECTED in any dictionary views-related methods and ANY RELATED LISTS.
+
+#Note another utilty of the 3+ version is that keys and HASHABLE(i.e. containing immutable values like strigns/ints) items (keys:values together) are treated as sets. Note that this doesn't work with VALUES SINCE VALUES ARE NOT UNIQUE. BUT KEYS, which ARE UNIQUE, and HASHABLE(IMMUTABLE-VALUE) ITEMS CAN BE TREATED AS SETS. 
+The utility of this is that they can be subjected to set operations like INTERSECT, UNION etc.
+
+SORTING DICTIONARY VIEWS
+NOTE remememebr that since the views construct fundamentally changes the keys,values and items methods' outputs into iterable memory views rather than list blocks in memory, then we cannot use the traditional sort method to sort keys or values in (caps)alphanumeric order.
+
+three hacks for this:
+
+1. convert dictionary into a list then sort:
+
+dict2 = {'c':'charlie','a':'alpha','t':'tango','f':'foxtrot'}
+
+listedDict2 = list(dict2)
+listedDict2.sort()
+for a in listedDict2: print(a, dict2[a])
+a alpha
+c charlie
+f foxtrot
+t tango
+
+2.use sorted() which accepts iterables as well as lists.
+
+dict2Keys = dict2.keys()  #get the iterable key images
+#sorted works BUT consol's out
+for a in sorted(dict2Keys): print(a, dict2[a])
+a alpha
+c charlie
+f foxtrot
+t tango
+
+ 
+3. sort the dictionary itself first and embed into a for loop that pumps out the sorted result's keys used sorted()
+
+for a in sorted(dict2): print(a, dict2[a])
+
+# a final novelty with dictionaries is that the old has_key() method is gone. Now, we can just use the IN keyword to check if there is a key:
+
+'b' in dict2 
+FALSE
+'a' in dict2 
+TRUE
+
+
+
+//////////////TUPLES AND OTHERS\\\\\\\\\\\\\\\
+
+1 - immutable ARBITRARY ORDER (no sorting) object collections - left-to-right order can nest any type (i.e. a tuple with a dictionary and a list as one of its parts
+2 - offset indexPos access - support slicing and indexing
+3 - immutable sequence just like a string. NO IN SITU changes
+4 - fixed length once defined - changes of length only available with a copy 
+5 - in memory they are an ARRAY of object references via pointers.
+
+++++ usual ops supported with tuples:
+
+concat:
+
+(1,2,3) + (4,5,6)
+>>> 123456
+iteration:
+(1,2)* 4 
+(1,2,1,2,1,2,1,2) 
+
+index/slice:
+
+tuple (1,2,3,4)
+tuple[0]
+>>> (1)
+tuple[2:3]
+(3,4)
+
+NOTE that because tuples are expecting more that one part, we need to signal python that we are assigning an individual object a tuple value by adding a trailing , after the object's value is defined (within the usual tuple brackets):
+
+tupleNotInt = (1,)
+IntNotTuple = (1)
+
++++ converssions/typecast:
+
+tuple = ('j', 'x', 'a')
+listedTuple = list(tuple)
+listedTuple.sort()
+listedTuple
+>>> ['a','j','x']
+tupledList = tuple(listedTuple)
+
+NOTE list comprehensions can actually be used on tuple parts:
+
+tuple = (1,2,3,4)
+comprehendLizt = [i + 20 for i in tuple]
+[21,22,23,24]
+
+TUPLES have BASICALLY NO METHODS THEMSELVES COMPARED TO STRINGS OR ARRAYS ETC.
+BUT THEY DO HAVE:
+
+.index(indexPos)
+>>> returns the indexPosition of the sought for tuple part (base 0 as usual).
+
+and
+.count(soughtTuplePartIterations)
+>> returns a count of iterations of tuple part passed to arg1 
+
+NOTE that the IMMUTABILTY of a tuple ONLY APPLIES TO A TUPLE AS A DATA STRUCTURE AS A WHOLE ITSELF - NOT TO ITS PARTS:
+
+tuple = (1,2,3)
+tuple[0](4) // ERROR can't change 1
+
+but:
+tuple = ([1,2,3],[4,5,6],[7,8,9])
+tuple[1][0] = 7  // WORKS:
+print(tuple)
+>>>tuple = ([1,2,3],[7,5,6],[7,8,9])
+
+tups are like the consts equivalent of data structures
++++++++++FILES
+
+1 differ somewhat from preceding objects because their purpose is not really to be constructs in memory. Rather they have a placeholding role where they act as a "bridge" between a file object somewhere (directory/server) and its destination 
+2 files THUS MUST BE OPENED before being acted upon/modified. 
+
+3 files have an iterator method that allows for auto reading files in a line-by-line basis allowing for looped actions
+
+4 data read from a file IS ALWAYS RETURNED AS A STRING OUTPUT so any other desired output will need a typecast(conversion). VICE VERSA, when WRITING TO A FILE, we need to have the conversion done already to string format +whatever formatting we would like, as file will not convert/format the strings itself
+
+5 closing files is option because garbage collector does it automatically. But it is a good idea to close for security reasons + it flushes the output buffer that therefore allows seeking the file on a secondary memory (having been written/buffered and outputted and closes(+buffer flushed). 
+
+6. files are buffered and seekable. text written to file is not immediately seekable because of the buffering process but once closed , or explicitly flushed, then it is seekable in secondary memory
+
+an example writing to and reading from a file follows:
+
+myFile = open('myFile.txt', 'w')
+#open(arg1FileName-if in same directory otherwisw full location, arg2modifier- w write)
+myFile.write('Hi this is a new file\n')
+myFile.write('and this is the second line\n')
+#note we include the \n newline marker or new text will not be appended correctly
+myFile.clost() #flushed and closed
+
+myFile = open('myFile.txt', 'r') #r is optional here since read modifier is default
+myFile.readline() 
+>> outputs Hi this is a new file
+myFile.readline() 
+>>and this is the second line
+myFile.readline() 
+'' # empty measn end of file content.
+
+
+NOTE if we don't want output line-by-line, then we can use the print() and the simple read() meths:
+
+print(open('myFile.txt').read()) 
+>>>Hi this is a new file
+and this is the second line
+
+
+#to scan through a file one line at a time, use iterator for loop:
+
+for line in open('myFile.txt'): 
+	print(line, end = '')
+
+
+Text files are:
+normal string types
+perform Unicode encoding/decoding automatically
+end-of-line translation by default
+
+binary files are:
+special bytes string type
+allow programs to directly access content without coding/alteration
+saved as .bin files
+
+to read them:
+
+data = open('binaryFile.bin, 'rb').read() 
+#the 'rb' modifier stands for read binary
+#presumably wb is write binary
+data is stored in byte strings that look like this:
+\x00\x00\x00\x07spam\x00\x08
+#hexed escape strings with chars
+#the bin() function will convert and return the bytestring .bin file to a true binary output:
+bin(data[0])
+0b1110011
+
+
+++++ Python Objects and files
+
+objects can be stored and parsed within files BUT they must be either natively or converted strings:
+
+a, b, c = 1, 2, 3
+string = 'whatever'
+dict = {'x':1,'y':2,'z':3}
+list = [4,5,6]
+
+file = open('dataFile.txt','w')
+file.write(string + '\n') 
+# string writes with newline
+file.write('%s,%s,%s\n' %(a,b,c)) 
+#regular expression here, rememebr %s can convert anything to a string, in this case the ints a,b,c which are 1,2,3 so converted to '1' etc
+file.write(str(list) + '\n' + str(dict) + '\n')
+#convert list and dict to string str()
+file.close()
+
+NOTE that reading the file using the .read() method to a nominated var will output the exact raw string
+dataFileVar = open('datafile.txt').read()
+>'whatever'\n1,2,3\n[x,y,z]\n{'x':1,'y':2,'z':3}
+
+but using print() on the var object will now be in proper console reading mode:
+print(dataFileVar)
+>> 'whatever'
+	 1,2,3
+   [x,y,z]
+	 {'x':1,'y':2,'z':3}
+
+We can also reverse the process of conversion, from the string data file to ints/dctionaries etc.
+But to achieve this, we need to clean up the raw string code so that the python parser doesn't give an exception when trying to see which elements of the string we are trying to convert to int/dict/list.
+First we need to dump all of those newline special chars that allowed us to separate the fragments of the string using rstrip()
+
+file = open('dataFile.txt')
+line = file.readline()
+line.rstrip()
+
+the first line was the 'whatever\n' string.
+now we have stripped the \n
+
+that's a string so we ignore and go to next line for the ints:
+line = file.readline()
+>>'1,2,3\n'
+line.rstrip()
+'1,2,3'
+#NOTE this is optional since the int() and other converters automatically ignore whitespaces.
+stringFragment = line.split(',') 
+#split() will cut up using , demarcator
+stringFragment[0] 
+>>1
+stringFragment[2]
+>>3
+
+we can now convert one of the fragments, OR we can loop to convert all fragments to int:
+#1
+int(stringFragment[1])
+>>2 #as an int
+
+#2 convert all into a list
+
+firstLineInts = [int(i) for i in stringFragment]
+>> [1, 2, 3]
+
+for the list and dictionary, we can instead use eval() function - this function treats a string as a piece of executable code because it treats the string as a python expression rather than a literal string.
+
+line = file.readline()
+>>[x,y,z]\n{'x':1,'y':2,'z':3}
+lineSections = line.split('\n')
+>> [[x,y,z],{'x':1,'y':2,'z':3}]
+eval(lineSections[0])
+>> [x,y,z] #back to list!
+eval(lineSections[1])
+{'x':1,'y':2,'z':3}
+
+#or we can loop out the various objects in line:
+
+lineObjects = [eval(o) for o in line]
+lineObjects
+>>[[x,y,z],{'x':1,'y':2,'z':3}]
+
+the problem with eval() is that it is simply TOO POWERFUL AND INSECURE
+
+Instead, we can use the PICKLE std_lib module.
+
+pickle allows us to store almost any object directly.
+
+for example, to store a dictionary into a file:
+
+dict = {'x':1,'y':2,'z':3}
+newFile = open('dataFile.pkl','wb') 
+#directly open the file as a pickle module file (instead of txt)
+import pickle #import pickle module
+pickle.dump(dict, newFile) #dump the dictionary
+into the newFile object (which is a pickle-file)
+newFile.close()  #flush the buffer and close
+
+then vice-versa to retrieve dictionary from pickle file:
+
+newFile = open('dataFile.pkl','rb')
+dict =  pickle.load(newFile)
+dict
+>>> {'x':1,'y':2,'z':3}
+
+for writing to('packing') and reading from ('unpacking') binary files, we have the struct module:
+
+file = open('binDataFile.bin', 'wb')
+import struct
+data = struct.pack('what', 1, [1,2,3], 'ever')
+data # byte string form
+file.write(data) # writes data to binary file
+file.close() flush and close
+
+the vice-versa can be achieved with rb- read binary
+
+Note the file context manager allows us to ensure a file is closed after a read/write operation, instead of awaiting the garbage collector. Part of exception handling
+
++++there is a whole range of further file  handling tools available, both strictly file-related and in connection with other purposes like: sockets, pipes, FIFOS, shelves(access by key files), descriptor files and shell command files(like os.popen or subprocess.Popen which interact with shell-level commands).
+
+third party modules also exist, like PySerial which help communicationg with machine serial ports.
+
+/////////Intermediate Statements\\\\\\\\\\\\\
+
++++ advanced sequence assignment
+
+indexing and slicing can be achieved:
+string = 'whatevs'
+a,b,c,d,e,f,g = string
+x,y,z = string[0], string[1:4], string[4:]
+x>> 'w' 
+y >> 'hat'
+z>>  'evs'  
+#or we can concatenate:
+d,e = string[2:5], string[1:4]
+newString = 'I ' + d + ' a ' + e!' 
+>> I ate a hat!
+
+#or direct concat using a list: 
+a,b,c = list(string[1:4]) + [string[4]])
+>>hate
+
+#python can also handle sequential assignment on nested basis:
+(a,b),c = string[0:1], string[2:]
+>> a => 'w', b => 'h', c => 'atevs'
+ 
+ this nested squence can be useful with for loops - covered below.
+ for example, let's say we have a number of strings in a text file and we want to parse through each string and pick out every string that has a starting sequence of chars? Like, for example a (real world, not coding) dictionary has each word assigned according to starting letters. 
+ Thus we could create a sequence assignment-based looping template that looks at char 0 or chars 0 & 1 of string, separating them in a nested tuple, with the "outer" tuple holding the string as whole (including rest of string that isn't interesting for our first chars purposes.
+
++++sequence unpacking
+
+Since python 3.0 unpacking means that instead of having all left-handside placeholders matching the number of values being sequentially assigned on the right handside, we can just deploy a wildcard * sign in order to mass assign whatever number of remaining values on the right hand side are not fulfilled by a respective lefthandside placeholder
+string = 'sequence'
+a,b,c* = string #works as of py 3.0
+
+a => 's'  b=>'e'  c=> 'equence'
+
+#can do the reverse order:
+a*,b,c = string
+a=> 'sequen' b => 'c'  c=>'e'
+
+#or bookended a, c with b* wildcard holding middle chars would work.
+
+the unpacked sequential assignment makes the looping over a first or initial values mentioend in advanced sequenceing earlier easier.
+
+NOTE however, that two wildcards * don't work.
+a sole wildcard won't work either, the whole point is that it is a (list or tuple) sequence of left-side placeholders
+
++++multiple target assignment
+
+++++augmented assignment
+
+//////////////IF LOOPS \\\\\\\\\\\\\\\\\\\\
+
++++IF  | ELSIF
+
+if loops in PY don't take the usual function block demarcators {} 
+
+instead they take a : and use indentation:
+
+if x < y:
+	x = 1
+	y = 2
+
+in python, such COMPOUND STATEMENTS will have the : demarcator as a separator between header line/conditional and nested statements/functions blocks
+
+note that parentheses in the header/conditional line are optional
+if x<y == if (x<y)
+
+Python tells when the nested statement block ends using indentation, the end of the indent signifies end of block, no need for a }
+
+
+NOTE that we can actually put the header and block all on one line if we so please:
+
+if x > y: print(x)
+
+++++multiway branching
+
+this relates to more complex if/elseif/else compound with multi branches of if, elseif, else
+there is no limit to elsif and else addenda, but they will use up mem resources on runtime
+
+NOTE however, that Python DOESN'T have any SWITCH-CASE structures... so the best thing is to use use/elsif/else but with lean structure.
+
+Another keyword: IN can be combined with the if/elsif/else structures to test, for example, membership of a char in a string, of a shorstring in longString, or of a member in a dictionary/part of a tuple/ etc.
+
++++catching errors with basic if loop
+
+without using the more typical Try-Catch construct, we can more basically use a simple if elsif loop to catch any errors in input.
+for example, if we want a specific digit(an int, an not any other type) and within a specific range, we can force the user to enter the right value otherwise the loop continues... note that without the try-catch we don't have the option of internal/external exception reporting in this case:
+
+while True:
+	reply = input('Enter your age as a whole 
+	number between 1 and 130:')
+		if (reply < 1 || reply > 130):
+			print('Sorry, that\'s out of range')
+		elsif not reply.isdigit():
+			print('Sorry, that\'s not a whole number')
+		else
+			print('Thank you, we confirm you are ' + 	
+			reply + ' years old.'	
+
+
+////////////While and For loops\\\\\\\\\\\\\\\\
+++++++
+usual while loop rules:
+
+while <test condition Holds>:
+	statements..
+else:
+	statements	
+
+example>>
+
+While a==True:
+	print('a is true')
+
+x = 'value'
+while x:
+	print(x, end='\n') // end each line with a newline marker
+
+while can also allow for countered loops
+usual keywords: BREAK -stop loop CONTINUE restart loop 
+PASS empty placeholder  
+LOOP ELSE BLOCK runs if and only  if loop successfully finishes (without hitting a break).
+
+thus total template is:
+
+while <conditionHolds>:
+	statements do stuff
+		if <furtherConditionalTest>:
+			do other stuff
+		elseif<condition>:
+			statements
+		continue 
+		pass etc..	
+		else<finalCondition>:
+			finalstuff to do 		
+		break			
+
+Note pass has its uses- especially as a placeholder for any element of a loop that isn't to be deployed. 
+
++++++ FOR loops
+for loops differ from while because they offer multiple assignments and targets with the first conditional statement  
+ 
+template is:
+for <target> in <object>:
+	<statements>
+	if <test>: break
+	if <test>: continue
+else:
+	finalStatement
+
+for loops can be basic or more advanced:
+basic:
+sum = 0;
+for x in [1,2,3,4]:
+	sum = sum + x
+
+NOTE, we can for with any type, such as, for example strings or string parts of a tuple or even tuple members of a list:
+
+tuple = [(1,2),(3,4),(5,6)]
+for (a,b) in tuple:
+	print(a+b)
+3
+7
+11
+
+Another use of this contstruct is to loop through iterations if dictionary, list or other KEYS=>VALUES:
+
+dict1 = {'a':1,'b':2}
+for key in dict1:
+	print(key, '=>', dict1[key])
+//OR usign the list() and .items() method:
+list(dict1.items()) //convert to list
+[('a',1),('b',2)]
+for (a,b) in dict1.items():
+	print(a, '=>', b)
+
+... and so on with even nesting being possible.
+
+we can even, since PY 3.0, loop and slice simultaneously:
+
+firstName, *middleNames, lastName = ("","","","")  //rememebnr * wildcard i..e all contents except bookends a and c
+
+//populate with for loop from SQL
+
+//then extact with wildcarded/bookended for loop
+
+for (firstName, *middleNames, lastName) in  namesDataBase:
+	print('First Name: ', firstName, 'Middle 
+	Names: ' middleNames, 'Last Name: ', 
+	lastName);
+	
+
+for loops can obviously be nested at multiple levels with a for if elseif else template:
+
+vars...
+
+for varKey in varCollectionKeyName:
+	for varItem in VarCollectionItemsName:
+		if varCollectionItemsNam == 
+		varCollectionKeyName:
+			print() //do stuff
+break
+		if other conditions like key not matching 		
+		item:
+			print() whatves
+ 
+ One of the most common uses of for loop is to parse through a document using a file scanner (i.e. an open() and  file.read() method):
+ 
+file = open('fileName.txt', 'r')
+	print(file.read())
+#the issue with the above code is that longer files should probably be buffered. One way to buffer them is to use a for loop to go through pieces of the file at a time:
+
+file = open('fileName.txt')
+	while True:
+		char = file.read(1)
+	if not char: 
+break
+		print(char)
+	for char in open('fileName.txt').read():
+		print(char)		  
+
+# we can modify this loop to read by a certain amount of bytes:
+
+file = open('fileName.txt', 'rb;) #rb bytes
+while True:
+	chunk = file.read(10) #10 bytes at a time
+	if not chunk: 
+break
+	print(chunk)
+
+
+++++++RANGE
+
+RANGE is a type of loop that produces successively bigger integers.
+
+This is useful for counters. range is an iterator so it's best to wrap it into sub-lists nested within a list. 
+range method takes an arg1 as the max int assuming base0 start. optArg2 is used if an arg1 other than base 0 is defined. and optArg3 is a traverser (i.e. a jumper, giving it a 2 will return even number, 3 wikll skip to every 3 int from bgining (default0))
+
+list(range(6),range(23, 100),range(4, 80, 4))
+>> ((0,1,2,3,4,5,6),(23,,24,25 ...,99,100),(4,8,12,16 ... 76, 80))
+
+NOTE these are ABS numbers so can include negatives
+
+Range can be used to create a more explicity alternative to the traditional for iterational loop:
+
+var1 = 'spam'
+
+list(range(len(var1)))
+
+for i in range(len(var1)): 
+	print(var1[i], end='\n')
+s
+p
+a
+m
+
+range can also be used in conjunction with slices. this is particularly useful if we want to traverse the collection by skips using optArg3:
+
+longString = 'a,b,c,d,e'
+list(range(0, len(longString), 2))
+
+for i in range(0, len(longString), 2):
+	print(longString[i]), end='\n')
+>>
+a
+c
+e
+
+a particularly useful trait of range() is in iterating through list members and changing them IN SITU
+
+list = [1,2,3,4,5]
+for i in range(len(list)):
+	list[i] += 1
+>> [2,3,4,5,6]
+
+Note however, that this will use more resources than a simple FOR loop, so a FOR loop with comprehensions (covered below) is more efficient.
+	
+++++ ZIP()
+ZIP is a function that returns a series of paralellel-item tuples, allowing traversing several sequences simultaneously.
+
+I.E. two or more lists traversed IN TANDEM
+
+list1 = [1,2,3,4]
+list2 = [5,6,7,8]
+
+zip(list1, list2)
+>> [(1,5),(2,6),(3,7),(4,8)]
+
+combined with for loop:
+
+for (a,b) in zip(list1, list2):
+	print(a, ' ', b, '+=', a+=b, '\n')
+
+1 5 += 6
+2 6 += 8
+3 7 += 10
+4 8 += 12	
+
+zip can take any type, not just lists/tuples it can also zip up files
+
+zip is particularly useful for generation dictionaries for example, if we have lists for keys and values and we wish to simultaneously read/parse through those lists and also zippem'up itno dictionaries all at  once at runtime exec
+
+isntead of doing so in two ops, we can instead  get it all done at once without first populating the dictionary and then looping through. Instead since PY 2.6 we can simply zippem'up
+
+keysList = ['a','b','c']
+valsList = ['1','2','3']
+
+zippedDict = dict(zip(keysList, valsList))
+
+++++++ MAP()
+Note that map is now deprecated but was the pre-Py3.0 function for somewhat similar results.
+
+++++++enumerate()
+
+enumerate is a post-Py3 generator object that allows a dynamic binding of the arg1 passed list members and with an optArg2 indexPos starting point (base0 default) in tuples nested within an overarching list construct:
+
+list1 = ['string1','string2','string3']
+list(enumerate(list1, 5))
+>> 
+5 string1
+6 string2
+7 string3
+
+# thus we can loop it for iteration of a single string or list membership collection or dictionary entries:
+
+lists = ['a','b','c','d']
+for (list1Entries, indexPos) in 		
+		enumerate(list1):
+	print(indexPos, ' -- ' , list1Entries)
+	0 -- a
+	1 -- b 
+	2 -- c
+	3 -- d
+
+NOTE because ENUMERATE() is an generator object it actually implements the __next__ and other name-based stack navigators.
+Presumably we can not only use __next__ but also _prev__ etc
+
+we can created an enumerated version of our string/list/indexedArray that we can then call the __next__ meth on:
+
+enumedArray = enumerate(array1)
+next(array1) // cycles through the stack one item at a time.
+
+///////////////DOCUMENTATION\\\\\\\\\\\\\\\\\\
+++++++ docstrings hold doc just like man and --help in BASH
+#comments as usual
+but rememebr no multilines only with ''' or """
+
+dir is an inbuilt function working like man pages in bash:
+
+import sys #need to import the SYS SUPERCLASS
+dir(sys)
+... lists out all of sys' inbuilt funcs like:
+
+__displayhooks__, __doc__ etc...
+
+NOTE we can custom define our own docstrings
+We can also print a doctstrings:
+import sys
+print(sys.__doc__)
+
+docstrings is also now accessible via the HELP construct which auto consols out info:
+
+import sys
+help(sys.__doc__)
+
+and manuals online...
+	
+///////////////SCOPE\\\\\\\\\\\\\\\\\\
+++++++
+
+Scopes as usual (global, local)
+
+scopes are one of many (var placeholder)NAMES that are assignments of particular sections of code that have a NAMESPACE demarcated and associated to their relevant BOUND name. 
+NOTE, when we DEPLOY the (var placeholder)names (and it's ensuing namespace demarcation) within a block of our source code, then this name and namespace will be bound to that section/block of sourcecode
+with names:
+- all names assigned within a function's definition block { } is associated with that block ONLY
+	- (var placeholder)names within that block can 	
+	only be seen by 
+	code within that block ONLY
+	-(var placeholder)names assigned within this 
+	locally scoped function block can have the 
+	same name as any names/vars assigned in 
+	another locally scoped function block or in 
+	the broader source  code block (global 
+	scoping)
+
+the three scopes are:
+ 
+- assigned to function definition block = LOCAL
+- assigned to a supervised nested/enclosed function defintiion block to override its default local scope limitation = NONLOCAL
+-assigned outside all function blocks but in source code module generally = GLOBAL
+
+NOTE that the GLOBAL scope concept is somewhat misleading because global refers to global to the source code file ONLY, not beyond that. Any further scope extension would require class inheritance... 
+NOTE also the dangers of overusing GLOBAL... although it is very useful due to its ensuring PERSISTENCE OF MEMORY STATE and ACCESSIBILITY of a variable/method, it is often better to use a functions structure that deploys recursion via enclosing(factory) functions or default mutable args (the old pre-py3 hack mentioned below). Or simply with passed-in args and return values in a standard function structure- i.e. doing things one at a time to allow for sequential access, rather than taking the easier (but riskier) option of simply defining global vars/meths allowing easier cross-function block access.
+
+Overview:
+
+BUILT-IN 
+names preassign@ Python: open, range, SyntaxERR
+		GLOBAL- module level source code
+			top-level OR those explicitly declared 
+			global
+					NON-LOCAL supervised nested/			
+					enclosed function
+						any enclosing func definition or 
+						lambdas
+								LOCAL within func block
+the order of priority is:
+LEGB
+Local-Enclosed(non-local)-Global-Built-in									
+									
+++++ Enclosed OR Statically Nested Scopes
+
+This occurs when multiple functions may have a broader scope one over another. The scope of supervising nesting/enclosing function a carries over to its supervised nested/enclosed nested functions b,c,d. BUT remember that the LOCAL scope of each of these supervised enclosed/nested functions b,c,d have priority, followed by the local scope of supervising nesting/enclosing function a's methods/statements and thereafter followed by the non-local enclosed scope of a over b,c,d. 
+
+THIS IS IMPORTANT- JUST BECAUSE a supervising nesting/enclosing function gives ACCESS to its vars to its respective supervised nested/enclosed functions b,c,d, this doesn't work VICE VERSA- the supervised nested/enclosed functions b,c,d have READ ONLY access to any vars/meths() in their supervising nesting/enclosing function a. 
+TO OVERRIDE, since Python 3.0 we can declare a particular var within the supervised nested/enclosed function NONLOCAL (more below) and this will give it WRITE ACCESS outside of its local nested/enclosed function block - thus the primary goal of MAINTAINING PERSISTENT MEMORY STATE ACCROSS THE SUPERVISING and SUPERVISED FUNCTION BLOCKS. This is parallel to the broader us of the GLOBAL scope demarcator used between regular FUNCTION BLOCKS and broader sourcecode modules. 
+
+After this any globally scoped module-sourcecode level kicks in, followed by Python Builtins.
+
+The point here is that the nesting and nest function both have RECURSIVE access to one another scopes because of this enclosing:
+
+def function1(): # note the DEF keyword is used to define a custom function in python
+	  x=88
+	  	nestedFunction2(): #nested function within 
+	  	func1
+	  		print(x) #has access to x within the 
+	  		non-local scope
+	  return nestedFunction2 #has access to 
+	  nestedfunc2 BUT NOT ITs LOCAL SCOPED block
+
+enclosingRun() = function1()
+enclosingRun()
+>>consol'd >> 88
+
++++factory/closure functions
+
+The above example of a nested function with recursive scoping outside of the local scopes is called a closure or factory function. the latter moniker is due to the fact that we can use these constructs allow us to have a maintained state of a variable's value- or the outcome of a method OUTSIDE OF THE LOCAL SCOPE (remember that when a local scoped function defines and executes a variable's value it DOES NOT MAINTAIN STATE, it is temporarily held in memory).
+
+Thus, without having to define a variable/meth in a CLASS construct, this factory function construct allows us to maintain state and recursively refer to the locally scoped var/meth. 
+
+Though the class structure is often the right consturct, one utility of this factory construct is to have event handlers for on-the-fly responses to runtime conditions - for example to handle unpredictable user inputs that cannot be pre-guided.
+
+NOTE HOWEVER That the above factory code ONLY WORKS with Py 3.0 and onward because it's only then that non-local scoping was introduced. For previous versions, each nest function had to be explicitly defined via default argument values in order to escape local scope and bleed into non-local nestin function scope(a kind of hack around the local scope limit that would work due to runtime parsing order).
+
+++++lambdas
+lambdas are expressions generating new functions to be called later - similarly to def custom function definition used above. BUT, the added use of a lambda is that we can deploy these expressions WITHIN lists and dictionaries
+The lambda keyword is deployed and like def, it automatically carves out a new local scope for the function that it creates.
+
+++++nonlocal scope
+
+since 3.0, the nonlocal keyword, similarly to global, can be used, in this case in the supervised enclosed/nested functions' block to give it MODIFICATION/WRITE ACCESS, not just READ ACCESS, to a supervising nesting/enclosing block above it.  This keyword is required because the supervising nesting/enclosing function has, despite its supervisory role, it's inherent default LOCAL scoping for any vars within its own block. 
+
+Any of its supervised nested/enclosed functions will by default be able to READ the vars in the supervisor's block but will not have WRITE access. NONLOCAL overrides this default. 
+
+One of the uses of this is to allow recursive and STATE MAINTING multiple runtime excution outcomes within the structure of ONE SUPERVISOR FUNCTION and its SUPERVISED NESTED FUNCS- all of this outside of the traditional CLASS STRUCTURE- which has it's benefits & negatives (one benefit being low memory use).
+
+NOTE 1 and 2:
+1. there has to be a supervising nesting/enclosing function block var defining within that scope BEFORE thereafter deploying the recusrively linked NONLOCAL WRITE-ENABLE same-name var in the supervised nested/enclosed function block. We can' jsut deploy non-local without a recursively-linked supervising block var that will be affected by the nonlocal declared samename supervised function block var. (if we don't deploy, the same name var will throw an exception because it can't access the supervising block, which is by default outside its local scope- although, vice-versa the supervising function block does have access and can feed its initial var values to its supervised nested/enclosed function block.
+
+2. outside of the supervising function block, any supervised nested/enclosed nonlocal or local scoped vars have no impact/readability in the other regular function blocks or the general module source code scope. In other word, the supervising block acts as intermediary between its supervised nested function block and the broader sourcecode
+
+
+++++++  alternative structure via ATTRIBUTES
+
+an alternative to the nonlocal construct is to simply create a supervised function as an attribute of the supervising function. We use the concatanating demarcator to refer to that supervised function and the added benefit here is that we can actually explicity refer to EITHER the supervising function OR the supervised function - unlike the implicit referal in the NONLOCAL construct
+Deployment:
+
+def nestingF(initStuff):
+		def nestedF(moreStuff):
+			print(moreStuff, nestedF.memOfInitChange)
+				nestedF.memOfInitChange += 1
+				#any further changed to init held in mem
+		nestedF.memOfInitChange = initStuff
+		return nestedF	
+
+
+multiFunction = nestingF(2) #init value given
+multiFunction('count') ## moreStuff val given
+>> count 2
+multiFunction('count') ## ++
+>> count 3		
+multiFunction('count') ## ++
+>> count 4
+multiFunction('count') ## ++
+>> count 5
+multiFunction('count') ## ++
+>> count 6
+
+#amd we can even refer directly to the nested mem state holder WHICH HAS NOW BEEN CHANGED FROM 2 TO 6 and this HAS BEEN PRESERVED IN MEMORY OUTSIDE LOCAL SCOPE WITHOUT DEPLOYING NONLOCAL KEYWORD:
+
+multiFunction.memOfInitChange 
+>> 6
+multiFunction.memOfInitChange ++
+>> 7
+
+///////////////OOP \\\\\\\\\\\\\\\\\\
+++++++
+
+Usual inheritance, composition (purpose breakdown) object-oriented concepts.
+
+abstraction etc...
+tree hierarchies
+ NOTE PY USES SELF KEYWORD NOT THIS()
+
+__init__  is a constructor name for function that constructs(initialises) an instance of a class object
+this is one of several OPERATOR OVERLOADING methods which also include __and__ , intersect etc
+
+inheritance usual rules
+poly usual rules
+
+remember that we can import specific classes from a module (i.e. external sourcecode) via the 
+FROM moduleName.py import ClassName
+NOTE that, if we have a samename module and class, we need to explicitly refer to that class in our sourcecode using concatanation:
+
+FROM person import person
+
+person.person # now we are talking about the class person
+
+Usual operator overloading concepts -i.e. overloading is like polymorphism but for OPERATORS rather than classes or functions.
+
+overloading operators are those custom operators defined in a class that overlap with built-in type operators like : addition, multiplication, printing, slicing etc
+
+Technically, classes give us the ability to code any type of function that independently achieved these built-in operator functions. However, the utility operator overloading is that, by 'piggybacking' the custom-class-defined operator alongside the inbuilt Py operator, this creates a smooth, integrated and 'code-switching' environment for the instances of a class that has such overloaded operators deployed (in conjunction with the built-ins' always present interface inheritance)
+
+We use the following denotation to distinguish overloaded operators - something that allows the py engine to distinguish these as what are called 'hooks': __operator__
+
+Py is quite liberal about allowing basically any built-ins to be override/piggybacked by custom designed overloaded operators.
+
+NOTE obviously this is all OPT 
+The utility of this is primarily to integrate the class structure with (piggybacked)/polymorphic functions/meths
+
+An example of such piggybacking follows:
+
+class PiggyBack():
+	def __init__(self, value):	
+		return self = value
+	def __add__(self, other):
+		return self + other
+	def __mul__(self, other):
+		return self *= other
+
+ONE GREAT UTILITY OF OPERATOR OVERLOADING IS THAT WE CAN USE IT TO CREATE WHAT ARE CALLED STRUCTS in C and  RECORDS in PASCAL:
+THESE ARE  BAREBONES 'IMAGING' CLASSES that are created empty of any attributes. But, as an when needed to to instantiat an object of that class, we can also simultaneously attach attributes of the class that we create on-the-fly. This makes them very flexible and the great utility is also that any further instances that we instantantiate on-the-fly with the same attribute but with a different value will be written to a new memory reference, thus not overwriting the originally committed attribute-instance combination. That makes them like short-hand dictionary key-name assignation- faster and easier on memory:
+
+class struct: pass   # pass keyword allows us to
+										 # leave this struct empty
+
+struct.name = 'paint'
+struct.colour = ''
+struct.price = 10
+
+now since we have given these attribtues to the class, we can instantiate objects as needed: 
+
+greenPaint = struct()
+
+bluePaint = struct()
+
+NOTE that the attibute mappings are stored on the class level only, but we can directly refer to them via the object instance construct:
+
+bluePaint.name 
+>> paint
+bluePaint.colour
+>> 
+
+let's define green paint's colour:
+
+greenPain.colour = 'green'
+And now we want a cheaper blue paint- so we can shift gears:
+
+bluePaint.colour = 'blue'
+bluePaint.price = 8
+
+NOTE that the greenPaint price doesn't change:
+
+greenPaint.colour
+>> green
+greenPaint.price
+>> 10
+bluePaint.colour
+>> blue
+bluePaint.price
+>> 8
+
+///////////////CLASSES\\\\\\\\\\\\\\\\\\
+++++++
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+
+++++++
+
+/////////////// ITERATIONS\\\\\\\\\\\\\\\\\\
+
+for loops can work on any sequence type (strings, tuples, lists):
+
+for x in [1,2,3,4]:
+	print(x * 2, end=',')
+	2,4,6,8,
+
+But in reality the for loop can work on any iterable object, not just sequences of (sub-)objects 
+
+Because of this wider sense, iterables are basically anything that can produce a result one object at a time, either via a loop (a virtual sequence computed on demand) or via a physically stored sequence.
+
+++++++ File iterations
+
+Files can thus be iterated through. A primitive non-iterable way of PARSING through file contents is done via the file.readline() inbuilt meth.
+ 
+ myFile = open('myFile.txt')
+ myFile.readline()
+ #first line out
+ myFile.readline()
+#and onward..
+ myFile.readline()
+# reaching the end, we get an empty string.
+
+But an iterator does exist - the __next__ namespace/iterator meth is part of files' inbuilt functions and it also returns the next line from each file.
+
+ myFile = open('myFile.txt')
+ myFile.__next__()
+ #first line out
+ myFile.__next__()
+#and onward..
+ myFile.__next__()
+# reaching the end, however, it throws a StopIteration exception in this case.
+## NOTE that the __next__() namespace meth also accepts a simpler format of next(fileName):
+ myFile = open('myFile.txt')
+ next(myFile)
+#first line out
+ next(myFile)
+#next line out
+
+because of this iterable construct, we can actually just loop line-by-line through a file object and do whatever we want as a conditional action (on the condition of each loop being fulfilled):
+
+for line in open(myfile.txt)
+	print(line, end='')
+# print out the doc on console.
+note that we end with a no-space demarcator, because most text files already have the relevant \n newlines inside so no need to repeat them.
+
+NOTE, the iterable construct is for many objects actually a kind of virtual doppleganger of the original construct. This is the case with tuples, lists etc- BUT NOT WITH FILES.
+Files'.__next__ namespace attribute allows it to have iterations performed on the original file object itself. 
+However, with a list, for example, the process of an iteration for loop actually fired off the creation of a doppleganger which will be the one being looped. We can see this explicitly if we deploy the builtin iter() meth that actually makes this doppleganger copy of the object for iteration purposes:
+
+list1 = [1,2,3]
+doppList = iter(list1) 
+doppList.next()
+>>1
+doppList.next()
+>>2
+doppList.next()
+>>3
+#NOTE:
+iter(list1) is list1
+>> FALSE -it's not the same obj
+#AND
+list1.__next__() 	
+>>AttributeError
+#BUT
+doppList.__next__()
+>>1
+	
+	the iter() construct is a manual and explicit iteration of what a for loop does in the background in py
+
++++++ dicts
+
+dictionaries also can be iterable- a simple for loop to explicitly request key-value pairs in a dictionary contrsuct is the following, which first brings out the keys then matches them:
+
+dict1 = {'a':1,'b':2,'c':3}
+	for keys in dict1.keys():
+		print(key,dict1[key])
+
+but, in more recent PYs dictionaries have had an iter() iterator attribute attached to them, thus allowing us to implicitly call for the keys without deploying the explicit keys() meth. So a simple for loop like that used on a list works:
+
+for key in dict1:
+	print(key, dict1[key])
+
+++++++dictionary views
+
+these views are similar to the SQL view structure, where we get a kind of 'preview' image of the SQL search. Views save on memory because they don't generate the entire dictionary object/ entry sub-objects all at once, but rather give us snippet view images of the iterated collections (of underlying dictionary key-value pair entries) collections.  NOTE that therefore, any changes to the underlying dictionary real object, or its key-value entries' order, will be reflected in any conjured up snippet views.
+
+Note that, like range and unlike map/zip/enumerate, views are not actual iterator doppleganger images themselves. Just like range, the appended view object to the real dictionary is just an object, not a list itself. And, just like range() we need to create a separate iter() iterator image object to iterate through them using the next() meth. 
+
+dict2 = dict(a=1, b=2,c=3)
+
+keysDictView = dict2.keys()
+<<keysDictView
+>> <dict_keys object at 0x026D83C0> # dictionary snippet view object of keys elements of the dict2 object at that mem space location
+
+next(keysDictView)
+#won't work - like range it isn't a dopplegange image obejct itself
+
+dictIter = iter(keysDictView)
+next(dictIter)
+>>'a'
+#works now
+
+#automated looping works also
+for key in dict2.keys():
+	print(key, end=';')
+>> b; a; c; #REMEMEBR DICTIONARIES ARE UNORDERED
+	
+Interestingly, however, we can also go from a view (absorbing the image of the dictionary entries) into a REAL list collection, by using list() to force the generation of a real dictionary - this can be done for .keys,.values or .items appended views:
+
+list(keysDictView) # force a REAL LIST from the keys view image object of dict2 dict
+>> ['a','c','b'] #unordered because its coming in from a dict
+#can do it with other dict entry elements:
+
+valDict2 = dict2.values()
+entriesDict2 = dict2.items() 
+
+list(entriesDict2) # force out tupled entries in list holder
+>>  [('c',3), ('b',2), ('a',1)]
+
+#can iterate automatically looping:
+for (key, val) in dict2.items():
+	print(key, val, end=' $\n')
+	b 2 $
+	a 1 $
+	c 3 $
+	
+++++++map function
+map is a builtin function that applies whatever arg1 specified functioncall to its arg2 passed object - which can be a file object. Map always requires a function passed for arg1, unlike a list comrpehension dealt with below which can parse through the elements of a file or list with arbitrary expressions.
+Another limit with map is that it itself must be embedded inside a list() function, because when map 'maps out' the iterables caught in the arg2 passed object, it must return them ALL AT ONCE as a list - if not embedded in a list() function it will have an error. Example:
+
+list(map(str.upper, open('myFile.txt'))
+# returns every iterable sub-object found in the myFile object opened as arg2 with a UPPERCASE due to function passed to arg1
+
+zip, enumerate and sorted all work similarly to map() although with a different outcome:
+++++++zip function
+Zip also needs to be embedded in a list() to return the result as a list. the zip() func will itself take two args, each are the items and/or file that need to be 'zipped up'/tracked one-alongside another like a zip or a railroad track. The list output will actually have tuples of each zipped up object, each tuple being a list member:
+
+zippedUp = list(zip(open('myFile1.txt'), 
+		 			 open(myFile2.txt)))
+>> 
+zippedUp [(item1File1, item1File2), (item2File1, 
+					item2File2), (item3File1, item3File3)]
+
+++++++enumerate func
+basically like zip but takes only one arg1 whose items it then keys to a key count starting at 1 (NOT BASE0- human count):
+
+enum'd = list(enumerate(open('myFile1.txt')))
+>> 
+enum'd [(1, item1File1), (2, item2File1), 
+				(3, item3File1)]
+
+++++++ sorted func
+sorted doesn't need the list() embedding:
+sorted(open('myFile.txt'))
+# will sort items within object and return sorted items as a list. default sort is ascending alphanumeric
+
+NOTE Sorted is also different because it returns an ACTUAL LIST OBJECT instead of an ITERABLE DOPPLEGANGER.
+
+++++++filter
+
+filter takes a function for arg1 and a file/itemCollection for arg2. It runs the function on the arg2 object  
+COME BACK TO FILTER 
+ALSO add pg532 and 538
+
+++++++range iterator
+
+range is interesting because, instead of returning a ready-at-hand list outcome, it instead returns the iterator object which contains a list image/doppleganger. So returning it doesn't pump out the list but just info about it. By using iter(rangedListImage) we can iterate one at a time through the listImage items. Using the list() method embedding range() will force the list to show itself:
+
+r = range(10)
+r >> range(0,10) # just info, not the image
+iterR = iter(r)
+>>0
+iterR = iter(r)
+>>1
+
+list(range(10)
+>>[0,1,2,3,4,5,6,7,8,9] #forced
+
+range supports indexing and __next__(if iter is used conjunctly)
+Range also supports len() as embedding it to get length back
+One cool thing about range is that it allows us to create two separate iterator dopplegangers on the same range collection that is created by the range() meth. Thus we can do simultaneous iterations (i.e. calling next) on the same one range but at different indexPos of that range:
+r = range(10)
+it1 = iter(r)
+it2 = iter(r)
+next(it2)
+>> 0
+next(it2)
+>>1
+next(it1)
+>>0
+next(it2)
+>>3
+next(it1)
+>>1
+
+NOTE: In CONTRAST MAP, FILTER and ZIP create the doppleganger iterator images to cycle  their items but unlike range, these iterator images they are iterated directly - they have their own iterating existence whereas range is just the object affirming existence of a collection of sub-object items in memory- with range, there needs to be an iterator object created separately in relation to the range object as an iterator image, for it to be cycled through (as seen above with it1 and it2). 
+BUT, unlike range, these standard iterable constructs (map, filter etc) cannot have multiple simultaneous iterators (since they are their own iterator doppleganger image themselves). And once we cycle through all of their elements, then we are exhausted and we will get the exception/blank return telling us we've reached the end, whereas with range, the cycle returns back to base0 from -1 like an array or set- since its a 'real' memory object, not a doppleganger image in itself.
+NOTE, what this means is that, although range() gives us multiple iteration and cyclicality functionality, the map, filter and zip - along with their functional benefits- take up much less space, especially when dealing with massive collections (because they are doppleganger images in mem space, not reference mapped pointerKey-heapMemSpace objects).
+
+++++other functions that can be iterable
+
+max/min() can be used to return the max/min string or int value in a file/itemCollection.
+
+sum()  returns the sum of collection/file content but it only expects nums (ints/long/double)
+
+reduce() gets rid of spaces/distinctions between the items of the collection/file i.e. it gets rid of white spaces, commas etc- BUT NOT special ecape sequences like \n
+
+
+essentially, anything that has a left-to-right collection of items can have a iterator implemented and those iterators can have, for example, something attached to them. So we could iterate making a tuple out of every two items of a file by simply using tuple(open('file')). 
+Or we could add a $ char between every element in the file using the concatanator to attach it on every item iteration of the file's contents:
+$.join(open('file'))
+
+++++++ Generators
+
+generator functions basically act like promises in javascript. They use the usual def function nomenclature but instead of producing linear-timed outputs, they save state and YIELD the output as and when necessary on demand.
+Generator expressions are similar but, instead of being defined in a function nomenclature, they take the form of the list comprehensions.
+This makes them useful for saving computation time, allowing for multiple state results etc.
+
+
+
+with the function, the YIELD statement tells the python engine to return suspended local-scoped function block actions/variables BUT once a yield has been called, this doesn't mean that function local-scope paras/vars are wiped in main memory. Instead, that new state is now saved. This allows quite useful asynchronous iterations and avoiding endless/full run loops that use up more machine memory/network resources.
+Underlying the yield call construct which is a property of the inbuilt generator object/class is also aligned with that object's  __next__ hook method that calls each of the yielded returns in a piecemeal manner.
+Note that the generator function can indeed call a RETURN at the end of it's block and this will act as yield stop-block, meaning that the piecemeal yielding will stop and all relevant values will now be returned/processed in the usual manner.
+
+def squared(n):
+	for i in range(n):
+		yield i**2
+
+for i in squared(9)
+	print(i, end=', ')
+
+>> 0, 1, 4, 9, 16, 25, 36, 49, 64
+
+NOTE that generators are not threads, but they can be considered as simulating multi-threading, a kind of async like Javascript. Note also that the yield call is not a backtracking call as in usual loops. It works instead on a coroutine principle.
+	
+Alongside the __next__ hook, there is a send method, added after python 2.5
+
+Send does what __next__ does but it REVERSES THE PROCESS, instead of PIECEMEAL RETRIEVAL OF SUB-OBJECTS BEING ITERATED/CALCULATED IN MEMORY, WE ARE INSTEAD SAVING SUB-OBJECTS TO THE MAIN/VOLATILE MEMORY STATES- KIND OF LIKE SAVING IN A GAME, AT REGULAR PAUSES WITH NEW STATES.
+
+because of this different functionality, there are a few different rules about the deployment of the .send() method. 
+1. first, we need to create a generator function block as a memory object and its paras must be UNDEFINED. 
+2. second, we pass a parameter regarding the number of iterations we wish to undertake, BUT remember that these iterations are no longer AUTO CALCULATED by the machine- the human is the input here on each iteration and machine is simply saving/retrieving state the function block can also contain any further actions we need, like printing out info to the console.
+NOTE that we must also deploy the yield expression here. it's still needed.
+3. need to assign a variable at runtime exec that  instantiates the generator function
+4. when it comes to runtime execution we initialise the send-style generator by calling the __next__ BUT we don't call it again. Any attempt to call next after the first call will simply output NONE
+5. after that initial hook, we can now deploy the .send() meth, passing whatever value we wish to be saved in state as an arg:
+
+def myGeneration():  		    #1 create our genert
+								funct block - 
+								nothing in args
+	for i in range(5):			#2 we want to save
+		n = yield i 			FIVE times to memory
+		print(n)				and we add things we 
+								want to be done
+
+# now we have this send-style generator function setup, it's ready for use at runtime calls:
+g = myGeneration()				#3 assign an 
+								instance of funct
+								
+								#3 first time we 
+next(g)						    call it, USE NEXT
+								but not again
+g.send('first value')			#4 every time we 
+								wanna save someting 
+								to it now, we use 
+								send(). And remeber 
+g.send('second value')			the limit here - 
+								only 5 iterations 
+g.send('third')					defined.
+				
+NOTE that there are other meths() linked to send-style generators. Two of which are the .throw() and the .close() meths. throw allows us to throw an error by passiing it with arg1 as the error type and arg2 being the error content 
+
+close() relates to signalling that the generator is closed now - this is needed for garbage collection because we tell the python engine that this generator's use is finished.
+
+NOTE also that py has now caught up to the JS async-await mess so we now always have explicitly async'd send-style generators...
+
+++++ Generator Expressions: Iterators meet comprehensions
+
+essentially, these take on the same syntax as list comprehensions BUT, unlike a list comprehension which might iterate through the given constructed (sub-)objects all at once, the use is again async because a runtime call to the generator expression will yield a result one-by-one:
+
+#list comprehension iterated:
+[x**2 for x in range(9)]
+
+>> 0, 1, 4, 9, 16, 25, 36, 49, 64
+
+#list() method equivalent build:
+list
+list(x**2 for x in range(9))
+>> 0, 1, 4, 9, 16, 25, 36, 49, 64
+#generator comprehension equivalent but async'd:
+
+gen = (x**2 for x in range(9))
+
+next(gen)
+>>0
+next(gen)
+>>1
+next(gen)
+>>4
+next(gen)
+>>9
+
+NOTE, although the async'd aspect is useful, there are two fundamental limitations to bear in mind with respect to the generator functions/comprehensions:
+
+1. generators support one iterator at a time ONLY. That's because they are recursively self-calling their own iteration construct. So we can't have generator function blocks defining multiple or nested iterations.
+
+2. they are one run-through constructions meaning once you reach the end of the range they are exhausted- unlike a loop.  This is also called one-shot iteration similar to some standard iterator constructs like map() are also one-shot
+
+///////////////Comprehensions\\\\\\\\\\\\\\\\\\
+
+++++++list comprehensions
+
+list comprehensions allow us to travel through a list while also making automated, iterated, changes/modifications- either on the list itself or on the output.
+
+list = [1,2,3,4]
+list = [i + 10 for i in list]
+>>list
+<< [11,12,13,14]
+
+NOTE that the difference between a list comprehension and a looped alteration is that the list comprehension actually creates a new memory object rather than changing the underlying object.
+essentially, it builds a new list from a loop that appends results as it iterates through the existing list items. So the below is the longform of what the comprehension shortens:
+
+list = [1,2,3,4]
+for i in list:
+	list.append(i + 10)
+	
+++++++list comprehensions on files
+
+comprehensions can be deployed on files to perform line-by-line or segment by segment alterations. For example, let's say we want to rstrip the end \n newline escape sequence present in many docs, we can do so: 
+
+stripped = [stripped.rstrip() for line in stripped]  #OR with a file:
+strippedFile = [strippedFile.rstrip() for line in open('file.php')]
+#of course we can deploy other meths. split() segments the attached lines into separate elements:
+strippedFile = [strippedFile.split() for line in open('file.php')]
+#can mix two together:
+strippedFile = [strippedFile.rstrip().upper() for line in open('file.php')]
+
+strippedFile = [strippedFile.replace('/eol') for line in open('file.php')]
+
+#or we can even search through for the presence of a particular substring to get a list out with a boolean result on their presence, line-by-line (with line indexPos[0] standing for each line as it is encountered):
+strippedFile = [('searchSubString' in strippedFile, strippedFile[0]) for line in 
+							  open('file.php')]
+
+#we can do more precise search and then extract the file's relevant content based on IF that search hit:
+
+strippedFile = [strippedFile.rstrip() for line in open('file.php') if line[0] == 'subString']
+# finds every line beginning with subString and extracts it to strippedFile
+
+
+++++++ list comprehensions versus map 
+
+list comprehensions have an IMPLICIT mapping role when passed various numeric or regexp or other types of inputs that they will then generate or parse from an existing value/collection. 
+This means they are a third additional option for going through values alongside the EXPLICIT map() function and the traditional for loops. 
+Example: 
+
+FOR LOOP EXAMPLE:
+	asciiConv = []
+	for c in whatever
+		asciiConv = append(ord(c))
+>> returns ascii char values of 'whatever'
+EXPLICIT MAP(): 
+NOTE rememebr to use list() with map to convert to list.
+	asciiConv = list(map(ord, 'whatever'))
+
+IMPLICIT MAPPING WITH COMPREHENSION:
+
+[ord(c) for c in 'whatever']
+
+comprehensions particularly shine when it comes to database work or rstripping excess chars lik a \n char when reading a file. Examples:
+
+[line.rstrip() for line in open(file.txt).readlines()] 
+#same as above here but without explicit readlines() function which explicitly includes all space lines like \n
+[line.rstrip() for line in open(file.txt)] 
+
+or, in the context of database withdrawals, Py's builtin SQL database API will fetch database members as a list of tuples. using comprehensions, we can extract a particular part of the tuples in that list, thus finding a particular sub-object of data reuqired:
+
+myDatabaseInfo = ['Mark', 30, 'teller', 'John', 27, 
+				 'Secretary']
+
+names = [name for (name, age, occupation) in 	
+		 myDatabaseInfo]
+names
+>>  Mark, John
+
+++++++ list comprehensions and matrixes
+
+list comps are a useful way to access (multi-dimensional array)_ matrices:
+
+matrix = [[1,2,3]
+		  [4,5,6]
+		  [7,8,9]]
+
+[thing for thing in matrix]
+>> [1,2,3]  [4,5,6]
+
+[row[1] for row in matrix]
+# this one gives column
+2 5 8
+
+#we can go diagonal
+[matrix[d][d] for d in range(len(matrix))]
+1,5,9
+
+and so on to much more complex constructs
+
++++++ set comprehensions 
+
+sets are able to construct themselves on the basis of being combined with a generator comprhension either directly spelt out using a set() meth wrapping over a generator comp: 
+
+myGenCompdSet = set(i**2 for i in range(9))
+
+<<myGenCompdDict
+
+>> 0, 1, 4, 9, 16, 25, 36, 49, 64
+
+or via a constructing loop as a set or as a dict: 
+
+myGenCompdSet = ()
+	for i in range(9):
+		myGenCompdSet.add(i*i)
+
+<<myGenCompdDict
+
+>> 0, 1, 4, 9, 16, 25, 36, 49, 64
+
+myGenCompdDict = {}
+	for i in range(9):
+		myGenCompdSet.add(i*i)
+<<myGenCompdDict
+
+>> 0, 1, 4, 9, 16, 25, 36, 49, 64
++++++Dictionary comprehensions
+
+///////////////FUNCTIONS    \\\\\\\\\\\\\\\\\\
+
+As usual funcs are fundamental to code reuse, compartmentalisation and multiple functionality.
+
+++++++def
+
+def is a definition of a function, def keyword signals this definition:
+
+def functionName(args){
+	paras
+} 
+
+One feature of def is that it declares the function to be a statement which means that the function it defines AS A STATEMENT can be nested arbitrarily, for example within an if block:
+
+if testCondition:
+	def function1(args):
+		paras..
+else:
+	def func2(args):
+	paras...
+	
+NOTE that in python, there is no compilation time, ONLY RUNTIME
+
+FUNCTIONS are fundamentally OBJECTS also. So there is nother 'fixed' about them. We can assign a defined function as the definition of a var, and then call the var() which will by reference call the underlying defined function:
+def funct2(a, b):
+	return a + b  				#define a function object
+var1 = funct2    # assign to var1 passed by reference
+var1(1,3)
+>> 4             #works
+#if we want a copy of the result itself as a mem object then:
+var2 = var1(1,3)  #var2 =4 
+
+#A great thing with python is that it is very loose. So functions are typeless, we can pass string, int, list whatever:
+var3 = var1('Hi ', 3)
+>>var3>> Hi Hi Hi
+#remember this works because the * operator is an overloaded operator -with polymorphic meaning depending on which type (int/double num vs string) is entered
+#these operators are thus more like 'switchers' on a network, dispatchin whatever signal is coming toward the type-relevant result.
+
+the benefits of polymorphism of course also extends to our custom defined functions. We can create generic functions that handle a higher-level abstract concept/task, and then call on it by passing multiple different types and values as required. We can even code this function into a module that can itself be imported into other source code.In otherwords, the function is like the highway traffic lights, with a specific input-output mechanism hardcoded. Who drives past and where they are going is the problem of the drivers. The only time we need to touch the function again is because we want to change some structure thing, like if we wanted to change the way the traffic lights are placed, or how long each light stays on for.
+
+Our custom functions can thus achieve a general objective like c
+hintersect() below - which takes two sequences and finds which items in their two collections match- and deploy them in different input-output situations:
+
+def customIntersect(seq1, seq2):
+	result = []
+		for i in seq1:
+			if i in seq2:
+				result.appent(i)
+	return result
+
+remember that any var defined in a function's scope block will be a local var - like result above.
+
+
+++++++arguments and shared references 
+
+NOTE the way that a function block's scope works in relation to the objects that are passed to it in its ARGS depends on:
+1.WHAT SCOPE the object passed has.
+2.WHAT TYPE OF OBJECT is passed.
+
+
+1.
+The usual scoping rules apply meaning that, a VAR OBJECT DEFINED/INSTANCED WITHIN A FUNCTION BLOCK ONLY HAS RELEVANCE AND EXISTS WITHIN/DURING THAT BLOCK'S EXECUTION. 
+THIS DOESN'T APPLY TO GLOBAL VARS, whether they are implicitly global because they have been declared outside function blocks in the general module-level space, or because they do exist in a function block but have been explicitly declared GLOBAL using the global keyword. 
+WHat this means in practice is that, whatever a variable's value is in the context of being instanced/defined within the function's block, this VALUE IS TRANSIENT. It has authority only within the block's execution/scope. If the samename function is then passed a global var object for its arg, that var takes precedence over the local-scoped var object's value and thus whatever this var-object's initially locally-scoped/defined value was, it will now be automatically changed to reflect that new value that has been defined by the global scoped var object passed to the function's arg.
+In short, a global (out of function block) var object being passed as an arg will OVERRIDE any pre-built local-scope var objects within that function's block. Example:
+
+def function1(loclScpeObjA):
+	loclScpeObjA = 12
+	print(loclScpeObjA)
+	
+#locally scoped so runs but disappears only with context of function.
+
+glblScpeObjB = 20
+#globally scoped by default, when passed to function1 will override the value of locallyScopedObjectA
+
+print(glblScpeObjB)
+>> 20
+function1(glblScpeObjB)	
+>> 20 # local object overriden
+2.
+Alongside this complication, we also have to consider the TYPE of the local-scope object being defined in the function block- whether IMMUTABLE (strings, ints, tuples etc) or MUTABLE (arrays, dictionaries, lists)
+If the object defined in the local-scoped function block is MUTABLE, then it will indeed be OVERRIDDEN by any global-scoped, non-function block defined var object that is passed to the function's arg (as mentioned in 1 above).
+
+BUT, if the local-scope function-block defined var object is MUTABLE, like a list or dictionary, then IT TAKES PRECEDENCE AND IS NOT OVERRIDDEN by any additions/modifications implemented by a same-type (i.e. dictionary, list etc) global scope (non-function block located) var object that is passed to its housing function's relevant arg.
+Example: 
+
+def function2(a, b) #placeholder args
+	a = 2 #local-scope objVar with an IMMUTABLE
+  b = ['one', 'two']#Mutable local scoped objVar
+
+ 
+c = 40
+d = ['three', 'four', 'five']
+
+function2(c, d) #call the func with glbl objVars
+
+c >> 40 #changed localVar to glblVars' value
+
+d >> ['one', 'two', 'five'] # added extra sub-
+														object but DIDN'T CHANGE EXISTING FIRST TWO MUTABLE LOCAL SCOPE OBJECTVAR'S SUB-OBJECTS
+
+++++++ fixing references to avoid mutability
+
+such mutable sub-object changes is on purpose, but we can indeed override it. 
+To do so, we can make copies of the entire mutable object (array/list etc) and then make the changes we wish to their sub-objects without being hampered by the original object's memory-stored values.
+a shortcut manner to pass a copy is to use : symbol.
+
+function2 (c, d[:]) #will make a copy instead of 
+										trying to affect original 
+										mutable obejct in function2 
+										local scope.
+d>> ['three', 'four', 'five']
+
+NOTE that we can also use this copying hack to avoid ANY change to the locally-scoped mutable objectVar in the function block and instead turn that into a placeholder objectVar which 'mirrors'/reflects back to us whatever we pass to it in the function's relevant arg:
+function2(a, b):
+	a = 2; 
+	b = b[:]
+
+x = 4
+y = [2,3,4,5]	
+function2(x, y)
+
+x>> 4 #local a overriden by global x	
+y>> [2,3,4,5] # mirror image of what passed in
+
+++++++custom argument matching (overriding pass-by-assignment)
+
+As seen in preceding examples, the default for passing varObjects to a function arg is by assignment. Also by default, args are considered to match their assigned varObject by their position, from left to right (arg1, 2, 3 etc)
+
+But python is flexible here also, allowing alternative ways to pass to the function.
+
+
+the following are optional alternative overrides to this default mode of pass objectVars to the function args:
+
+- By Keywords
+
+
+- Prescribing default argValues
+
+- VarArgs Collecting- arbitrary extra number of 
+	args collected from the function block
+
+
+- VarArgs Unpacking - arbitrary extra number of 
+	args passed in the function call section ( )
+
+
+
+- post-py 3.0 pass by keyword ONLY
+
+
+////////////ADVANCED FUNCTIONS \\\\\\\\\\\\\\\
+
+++++++function design
+
+++++++summing with recursion
+
+++++++recursion alternatives, if-else and other loops
+
+++++++recursion for traversing arbitrarily nested structures
+
+++++++function indirect calls
+
+++++++function introspection
+
+++++++custom function attributes
+
+++++++function annotations
+
+++++++lamba functions
+
+++++++nested lambdas
+
+pg530 MAP FILTER REDUCE- place in above map section
+
+///////////////MODULES \\\\\\\\\\\\\\\\\\
+++++++
+As usual modules are highest scale programme partition. Source code files basically.
+Py IMPORTS modules to get access to its ATTRIBUTES
+A py programme has a top level module which is a SCRIPT FILE, that executes the programme. Then it has a lower level of multiple modules providing attributes used by the runtime exec script. each of these can call on (import) multiple standard library modules/packages
+
+StdLib modules are built in, around 200 of them.
+
+python has various inbuilt mechanisms for search for the module since we only give it the module name and not a specific directory to import it from.
+
+NOTE one quirk is that, because of this, there is no specificity about the module name's file-equivalent being imported. So if we have an import moduleName statement, PY looks for the FIRST HIT it finds in its multi-directory auto search. This hit could be any file of the following types which has that module name:
+.py, .pyc(bytecode) ,directory for package imports, compiled extension module in C or C++, zip file component, statically linked C-based built in module, a Jython java class or IronPython .Net C# class.
+
+++++++
+Creating a module simply requires saving a text file with a .py extension
+NOte that we cannot name the module a reserved kwyord like if.py - there will be a clash 
+
+basic deployment template:
+import moduleName
+moduleName.namespace
+
+# we can be more or less specific using from namespace or form * (wildcard all)
+from moduleName import namespace-attribute
+from moduleName import *
+
+NOTE imports HAPPEN ONLY ONCE UPON RUNTIME - they are loaded once for the runtime exec 
+BUT once the import is done by python, an image of the import process remiains so any further references/deployment of relevant module/namespace attributes material works.
+
+Import and from are actually assignments. Eveyrthing is an object, even the route toward a module/namepspace-attribute.
+
+Every name at the top-level (i.e. not nested within a fucnction/s) of a module file is considered to occupy a namespace as an attribute of the module.
+namespaces contianed in a module can be listed via the inbuilt __dict__ or the dir() attributes
+modules have simultaneous global and local scope because they are simultaneously a single global module file AND a set of local-socped namespaces gathered into one module. When python imports (import or from) a module, it ALWAYS imports the entire namespaces of that module one and the same.
+
+NOTE that importing NEVER IMPACTS THE SCOPING OF FUNCTIONS/VARS. 
+Functions can never see names in other functions unless they are physically enclosing (nested)
+modules can never see one another's code unless explicitly imported
+An imported module doesn't gain any ability to see code in the file that has imported it.
+
+concatanation (formally, qualification) of module namespace paths is arbitarily nested and does give the 'parent' namespaces/module scope to see into its 'children'
+
+
+x = 1
+import module2 #where x =2 and which ITSELF IMPORTS MODULE3 where x=3
+
+print(x, end=' ')
+print(module2.x, end=' ')
+print(module2.module3.x))
+1
+2
+3
+NOTE remember that the reverse scope view isn't true, module3 cannot see into module2 which cannot see into the current file.
+
+IF we want to reload a module, after it's one time init, we can deploy the RELOAD keyword But this isn't a good idea most of the time.
+
+++++++ PACKAGE IMPORTS
+
+this relates to those situations in which a DIRECTORY IS INDEED PASSED TO THE PYTHON ENGINE which has the effect of turning a directory on a server/localHost into a Python META-NAMESPACE in which, unlike a standard module, the sub-directories and module files are themselves the META-ATTRIBUTES.
+
+The primary aim of using this feature is to organise large-numbers of py-relevant files into a directory which can then be accessed/referred to in the various pertinent module sourcecodes as if it were a module with standard attributes.
+In particular, if we have several py programmes hosted on the same host/server which make use of several samaname py files. Here usign package imports helps us distinguish between these files by making their directory inheritance explicit- thus avoiding mistakes.
+
+To import packages directories:
+
+import dir1.subDir1.subDir2.fle.py
+ OR:
+from dir1.subDir1.subDir2.fle.py import funcName
+
+NOTE that for this package imports structure to work, each of the relevant sub-directories underneath the PRIMARY package imports directory need to have one file of their own, within the relevant sub-directory, that is titled __init__.py 
+this is a marker file allowing the package imports structure to follow through which of the sub-directories are tied to the PARENT PRIMARY PACKAGE IMPORTS ACTIVATING DIRECTORY
+the PRIMARY PARENT directory doesn't need this file.
+the __init__.py files are hooks that are automatically run for a variety of under-the-hood reasons.
+
+NOTE that like BASH, there is now support (since py 2.6/3+) for RELATIVE PACKAGE IMPORTS. This is a fancy name for the . ..  type structure found in bash.
+For example, we can import a particular py file from within the same directory by making clear we refer to current directory by prefacing filename with a . notation: 
+
+from . import fileName # note it's not 
+												CONCATANATION BUT 
+												RELATIVE FILEPATH LIKE 
+												BASH
+Remember that PY's default search, without such a dot notation indicating present directory, will be in the absolute directories of sys.path (i.e. a default search for relevant named file - and remember the first hit is what gets served up)
+
+			
+/////////////EXCEPTION 	\\\\\\\\\\\\\\\\\\\\\
+
++++ exception handling with TRY LOOPS
+
+exceptions as usual, allow continuation of runtime, inforamtion about code fails, super-goto status.
+
+A try block is useful for catching any potential errors in input or other types of erroes before they move along the source code and cause a warning (amber) exception or an entire runtime_error(red) exception.
+
+But exceptions are not just for error-handling, even if this is primary role. Exceptions also are there for: 
+
+-event notifications(to signal a valid condition- for example a valid failure of a search which we want to throw up a procedure of how to return a fail result for a failed search,  without hoping for such failed searched which may be few and far between in practice)
+
+-special case handling- for example very rare condition outcomes that don't merit their own whole block of code- so instead direct any such rare condition outcomes into the exception bin.
+
+-termination actions using the try/finally combination, shutdown something if condition isn't met (regardless of it being an error or just not input we are looking for)
+
+-unusual control flow/super-goto function
+Exotic control flows can be achieved - an example of this is backgtracking. Technically, at runtime, the py parse goes through the sourcecode one block at a time downward. BUT with exception super-goto, we can backgtrack upwards, for example, if a condition is met, we can have the exception 'goto' an earlier variable assignment block up in the earlier sourcecode and change/modify that assignment after-the-fact.
+
+As usual, there is a set of default exceptions hard-coded into the py engine- for example, an index out of range (i.e. index Out Of Bounds in java) exception saying that the string or other input that was to have an indexPos char/otherType picked out was outside of the indexed indxPos available.
+They will include a name of the default exception triggered and the usual LIFO stacktrace : Traceback (most recent call last). 
+
+The problem with a default exception like this is that, although it's ok in a testing environment, it's result would be catastrophic in a real-world environment. For example, with a server, we can't let the execution of our code shutdown because of an exception. We should catch the exception, reprot it for human evaluation BUT CONTINUE RUNTIME EXEC (UNLESS THE ERROR IS FATAL).
+
+def catcher():
+		try:
+			functionName(arg1, arg2)
+		except IndexError:
+			print('caught IndexError Exception')
+			print('continuing with runtime')
+
+NOTE - because of the lack of a formal enclosing block as in java {} the indent position of the try: ...except declaratives MATTERS and is PARSED BY PYTHON based on position.
+
++++++++ pre-empting default exceptions
+
+we can pre-empt default by simply deploying an exception without the try-except block structure with THE NAME OF THE DEFAULT Exception we are seeking to pre-empt:
+
+def function(arg1, arg2):
+	  print(arg1 + arg2)
+
+try function(inputArg1, inputArg2)
+	except TypeError:
+		print('Sorry, you have entered the wrong 
+					 type of inputs, please try again: ')
+
+... runtime continues with func etc..
+
+The reason runtime continues here, whereas it stops with default exceptions is because the EXPLICIT TRY BLOCK makes PYTHON consider that an EXCEPTION IS DEAD WHEN IT HAS BEEN HANDLED BY US THE HUMANS, WHEREAS, IN DEFAULT MODE- HOW CAN IT KNOW IF IT HAS REACHED US? SO IT HAS TO KILL RUNTIME TO MAKE IT EXPLICIT.
+
++++++++ RAISE (i.e. THROW)
+
+The raise keyword is like throw in Java/C# : it allows us to trigger an exception manually:
+
+def function1():
+  	paras
+
+	try:
+	
+
+try function1(): 
+	raise TypeError
+
+except TypeError:
+	print('Wrong type of input sorry')
+...
+
+the RAISE statement syntax actually has three deployments:
+
+1. raise instanceOfPreDefinedClassName
+
+raise IndexError # instance of pre-
+									 defined(default IndexError) 
+									 class raised
+raise IndexError() #instance but created in 
+										constructor method
+										
+OR alternatively: 
+
+indxExcpt = IndexError()
+raise indxExcept
+
+errsArr = [IndexError, TypeError, OtherErrors]
+raise errsArr[1]
+
+note that, within the EXCEPT section of the try block, we can also assign an alias to the exception instance that we have instantiated using the AS keyword.
+
+try: 
+	...
+except IndexError as whateverExcpName:
+	print('caught whatever')
+										
+2. raise defineAndRaiseInstanceOfClassName
+
+here we create a class with our customNamed exception that has a constructor method for the exception we want:
+
+class myCustmExcep(Exception):
+	pass
+	
+	def function1(arg1, arg2):
+		paras
+		raise myCustmExcep('function1')
+	
+	try:
+		whatvers
+	except myCustmExcep as aliasName:
+		print('aliasName caught')		
+
+}
+
+3. raise - on it's own means 're-set the last 
+					 triggered exception' this is known as 
+					 Propagating Exceptions.  Usually, this is when we want to try -catch an exception 
+					  but we want the runtime to continue AND we want to re-set the exception:
+try:
+	def function1(arg1, arg2):
+		paras
+	raise IndexError('whatever')
+
+except IndexError:
+	print('wathvce')
+	raise #reset
+						 
++++++ RAISE FROM (exception chaining)
+Since Py 3.0 the raise statments can have an optional FROM keyword attached to the end:
+	raise exception1 from otherExecption
+				PRIMARY					SECONDARY
+when FROM is deployed like this, it means the secondary exception is being attached to the primary exception's __cause__ inbuilt attribute
+
+++++++ ASSERT (i.e. raise for testing purposes) is used in the following structure:
+
+assert testCondition, optDataInfo
+
+which is essentially like:
+if __debug__:
+	if not testCondition:
+		raise AssertionError('data')
+
+assertions are used primarily for debugging and TESTING INPUTS. like all exceptions, such an AssertionError trigger as above will cause a runtime exec shutdown UNLESS there is a try block accompanying it with the necessary continuation keywords.
+
+basically, assertions are like a setting of the ground-rules by the programmer in order to 'force' a certain expected result scope... i.e. blocking our illegal inputs etc. In many cases, this will be redundant, because Py's inbuilt exceptions sub-classes already define many illegal and out of bounds exceptions. BUT, in other cases, it may be useful . for instance:
+
+def func(input)
+	assert input < 0, 'input must be negative' # we are asserting the condition of input
+	return input ** 2	# if input is negative, then the operation will occur
+#if input is not negative, then the assertion will throw an exception and in this case include sourcecode.
+
++++++++ custom Exceptions
+can be written ad-hoc BUT THEY MUST BE DONE USING A CUSTOM EXCEPTION CLASS STRUCTURE THAT IS INHERITING FROM ONE OF THE INBUILT EXCEPTION SUPER-CLASSES(INCLUDING THE GENERIC EXCEPTION CLASS- which is a generic exception class aside from the other ones like IndexError).
+
+class CustomException(Exception):  #inherits from Exception superclass
+	pass
+
+def function1(arg1, arg2):
+	raise CustomException
+
+try:
+	function1(arg1, arg2)
+except CustomException:
+	print('Caught a custom exception')
+
+etc
+
++++++++ termination actions
+
+the try block can also signal a termination action being forced on the code i.e. not necessarily an exception but rather an exit sign. This is achieved via a FINALLY statement. If the finally statement is combined with an actual exception, then it can mean 'no matter what, do this, even if an exception was handled':
+
+try:
+	function1(arg1, arg2)
+finally:
+	print('this prints no matter what')	
+NOTE that ONLY THE FINALLY BLOCKS' SCOPED CODE EXECUTES NO MATTER WHAT IN THE CASE OF AN END TO RUNTIME DUE TO EXCEPTION BEING RAISED. ANYTHING AFTER FINALLY BLOCK OUTSIDE IT'S SCOPE WON'T EXECUTE.
+
++++++++ try-except-else block
+
+the broad try-except-else block structure is the meat and bones of the exception trigger and catch mechanism in py. Note that, as stated above, the indent positioning of the try except else declaratives MATTERS WHEN PARSED. 
+Basic template is: 
+
+	try: 
+	 function1(arg1, arg2):
+	 	paras 
+	 function2(arg1, arg2):
+	 	paras	
+	exception exception1NameLikeTypeError:
+		paraActionsToBeDoneInCaseOfCatch
+		print('you triggered an except1TypeError')
+	exception (raisedByConstructorMethArg1Name):
+		paraActionsToBeDoneInCaseOfCatch
+		print('you triggered an except2Error')
+	exception exception3 as dataToDetailError:
+		paraActionsToBeDoneInCaseOfCatch
+		print('you triggered an except3')
+	exception:
+		parasNoNameExceptionMeansAnyOtherRemainingInbuiltErrorsToBe	
+	else :
+		print('generic error caught etc...')
+
+As usual the exception structure acts as a super-goto where, if an exception is triggered in the try block, then the python code stops what it's doing and jumps to the relevant exception block to do whatever it's told.
+
+Note that the ELSE statement cannot be deployed unless there is at least one preceding EXCEPTION block before it (otherwise it is redundant).
+
+As usual, a FINALLY statement declares that NO MATTER WHAT, REGARDLESS OF THE EXCEPTIONS BEING HANDLED BY PYTHON, THE CODE (WITHIN AND ONLY WITHIN THE FINALLY BLOCK) MUST BE EXECUTED BEFORE AN END TO RUNTIME.
+
+multi-catch try-exception-else block example:
+
+try: 
+	function1(arg1,arg2)
+		paras ... 
+except TypeError:
+	parasForHandlingTypeError		 
+except IndexError:
+	parasForHandlingIndexError		 
+except KeyError:
+	parasForHandlingKeyuError		 
+except:
+						#handle any other potential 
+						exception using the inbuilt #
+						exceptions
+else:
+	continue with normal Runtime Exec...
+
+It can be an issue to overuse the generic EXCEPTION loner block - because it will throw up multiple potential inbuilt exceptions and will thus end the runtime.
+
+NOTE- PRECISELY BECAUSE OF THIS , 3.0 introduced a generic EXCEPTIOPN super-class just like in JAVA or C# which acts as a placeholder for any generic exceptions THAT WILL NOT QUIT RUNTIME EXECUTION:
+
+exception Exception:
+	etc..
+
++++++++try-else block
+
+There is one use of the else block at the end of a try-else structure which relates to a kind of ongoing internal error reporting.
+The issue arises from the lack of clarity about whether a TRY block has been parsed through without any exception being raised. We may want to know that our code has worked without triggering any of the related exceptions. 
+The issue is that there is no EXPLICIT way to make this evident to the programmer other than the laborious option of placing BOOLEAN FLAGS throughout our function blocks to explicitly tells us if a try block has been parsed through WITHOUT triggering an exception.
+the ELSE statement can be useful here. We use ELSE to make EXPLICIT the fact that NO ERROR HAS BEEN CAUGHT WHEN PROCEEDING WITH RUNTIME.
+
+
+++++++ WITH-AS
+
+with-as is an alternative mechanism to try-finally. It offers more entry and exit options thanks to what are called context managers 
+
+context managers are shorthand packaging/unpackaging handlers that are deployed whenever we use a WITH statement. The WITH statement is itself primarily a means of shorthand expression for much longer function blocks. It acts as a kind of abstract packaging or zipping-up of the function-blocks statements. the WITH statement has, within it, an architecture allowing for the deployment of context managers including:
+1. the context expression 
+2. context manager ENTRY via __enter__() loaded
+3.context manager ENTRY via __exit_ loaded 
+4.context manager ENTRY via __enter__ invoked
+5.context manager ENTRY via __enter_ assigned #
+																			val
+6.context manager ENTRY via __exit_ invoked
+
+basic format of with statement block is:
+
+with expression [opt as variableNameAlias]:
+	with-block statements
+
+the expression returns an object compatible with the context-management protocols. The optional as variable is an alias for the value returned by the object
+
+and so on on this obscure aspect of with-as. with-as is quite advanced anyway.
+
+
+////////////Exception Objects\\\\\\\\\\\\\\\\\
+
+////////////Exception Design\\\\\\\\\\\\\\\\\
+
+////////////////Classes\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Usual OOP concepts and classes as factories, instances as concrete iterations of class. Inheritance, polymorphism of functions/overloaded methods abd operators
+syntax in py is a bit different:
+
+class SecondClass:
+def setData(self, value):
+	self.data = value
+
+class FirstClass(SecondClass): #in brackets means inherits
+	def display(self):
+		print(self.data)
+
+firstClassInst = FirstClass() # generate an instance of first class
+#note that it will have not only FirstClass display meth but also
+the SecondClass setData via inheritance
+#we access methods/class vars/attributes via concat.
+firstClassInst.setData(23)
+firstClassInst.display()
+>>23
+	
+
+++++++ classes are module 'top-level' namespace attributes
+
+This means that modules can hold one classA, then have that class pass on its characteristics/methods to another classB via inheritance in a completely different module, SO LONG as the the module is imported and that imported module's ClassA is appropriately referenced EITHER IN THE IMPORT STATEMT WITH from...import OR in the elliptical brackets referencing the inheritee super-class via concatanated qualified namespacing:
+
+from module1 import ClassA
+
+class ClassB(ClassA):
+	define b and inhrit A's stuff
+	
+OR:
+
+import module1
+
+class ClassB(module1.ClassA)
+	again do stuff
+
+++++++ operator overloading
+as usual, this refers to when we customise operations dealing with builtin types that already have existing hard coded functions that operate on them (and thus overload polymorphically the operations). builtin operators like: addition, slicing, printing, qualification.
+
+The utility of operator overloading like this, with existing operator functions being piggybacked upon by the class-defined operator functions are dual:
+1. it allows the object's we instantiate via classes have such functions that have integrated functions almost like they have builtins
+2. the built operators being overloaded can be distinguish by their __hook__ marking.
+ 
+These kinds of overloaded operators are particularly useful because:
+1. they are integral to the class structure that defines them
+2.most default built in operations functions are able to be 'piggybacked upon'/overriden
+
+For the most part, these special __hooks__ are advanced tools. But one common hook is the __init__ hook, which is used as an overloaded method for CONSTRUCTORS of object instances of the class that defines them.
+We can also combine this with a few other hooks that stand for the print() and concatanation/addition(which is already an overloaded inbuilt operator) functions -i.e. __str__ and __add__:
+
+
+class ThirdClass:
+	def __init__(self,value):
+		self.data	= value
+  def __add__(self, other):
+  	return ThirdClass(self.data + other)
+	def __str__(self):
+		return '[ThirdClass: %s]' %self.data
+	def multpl(self, other):
+		return self.data *= other		
+
+++++++ Classes vs. dicts
+
+In fact, classes are actually stored as dictionaries by the python engine, with the various top-level attributes of the class being fitted into a kind of namespace where they are the dictionary 'key'
+Class architecture has various other elements of interest. for example their relationship to their respective superclasses are stored in a __bases__ attribute hook which holds the superclass info as a tuple.
+
+NOTE that classes are NOT FUNDAMENTALLY NECESSEARY IN PY- LIKE PHP or JS it is more flexible about OOP than JAVA/C# 
+because of this, we can declare a function outside of the class structure.
+
+given this proximity to dicts and the flexibility of Python, it makes sense that we can consider: should we use a DICTIONARY or a CLASS structure to contain our data, especially when it is in a records-keeping/mini-database form.
+this is a question of judgement on a case by case basis. But, broadly, the class strcture is much easier to cosntructre and acces BUT dictionaries have more 'durability' and flexibility as it can take many sub-types for every entry
+
+++++++ the Class statement
+usual deployment BUT NOTE a major difference with Java, C++ and C# the CLASS keyword  IS NOT A DECLARATIVE STATEMENT - but rather an object construct itself - NOTE that's the reason for it's ability to shorthand assign the superclass via a method bracket(superclass)
+
++++++ constructor meths __init__ clashes
+
+the __init__ overloaded meth doubles-up as a constructor  BUT it can only be loaded up by the python engine ONCE on a parse - otherwise it will get confused as to WHICH of the__init__ are to be run- for example, if more than one __init__ is deployed in the super and sub class and we are operating FROM the sub-class and wish to trigger the super-class' __init__ 
+To deal with this we will have to deploy the SUBCLASS init with a function block that triggers the super class init (which has been inherited):
+
+class SuperClass:
+	def __init__(self, value1):
+		... do stuff in the paras
+
+class SubClass: 
+	def __init__(self, value1, value2):
+		def __init__(self, value1)
+	...further unrelated paras...		 
+#note that the nested __init__ holds just one value like the super-class one BUT the superclass __init__ has two values passed as arg2 and arg3 (because in fact, arg3 is feeding the arg2 
+
++++++ class methods
+these are a slight twist on the usual class-embedded methods. Instead, this is a class-on-class method, acting from one class on another
+
+These are advanced options.
+
++++++ inheritance specialisation technniques
+In python, inheritance is the usual and the way the python parser keeps track is via the concatanated(qualified in py terms) namespaces that produce a DOM-like tree hierarchy of packages-modules-(super-)classes-functions and Object instances.
+
+But, because of this direct tree hierarchy, there are some exotic possibilities in terms of the ways that sub-classes can interact with super-classes.  
+
+An example of this would be where a sub-class REPLACES INHERITED ATTRIBUTES from its SUPERCLASS PARENT. Or it can  provide to the parent attributes the parent expects. Or it can extend superclass methods by deploying a callback function to callback on the super-class defined method while also deploying its own actions in this callback function (that contains a callback to the superclass):
+
+class SuperClass:
+	def superMethod(self):
+		print('this bit is from Superman')
+
+class SubClass:
+	def subMethod(self):
+		print('doing separate stuff\n ')
+		Super.superMethod(self) 
+#rememebr Super to refer to inherited SuperClass
+		print('\n and more stuff on the sublevel')
+
+>> doing separate stuff
+	 this bit is from Superman
+	 and more stuff on the sublevel 		
+
++++++ interfacing with a super-class
+There are various of these INTERFACE TECHNIQUES:
+ including: Super, Inheritor, Replacer, Extender, Provider
+
++++++ Abstract superclass
+
+this is a type of superclass that is left blank of content. It contains only abstract (content-free) methods that the Abstract superclass expects other (super-)classes to define in their own blocks and make use of.
+Sometimes it is useful to add an ASSERT statemetn in such classes as away to alert other programmers that this abstract method NEEDS the using (super-)class to define its content in order to use it. Such abstract methods will in any case, by default, throw undefinedName exceptuions. example:
+
+class AbsctSuper:
+	def delegatMeth(self):
+		self.whateverAction()
+	def actionMeth(self):
+		assert False, 'action must be defined'	
+
+////////////Class Design\\\\\\\\\\\\\\\\\
+
+Usual principles of OOP - inheritance, overloading etc.
+
++++++++ the 'is-a' and the 'has a' relationships
+
+two paradigms for inheritance are the above.
+
+'IS A' is classic direct inheritance relationship in which one super-class gives its characteristics to the relevant individual or multiple sub-classes. remember that with PY we deploy the (SuperClassName) to denote a class above passing the inherited characteristics
+
+'HAS A' is a complementary paradigm. Instead of inheritance, it acts like a directory-referencing/namespace organisation. We import whichever classes are relevant, or we create our own in source code. Then we reference them using the SELF and uise concatanation for referencing/pointing to these classes' methods. 
+What this creates is component-based pointers- very much like the component-based organisation found in React and other Javascript frameworks. BUT with PYTHON things can get complicated real quick- the language is very pithy and flexible.
+
+
+
++++++++ delegation
+
+
+ 
+
+//////////Operator Overloading\\\\\\\\\\\
+
+++++++
+
+++++++
+
+++++++
+
+++++++
+
+++++++
+
+++++++
+
+//////////////// 	\\\\\\\\\\\\\\\\\\\\\\\\\
+
+++++++
+
+++++++
+
+++++++
+
+++++++
+
+++++++
+
+++++++
+
+

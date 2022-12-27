@@ -1,0 +1,836 @@
+JAVA Object Oriented Programming in Java by Danny Poo, Derek Kiong, Swarnalatha Ashok. 2nd Edition 2008
+++++++++OOP CONCEPT +++++++
+                  ///////OOP Relations\\\\\\\\\
+In java, the objects are relational to one another on the basis of a set of information that is
+sent between them. In the case of two objects being related to one another, there is a set range of
+potential information relayed between them to achieve a particular goal. One object informing
+another will have a message which will instruct the other object about a particular frame of
+information to be referred to. It can within this message contain further attributes that are
+relevant to the action being undertaken, this is known as the args or arguments. The recieving
+object calls what is termed a method, which is a kind of incantation of this message from the
+initiating object (the sender object).
+                ///////Classes\\\\\\\\\
+When multiple objects have similar attributes (although varying values for these attributes) then a
+special kind of class object is created. Every object needs a class, since it is the fundamental
+structuring unit that allows objects to be grouped together.
+A class is a set of descriptions.It only describes the set of objects under its scope,
+it does not provide any values for theseobjects.
+An object, on the other hand is an instance of a class with its own attributes and methods.
+
+The arguments contained in the message sent by the initiating object are optional and can be left
+empty. If used, they provide additional information that may be required by the recieving object as
+necessary. Thus, the method, or multiple methods, executed by the recieving object can "act" upon
+the information provided by the arguments.
+
+The class contains the barebones outline of the objects but an instance of that class as an object
+has be invoked used the new objectTypeName(); demarker.
+Thus the class outlines the properties of the contained objects but the objects have a life of
+their own.
+
++++++++++++VALUES AND VARIABLES +++++++++
+
+Objects themselves express a range of inputs and functions. They can, for instance, make use
+of Java's primitive values types. These include the boolean yes/no true/false value, the byte,
+short, int, long, double and float variables which each have their own limitations.
+The objects can also execute method(s) as outlined by the corresponding class object.
+These methods will, when expressed by the object, outline a set of parameters. These methods
+often will modify the object's initial arguments/attributes.
+
+
++++++++ OBJECT MANIPULATION AND CHARACTERISTICS ++++++++
+
+Specific objects can be related to broader characteristics (including any related attributes or
+methods) via the . modifier. This . basically relates a specific object's instance to an attribute
+that it is attached to or a relevant method. For instance: carpark.number / entrance.number /
+door.number . The number element is an attribute relevant to these different objects.
+              ////////ACCESS MODIFIERS\\\\\\\\\
+Access modifiers can be used for class formation in order ot limit access between the initiator and
+the reciever.  Examples of this will be the Private , public, restricted and default(null).
+              ////////OVERLOADING\\\\\\\\\\
+Regarding clashes - also termed "overloading" - Java does support overloading, unlike C.
+Thus classes cannot have the same name within the same package. But class attributes can indeed
+have the same name as attributes found in another class since they are considered compartmentalised.
+Within a class, the methods denominated can share a name so long as they are distinguished by their
+content- ie. their number of parameters or the use of different parameter types.
+                /////////CONSTRUCTORS\\\\\\\\
+Constructors are a way of creating objects and initialising them at the same time. Essentially,
+they save source code space by allowing the listing of the different objects under one class
+which can then be executed/initialised all together later on in the source code.
+This is a particularly useful thing in the case of forgetiing to initialise objects which have
+been created and defined earlier in the source code. By using a constructor style for the
+object(s) then initialisation is done simultaneously within the same object-mapping process.
+
+Constructors can be overloaded in exactly the same way as methods.
+Overlaoding constructors basically entails listing out multiple objects but also changing the
+assigned variable values for each of these objects as required at the end of the mapping process
+                  //////ACCESS MODIFIERS AGAIN\\\\\\\\
+The variables themselves can either be instance variables, in which case they are available to all
+the methods declared in the class object. Or alternatively, they can be local variables, declared
+within the block of the method or within a particular object individually and thus not available to
+other objects/methods. The instance variables will be declared in a class but outside of a method
+and will have access available so long as they are public and not private/restricted. They will
+only be called into existence in memory when using the new keyword and they are destroyed by
+garbage collector when nothing refers to them any longer. In contrast, the local variable is
+declared inside a method, it created and destroyed the moment a method is called and when it exits,
+and they are not accessible from outside of the object/method that "owns" them.
+
+                      ////////APP LEVELS\\\\\\\\\
+                                HIGHER LEVEL
+Therefore the Java process has several levels.
+The overall java application is made up of some primitive values, keywords, and objects.
+These objects can have both a class-level existence, in which case they are class-level objects,
+or they can be singular self-contained objects- instances of a class  in which they can perform a
+variety of functions.
+                                MIDDLE OR CLASS LEVEL
+At the class level, there is a construction of class-level information. This includes the access
+modifiers (public, private, restricted or default). There is also the outlining of the
+class-contained methods, also known as instance methods as well as instance variables, which can be
+access by all relevant instance-objects or other classes/instance objects based on the access
+modifier.
+                                    LOWER LEVELS- OBJECTS
+Within the lower-level of the instance objects themselves, they can be defined and used for a
+variety of purposes- they can simply give an existence and description ot the object, or they
+can also be used to "message" or "call" upon another object's properties/information. This is
+therefore a level filled with local variables that are only contained within that object and not
+accessible from above or outside. The instance object will also potentialy have a combination of
+any of the following elements: assignments- which assign values to a range of variables that are
+denominated via a keyword such as int, double, float, char, string, byte, long etc. It can also
+pass messages to another object - it can call upon another object. Finally, more advanced types
+of statements within the object are control flow statements which include boolean, loop and
+conditional statements.
+                                  COMPLEX ABSTRACTED LEVELS
+That is the situation at the operational or "street" level. However, there are wider scales at
+which the Java application is being processed and navigating. At a higher scale, there is the
+urban view scale, which includes the "street blocks" that could be considered the class types
+and the broader urban quarters level, which can be considered the generalised classifications.
+At an even higher level of abstract, outside of the urban but a "regional" "international" level,
+there will be the servers, applets, interconnectivities via the internet, multi-threading etc.
+
+A set of superclasses allow us to collect a variety of class types into joint characteristic
+properties. For example, a superclass of bipedal could list all animals that walk on two legs.
+There could then be further sub-classes which can optionally themselves be superclasses to other
+sub-classes. For instance, a sub-class of mammals that are bipedal, followed by concrete (base)
+classes that outline characterstic properties of human beings, marsupials and whatever
+other bipedal mammals..
+
+SUPERCLASS                                 |BIPEDAL|
+                                        //           \\
+FURTH SUPER-CLASSES               |MAMMALS|            |REPTILES|
+                                //       \\              //
+CLASS                  HOMINIDS        SCAVENGER         LIZARDS
+                      //    \\            ||               //          \\
+OBJECT      HOMO SAPIENS   NEANDERTHAL   LEMUR      COMODO DRAGON  GIANT ANTEATER
+
+
+Generalization is the process of pickiing similarities between classes in order to outline a new
+generic superclass entailing all of these subordinate classes
+
+Specialization is the opposite.
+
+                    //////////ABSTRACT SUPERCLASSES\\\\\\\\\
+Some superclasses are of such generic proportions that they aquire a certain level of abstraction.
+With these abstract classes, there is no actual object created within their scope; they only exist
+to create an abstract generalized grouping for other classes below them. Those classes which are
+filled with concrete objects are named concrete classes and find themselves at the base of the
+hierarchy. Their scope outlines the variables, methods and modifiers that the actual objects call
+upon when being created and executed.
+Abstract classes are denoted in Java using the abstract keyword preceding the class keyword while
+concrete classes just use the standard class key word.
+
+
+                      ///////////INHERITANCE\\\\\\\\\\\\\
+
+With respect to inheritance, which is the inheritance from a class above to a class below of the
+methods and variables outlined, this can be denoted by using the extends keyword.
+for example: Class B extends Superclass A {
+}
+
+This allows for a lot of code reuse- saving effort and time. It also allows
+fro the simple extension of further objects on the basis of existing class Objects
+This can allow for the inclusion of new objects of the same type as and when required.
+
+                            MULTIPLE INHERITANCE
+
+Alongside these concepts, inheritance can also introduce another element which is
+related to the creation of multilevel inheritance as well as a further possibility of
+multiple inheritance.
+
+inheritance from one superclass can provide the frame for the formation of Objects
+following a class object on a single but also on a multi-level mechanism. In the case
+of multi-level inheritance, there is a kind of intermediary level class object
+through which a particular trait is passed through.
+
+Multiple inheritance is, instead, the mechanism by which objects or classes can inherit
+ traits from multiple superclasses. In the case of multiple inheritance, a final recieving
+object can get recieve traits from more than one class/superclass. For instance, a
+particular object may reflect a capacity or trait that has more than one broader
+supercategory.
+
+
+Super-class   Electric Power            Plastic          Human I/O
+                  \\                   //     \\              //
+Class             Electrical object             Physical Object
+                             \\                 //
+                              \\               //
+Object.                         Light Switch
+
+
+Multiple inheritance, however, can pose a probem of logically Identification
+since the machine cannot make a distinction between the class characteristics
+contained in two separate classes that have the same name and function.
+
+Thus the use of multiple inheritance can actually be useful to translate some
+real world problems or distinctions but can run into the problems of the machine
+world. Note the example:
+
+Super-class   Electric Power            Plastic          Human I/O
+                providePower();          manufacture();       interact();
+                                        insulate();          turnOn();
+                                                            turnOff();
+                  \\                   //     \\              //
+Class             Electrical object             Physical Object
+                      provideUtility();            provideUtility();
+                      providePower();               insulate();
+                                                  turnOn();
+                                                  turnOn();
+                             \\                 //
+                              \\               //
+Object.                         Light Switch
+                                turnOn();
+                                turnOff();
+                                provideUtility();
+
+
+In fact, java doesn't explicitly permit multiple inheritance for this reason.
+However, Java does allow the informal implementation via the use of fix and
+inherited method contracts outlined in a (super)class with the possibility of
+outlining separate and differentiated implementations in the (sub)classes and
+objects.
+                              METHODS
+
+In fact methods actually have two elements that fundamentally make them up.
+One aspect is the contract- which refers to the information that is to be
+understood and executed by the method. IE: the name and parameters of the method
+
+The other element is the implementation. This refers to the body or container
+information of the method in which statements are outlined.
+
+Note that a contract can remained unchanged while implementations can be unchanged
+at will.
+                        //////////INTERFACES\\\\\\\\\
+
+Interfaces are essentially a type of valve that allow for a way to limit certain
+methods to particular class-members . The work in parallel to the class characteristics
+and can be called upon just as methods are. The keyword used to call on the are:
+interface (to define an interface) and implement (to call on using an interface)
+
+Following is an example of use of Interface:
+
+                                PING USER FUNCTIONALITY:
+                                       ______________________
+                                      |user                  |
+                                      |    string userName;  |
+                                      |    bluetoothPing()   |
+                                      |    smsPing()         |
+                                      |    collectData()     |
+      ------------------------        ------------------------
+      |grantAuthorization    |                  ||
+      |    authorize()       |                  ||
+      |                      |                  ||
+      ------------------------         ______________________
+                          \\          |generalUser      |
+                           \\         |    collectData()     |
+                            \\        |                      |
+                              \\      ------------------------
+                    implements \\               ||
+                                \\     ______________________
+                                 \\   |authorizedUser        |
+                                      |    authorize()       |
+                                      ------------------------
+
+import java.util.*
+
+interface grantAuthorization {
+  boolean authorize() {}
+}
+
+public class user {
+  String userName;
+  String getName() {return name};
+  bluetoothPing() {}
+  smsPing() {}
+}
+
+protected class generalUser extends user {
+  generalUser (String n) {
+  name = n;
+  }
+  boolean registerUser () {
+  System.out.println("User Registered");
+  }
+  void collectData() {}
+}
+
+private class authorizedUser extends generalUser implements grantAuthorization {
+  boolean authorize() {
+  System.out.println("Access Authorized")
+  }
+
+  public static void main(String args[])
+    generalUser n = new generalUser ("Jack Newcombe");
+      if (n.registerUser())
+        if (n.authorize())
+          n.collectData()
+          System.out.println("User " + getName() + "authenticated and authorized");
+        else
+          System.out.println(Sorry "user " + getName() + "was not authenticated /n
+          or authorized");
+}
+
++++++++++++++++++++++++++++++++++
+CURRENTLY INCORRECT- NEEDS WORK
+
+package com.trial.interface.example                    /* package call */
+import util.*;                                         /* importing all java utils*/
+
+interface accessControl {                             /*creating the public access interface*/
+  boolean grantAccess();                              /* interface has a boolean option t or f*/
+}
+
+public class Employee {                               /*EMPLOYEE SUPERCLASS created*/
+  String name;                                        /* creates empty variable entitled name /*
+  namedEmployee() {}                                  /* creates method that is empty but allows naming an employee /*
+  String referEmployee() {                             /*creates string option referEmployee which calls the parameter of employee name /*
+    return name;                                       /* method returns the name of the employeed noted earlier /*
+  }
+}
+
+protected class noAccessEmployee extends Employee {      /*   /*
+  string name;                                         /*   /*
+   getName                                             /*   /*
+}
+
+protected class accessEmployee {                       /*   /*
+
+}
+
+interface data parameters are static and final. static meaning that there can only be one
+copy of the data available and they are final in the sense that they cannot be modified.
+
+This means that the parameters deployed are to be fixed and unchanging. The same occurs with
+the interface's methods. Any (super) or sub-class that is deploying the interface's
+method and parameters must use is if it "extends" that interface.
+
+
+ABSTRACT CLASSES
+
+Alongside interfaces, another type of abstraction but one with less strict binding on
+those other classes deploying its methods/attributes is an abstract class. Unlike the
+case of the rather strict interface object, the abstract class doesn't have the strict
+rules on binding of content (attributes and methods) nor does it have to be public, the
+abstract class can also be protected as well as public. however, it does need to be declared
+using the abstract keyword in order to distinguish it as an abstract class.
+Another key distinction is that the parameters and contents can be final but don't have to
+be- there can be modifications of the attributes from the subordinate class.
+
+A CRUCIAL difference between the Abstract class, which can be useful for defining general
+concepts as opposed to interfaces is that the abstract class cannot instantiate a new instance
+of a particular object under this schema: fruit a = new fruit();
+
+MULTIPLE INHERITANCE IN JAVA USING INTERFACES
+
+One thing to note is that any sub-class that stands "under" a higher level class which
+has implemented an interface will have the possibility of inheriting the interface's
+methods and attributes.
+
+Furthermore it is notable that Java's lack of multiple inheritance, unlike C++ for instnace,
+can lead to confusing and buggy implementations of multiple inheritance using one
+or more interface classes.
+
+
+                        //////////POLYMORPHISM\\\\\\\\\\
+
+Before considering the issue of polymorphism, we have to consider the issue of
+binding. In Java, there are two binding options. One of which is the static binding
+which offers an option to bind new objects into defined class processes.
+
+
+STATIC BINDING
+In static binding there is a field of potential objects that are defined under the
+class types. These can thereafter be added (bound) to the further instances of that
+class type. Static binding offer  the following conditions:
+    -In static binding, a switch array is designed. this actually creates two or more
+    alternating pathways for the main method in main memory.
+      The two or more options are created statically in the sense that they bothed
+      fixedly exist in main memory.
+
+DYNAMIC BINDING
+    - in dynamic, a self-referential logic gateway allows for getting rid of the Switch.
+    - it is dynamic because the superclass, sub-class, and objects refer to one another based
+    on the definition given when the processor runs main method on basis of array selection.
+
+OOP languages allow for operation overloading. This can be done using method overloading in
+the sense that it allows for the use of the same named methods within one class.
+
+method signatures can be overloaded within the same class:
+THey are considered to be the same operations if the name of the methods are the same and they
+have the smae parameter in terms of numbers of parameters and types.
+
+Another type of operation overloading is the use of direct method name overloading:
+This is done since for the assembly language, the inclusion of varied parameters and
+arguments (within the methods) actualy differentiate the method, even though for Human
+readers, the name of the method is the same.
+
+So long as the parameters and/or the arguments of the methods are distinguished, they
+can have the same name within the same class:
+++++
+
+import java.util.*
+
+public class methodOverloadingExample {
+    public static sameNameMethodExample(differentArgument1) []
+    public static sameNameMethodExample(differentArgument2, differentArgument 3) [para2, para3]
+    public static sameNameMethodExample() [para 1]
+    public static void main (string[args])
+}
+
+This doesn't clash because compiler and machine language sees it as different methods.
+Equally, having multiple classes using the same name and even same signature method is
+not an issue:
+
+import java.util.*
+
+public class methodOverloadingExampleClass1 {
+    public static sameNameMethodExample(differentArgument1) []
+}
+
+public class methodOverloadingExampleClass2 {
+    public static sameNameMethodExample(differentArgument1) []
+}
+
+However, if one of the classes is placed in a position of subordination (as a
+sub-class or extended class) then the clash DOES occur:
+
+
+import java.util.*
+
+  public class superClassExample {
+      methodOverloadingExample (arg1, arg2) {para1, para2}
+  }
+
+  public class subClassExample extends superClassExample {
+      methodOverloadingExample (arg1, arg2) {para1, para2}              CLASH HERE DUE TO
+}                                                                       EXTENSION OF THE
+                                                                        SUPERCLASS
+
+In this case, the clash doesn't actually produce an error; instead, there is a
+realignment of the sub-class method to the super class method. The hierarchy means
+that the super class method takes precedence (overrides) the subordinate class.
+
+
+POLYMORPHISM is the process by which we can use DYNAMIC BINDING in COMBINATION with
+METHOD OVERLOADING in order to achieve runtime executed self-referential and self-selecting
+programs that pick out one condition and using the same method to affect different objects.
+In other words, getting different objects to initialise themselves according to different
+conditions which are decided upon at runtime (with the main method).
+
+In the polymorphic architecture, the sender (super-class) and/or main method that includes
+a conditional array will not need to know anything about the identity of the recieving class/
+objects that are to implement these general methods upon selection nor anything that has to
+do with their "content" meaning the parameters and args contained in these sub-classes.
+
+Hence the beauty of polymorphism in epxloiting the capacities of the OOP model:
+with a few slight changes in the main method, one can add further conditions to the array
+as required and thereby increase the number of potential object with minimal effort and
+within a compartmentalised architecture.
+no need for switch, no need to change the ultimate Println statement (it is a block of text
+that can be modified as required)
+
+
+                    //////////MODULARITY\\\\\\\\\\
+
+Modularity is essentially the process by which we can try to cut through the deployment
+of functions in order to save time and memory space / algo workout. This is achieved by creating
+classes of objects that are being listed or counted up, or coalesced for a "final count" or a
+"final analysis".
+Instead of going through an onerous process such as:
+
+classCreation name {
+    general scope parameter
+
+    objectCreation (args) {
+      Paras
+    }
+  Static Void Main method  {
+    paras
+    object 1 = new *keyword count 1(string id);       // note how this is quite onerous since it
+                                                        requires one by one object initialization
+    object 2 = new count 2(string id);
+
+    SOUT print out count + ("statement")
+  }
+}
+
+
+INSTEAD, consider creating instances of the object via a method under the classCreation function:
+
+classCreation named {
+      general scoped parameter
+        condition starting point *for instance int count = 0
+        general scoped CONSTRUCTOR method (argument name) { parameters as content filling
+        the argument name's value and
+        an addition or other change to starting condition
+        }
+    independentMethod *allowing for instantiation of objects() {method parameters filling content for example return count;}
+    PSVM Main method {
+      object1 instantiation using new generalscoped method(parameters like string name of id of new object)
+      object2 instantiation using new generalscoped method(parameters like string name of id of new object)
+      object3 instantiation using new generalscoped method(parameters like string name of id of new object)
+    SOUT print to console (but this time embedding the independentMethod() then adding + "statementout string");
+    }
+  }
+}
+
+HOWEVER: the problem is although this does automate some of the process it doesn't actually get the
+count right because o*bject1.getCount for instance will give a count of 1 + "SOUT print console statement" and
+
+then o2.getCount will give another, independent 1 + SOUT meaning there is no +1, +1 ,+1 ...
+A simple fix to this issue to ensure that the independentMethod being deployed -in this case it was getCount()- is
+being performed on a static rather than dynamically allocated memory for the objects being tallied.
+Thus, in the above model, by simply adding "static" just before int count = 0 when defining the condition's starting
+value, then we achieve this. We have fixed the object(s) existence within a statically determined part of the main method's
+interaction with main memory. This means that it now counts every instantiation of this object (beginning with the starting
+condition) and treats each of these objects as having SHARED ATTRIBUTES FIXED STATICALLY in main memory.
+
+With modularity, we achieve this capacity to shorten the work, especially of counting and tallying instances of objects.
+In this case, the newly static variable "count" is considered to be a "class attribute"
+
+
+Another option is to take the independentMethod and subjugated it to the general function . I.e. to make that method
+(getCount() in this instance) one of the parameters of the broader function creating the class. This has the advantage of
+now not only statically but generically sharing this method to all instantiations of the class as o1, o2. etc. Thus the same
+o2.getCount, o3.getCount can be used in same way.
+
+An important underlying concept for understanding static writiing to memory is the idea of aliases.
+basically, when the object instantiations are now referring to a static method in main memory (eg: o1.getCount(), o2.getCount()
+then these are now aliases) They don't "exist" independently of the generally scoped method - they are "symbolically linked" to That
+method while being deployed in the object instances. This also means that the only way to access this general scope method  but
+NOTE NOTE NOTE that this applies to THIS java class being used. The EXACT SAME NAMED METHOD can be Equally deployed in another
+class document with completely different contexts and effects. IF we want to operate from OUTSIDE THIS JAVA CLASS but yet REFER TO
+THE SAME GENERALLY SCOPED METHOD, then we need to added the document object model reference, i.e. : we must refer to the CLASS.METHOD()
+
+So for instance, the above generally scoped getCount() method, if we were to leave SalesPerson.java and go to another class document,
+perhaps entitled Management.java then; within this new class if we want to make a reference to the getCount() method used in
+SalesPerson.java, then we must use the DOM i.e. : refer to SalesPerson.getCount() within out source code;
+
+Using the DOM model you can also restrict access using the modifiers as usual (private, default, public, protected)
+as well as being able to import and refer to methods and other components included in other classes within other
+packages (so long as it is referred according to the DOM model of packageName.folderName.className)
+to refer to specific components in another class, then use the ANOTHER reserved keyword.
+To import all of the name space in the other class' source code, then simply write the IMPORT keyword.
+if you want to import all of a package's classes then use the IMPORT.* wildcard to import ALL(*)
+NOTE access modifiers apply here as always. the imported class must be public. If they are protected or private,
+then the name space contained within them, or any classes that are protected/private within the imported package
+will not be brought into the new source code (via ALIASING remmeber NOTE)
+
+ENCAPSULATION is the process of doing these embedded and aliased relationship without having the other classes annd
+objects revealing all of their arguments(abilities) and parameters (attributes). Only the relevant Information
+and, in the case of aliasing a method, only the way to achieve something, not its details or further implementations,
+is shared with the recieving (calling) class from the sending class. In particular, there is a hiding of the HOW element
+while the WHAT of the object/method is shared.
+
+
+
+STOP HERE NOTE
+                        ///////////EXCEPTION HANDLING\\\\\\\\\\\\
+
+Inevitably, programs will need certain exceptional handling circumstances that arise for whichever reasons. Therefore,
+there is the concept of exception handling in order ot avoid overlly strict application of abstract concepts and in the
+case that modularity isn't sufficient to provided flexibility on a case-by-case basis.
+The benefits of modularity and absstraction is exactly what also causes the need for exception handling. The fact That
+programs, classes and other elements are modular, redepployed, redefined in different contexts as they are imported or
+inter-linked is what can cause exceptions and errors.
+Exceptions in particular are like contingencies that the programmer can think of ahead of time.
+-one benefit of exception handling is that it provides for forethought on the part of the programmer with respect to potential
+issues in the code, but alsop allows for smooth running of the code. Exception handling allows for "picking up" the exceptions/errors
+and "throwing them" to another construct outside of the class construct itself- thus allowing for the exception to be noted, picked up
+and temporarily skipped over within the class itself- even though the exception will be "handled" elsewhere by the exception handler.
+Rules
+- Exceptions are outlined via deployment of classs consttructs that inherit from the Exception class
+- Handling is enabled wihtin a designated block called the TRY (keyword) block and indicated using keyword: CATCH.
+-exception conditions are identified using the THROW keyword.
+
+Essentially you create an exception super-class that will contain various methods or arguments related to the exceptions that
+are to be raised.
+
+CONSTRUCT
+exception denoted by objects  | exception objects can be identified via object tags.
+exceptions defined by class constructs which are "exception handlers" they are prefixed with the 8reserved keyword* CATCH |
+additional attributes can be included in class construct for modularity of exceptions but these exception classes inherite attributes
+of the exception superclass.
+EXECUTION
+handling is dynamically enabled for any statements found within the TRY *reserved keyword* block marker
+  within the try block, things occur as per a normal function block BUT upon an exception control-flow can thereby be "transferred"
+  to the linked exception handler. THE CONDITIONAL that will FLAG the exception within the TRY block is prefixed with a THROW *reserve
+  keyword*- this "THROW statement" points to the conditions that an exception needs to be picked up and thereby "thrown" to the
+  exception handler, which is another block in the source code denoted by the CATCH keyword. The CATCH block then initiated whichever
+  action is required for the exception to the be handled in the paralell background.
+  NOTE meanwhile, the source code continues... but NOT within the rest of the TRY block... it skips the rest of that block and goes to
+  whatever is the next function/try block to continue exectuing main method.
+
+  NOTE some pre-defined exceptions are automatically picked up and thrown by the JVM = similar to some imported functions. This will
+  include the more serious ERRORS as opposed to exceptions, which will be fundamental computing errors that are not relating to the
+  source code logic but perhaps to a hardware issue.
+
+  The structure follows from a set of pre-determined super classes that dealw ith exception handling. These are:
+
+  At the very top: the THROWABLE super class - dealing with any methods, arguments and parameters relating to anything that is throwable.
+
+  below this, two super classes :                     ERROR                                    and                   EXCEPTION
+                          //                    //      // \\       \\                                          //          \\                              \\                    \\                            \\
+  below this:     |LINKAGE_ERROR| |ASSERTION_ERROR| THREAD_DEATH| |VIRTUAL_MACHINE_ERROR|            |IOE_EXCEPTION|  |REFLECTIVE_OPERATION_EXCEPTION|  |RUNTIME_EXCEPTION| |CLONE_NOT_SUPPORTED_EXCEPTION| |INTERRUPTED_EXCEPTION|
+
+From these built in super-classes, with their various "EXCEPTION CONDITIONS", one can "throw" relevant exception conditions that are picked up at the
+"normal" (super/sub) class level. To do so, one uses the mechanism mentioned above.
+NOTE however, it is reccommended that objects that are seen by the programmer to have the potential to causse exceptions should ideally have a
+quite rich customized set of functions and instance variables describing conditions in which an exception is to be thrown to the in-built exception
+classes (within the TRY block under CATCH deonminations)
+
+Also NOTE that since all of these various error and exception types are belonging to the THROWABLE superclass and ERROR/EXCEPTION SUPERCLASSES this means
+that the execpetions and errors all share fundamentally similar methods and parameters- although these can be further customised by employing extra
+codnitions as mentioned above.
+
+NOTE also that  exception conditions thrown by the TRY block can only be caught by the CATCH block if they share the characteristics (exception conditions
+of the TRY block.
+NOTE that the positioning of the TRY and CATCH blocks is important. the main method will logically work through these blocks on at a time going down vertically throug hthe
+source code, thus they can be deployed in a "filter" or sieve like manner: Exception Handlers for superclasses MUST precede exception handling for sub-classes and objects.
+
+NOTE that a particular use of custom exception handling, beyond the in-built exceptions, is the deployment of proprietary, enterprise
+or server-side API/servlet constructs which can thereafter, securely and in a controlled manner, be modified and executed by applets/clients/hosts
+without "owning" or "breaking" the code. The client coder can modify source code but will have the bounds of whichever custom exceptions the server-side
+"owner" coder has implemented.
+
+There is also a way to make generic sets of exceptions that can thereby pick up generic or default faults- for instance with loss of packets or input-output
+exceptions that can occur in such circumstances. These can be "pre-gamed" via the deployment of customised generic exception handlers that are "injected" in th
+usual places.
+
+Another trick that can be used in to make a TRY block earlier in the source code, with a THROW handle and then referring to it via the CATCH handle later in the
+code. This allows for "catching" errors later in source code from pre-defined conditions earlier in the source code.
+
+Subconditions are the process of nesting these exceptions within classes of exceptions - when exceptions are nested they must be listed via order of inheritance -
+sub-classes must be c aught first and then the superclass exceptions are caught. NOTE: if the superclass is caught first, it overrides the sub-class and means that
+the sub-class exceptions are ignored (overriden by the super-class).
+
+NESTED EXCEPTION HANDLING
+Basically like running a sub-block within a function or a block under another block...
+nested exceptions.
+
+LAYERED CONDITION HANDLING
+basically nested but in this case its the  try blocks which reflect differnet potential
+err_codes.
+
+CODE FINALIZATION AND CLEANUP
+
+Code constructors in OOP also has the option of destructors, which clean up the code out
+of allocated memory thus making the processor more efficient.
+however, with Java, the Virtual Machine already automatically allocates and deallocates
+memory and thus makes specifically written de-allocation and cleanup unecessary.
+
+Finalization is the process by which the code cleanup can be deployed at the end of an
+exception handling block or blocks. The use of the FINALLY reserved keyword can be
+deployed in order to lay a final condition in which the one or various preceding try blocks
+(which can be nested also) will result in the finally condition (which will be outlined in
+the parameters of the finally sub-block)
+
+
+
+                        ///////////INPUT OUTPUT\\\\\\\\\\\\
+
+In Java, as with other langs, the API system allows for code reuse and redeployment.
+APIs can be called/deployed in a variety of ways.
+    - the simplest manner to do it is to create an instance of the FileInputStream
+    inbuilt class and then using the read() method to read file data from the object
+    being deployed. The close() method is thereafter deployed to clean up memory usage.
+    -A less common API deployment method is to create a sub-class encapsulating the
+    superclass' more generic code and then adding further code as required within the
+    new sub-class which can deployed the API object.
+    -A third, "invisible", option is to deploy embedded inbuilt API functions/objects
+    that come prepackaged in the Java libraries upon installation of the the JRE.
+    An example of this is the OUT method such as that used for sytem.OUT.println
+
+Some other core and basic (preinstalled) API libraries are:
+
+    -java.lang - which consists of the classes  essential for the execution of Java runtime
+    for exampel the THREAD and SYSTEM superclasses.
+
+    -java.io - referring to the input-output facilities inbuilt into Java. An example of this
+    is the FileInputStream class.
+
+    -java.net package of classes which consists of those classes relevant to the networking
+    element of Java such as the Socket class used to hook into another host.
+
+    -java.util - referring to those utilities and tools to be deployed in code
+
+    -java.awt - referering to classes implementing Abstract Windowing Toolkit. used for
+    GUI creation especially with Windows.
+
+    -java.applet used to support applet creation and dpeloyment in html/web browsing context.
+
+
+The classic input output lines refer to  three core commands that were first outline in the
+UNIX system architecture based on C. These are the stdout, stdin and stderr - the latter putting out
+a report of an error of some time as outlined in previous section. In java there are equivalent
+inbuilt commands; System.out System.in and System.err
+
+NOTE that in terms printing out, there are two options : print and println. println will actually
+print out any type of object. An empty println() will print a return carriage.
+
+system.err behaves similar to system.out.print because it also prints out a message albeit
+an err_ mesg.
+
+However, the System.in behaves differently.It is considered static and final variable that
+is being inputted.
+
+public/private/protected static final InputStream in;
+In this particular example, the InputStream class (already built into core Java) has a particular
+statement of interest for calculating/error report of data streams. this is the following statment which
+counts every byte being sent and gives a return once appropriately coded to an undefined variable:
+
+System.in.read()   // this statemetn basically counts each byte. Using system below one can count
+each byte so long as more bytes have to be sent and loop the count by repeating the creation of an empty "holding"
+variable that "stands in" for each byte count. Meanwhile, the paralell count of the bytes is achieved by an equivalent
+loop of a ++ increment to another variable,c , which is initialised at 0. The number of bytes counted is printed out once
+the bytes are no longer being sent:
+
+import.java.io.*;                                                       // IMPORT INPUT OUTPUT TOOLS FROM JAVA CORE API
+
+public class ByteCountPrint                                             // CREATE BYTE COUNT PRINT CLASS
+
+public static void main (String args[]) {                               // PSVM ARGS [VOID] {FUNCTION BLOCK...}
+c = 0, b;                                                               // c = 0 INITIALISED , B IS UNDEFINED AS YET AND WILL BE LOOPED JUST TO CONTINUE BYTE COUNT
+  try {                                                                 // TRY BLOCK
+    while ((b = System.in.read()) != -1 );                              // WHILE LOOP ... SO LONG AS B STANDING IN/"HOLDING" the result of System.in.read BYTE COUNT AND, SO LONG AS BYTE COUNT HAS NOT FINISHED (b != -1) THEN, CONTINUE TO LOOP B>
+      System.out.print((char)b);                                        // SOUT PRINT CHARACTER B (HOLDING SYMBOLICALLY BYTE COUNT)
+      x++                                                               // INCREMENT X (++)
+      }
+  System.err.println(x);                                                // ONCE LOOP IS BROKEN> DATA STREAM IS FINISH SO WE CAN FINISH BYTE COUNT AND PRINT THE MSSAGE
+  System.err.println("bytes read in total");
+}
+          CONSOLE OUT:  6 bytes read in total.
+
+
+NOTE remember that everything is an object and everything is derived from the OBJECT superclas object. Therefore everything including
+the API related classes that are inbuilti into Java are equally drawn via inheritance from "Higher up classes" of API objects.
+For instance, with respect to the input-output API tools relating to data stream, there is a clear inbuilt hierarchy:
+
+OUTPUT STREAMS
+                PipedOutputStream
+              //
+           //                             BufferedOutputStream
+OutputStream == ByteArrayOutputStream   //
+          \\                           //
+            \\ ==   FilterOutputStream ====== DataOutputStream
+              \\                        \\
+                FileOutputStream          \\
+                                            PrintStream
+
+
+
+INPUT STREAMS
+                  PipedInputStream
+                //
+               //                             BufferedInputStream
+InputStream == ByteArrayInputStream          //
+      \\    \\  \\                          //
+       \\    \\  \\ ==   FilterInputStream ====== DataInputStream
+        \\    \\   \\                        \\  \\
+         \\    \\    FileInputStream          \\  \\
+          \\    \\                             \\   LineNumberInputStream
+           \\    SequenceInputStream            \\
+            \\                                    PushbackInputStream
+              StringBufferInputStream
+
+NOTE one thing to note is that since the JDK 1.1release, there has been an option for alternative named stream classes to
+be used. the idea is to streamline these names and make them fit more within the usual language names.
+So for instance:
+InputStream - becomes -Reader
+BufferedInputStream - becomes - BufferedReader
+and so on... etc.
+
+OTHER INBUILT APIs IN CORE JAVA ALSO EXIST AND CAN HELP IN VARIOUS WAYS.
+
+the SCANNER CLASS allows us to have data input from either a human or from a data source. Within the Scanner class, there is a set of
+sub-classes and methods, including the next(), hasNext(), and nextInt(), nextDOuble() etc. These read either general (i.e. token) data
+from the input, or specific -as in the case of nextInt().
+
+Another sub-class within the java Core APIs is the FILE CLASS. This allows programmers to give files more definitions because it
+allows a range of parameters relevant to a file, such as its directory/folder position, and modification information to be added.
+Some methods in the File Class include: isDirectory(), isFile(), getAbsolutePath(), lastModified().
+
+Another class is the RANDOM ACCESS FILE class. Random access in this case relates to the way that certain bytes of information can be
+read and even written into at any juncture within the file. This is enabled thanks to a location pointer that can intervene at the right
+location of the file and then introduce new bytes (write) or also read and introduce new bytes (read-write).
+In Java this is achieved via the usual inbuilt API classes such as DataInput and DataOutput. The File Pointer places the read/write location
+which is cosidered to be starting location 0 when the file is opened for the purpose of random access reading/writing.
+In Java, the deployment of random access read/write is done via a constructor class that can provide the following often used methods for
+reading and writing to the file as well as manipulating the File Pointer:
+readByte();
+readChar();
+readDouble();
+readLine();
+readUTF();     //for strings
+readFloat();
+
+and for the Pointer:
+int skipBytes (int n);      // skipping bytes representing ints.
+void seek(long n);          // looking for a particular long int to locate.
+long getFilePointer();      // unclear.
+
+         ///////////NETWORKING AND MULTITHREADING\\\\\\\\\\\\
+
+Essentially, there is a standard format for opening and closing comms_ between networked hosts/servers.
+
+In Java, there is the need to create a socket object that is instantiated from an inbuilt API set- the Java.net.*
+socket is actually deployed using a form that enables the coder to deploy the socket method with args that establish the
+domain name to be requested and the port through which the data is to be sent on the wire. ie:
+
+socket(server, port);
+or:
+socket(http://www.google.com, 80);            //established request to GOOGLE and via PORT 80.
+
+Important these net tools allows us to deploy the socket class but so too in networking there are other important inbuilt
+classes. Also important is the I/O tools API which provides many inbuilt classes allowing for the reading of
+data streams in and out as well as other methods such as getBytes(), flush() -which double checks that bytes have been properly
+sent along and read incoming. getResponse is important for assuring incoming data stream, for instance from a server to a host.
+read() is important here too because it allows us to read each incoming byte as they are sent down from the server.
+
+Among the network tools, alongside socket there is close() which allows us to close the socket connection.
+
+socket is not the only API class that exists in this context. there are others that are used for other purposes
+
+ServerSocket is an inbuilt class that works for servers as opposed to hosts. It has an inbuilt set of methods that allow for
+"listening" persistently to activity on a port, allowing for more generally communications, not the targeted ones that we find
+with the host-focussed socket class.
+
+
+                        ///////////\\\\\\\\\\\\
+
+
+
+
+
+                        ///////////\\\\\\\\\\\\
+
+
+
+
+                        ///////////\\\\\\\\\\\\
+
+
+
+
+                        ///////////\\\\\\\\\\\\
+
+
+
+                        ///////////\\\\\\\\\\\\

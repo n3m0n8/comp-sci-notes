@@ -1,0 +1,1081 @@
+	/////////////////////.NET book zero\\\\\\\\\\\\
+
+.Net is a set of libraries that are not windows-dependent and can be programmed to run with a range of languages. Certain specifications are required for compatability with .NET, these are known as the Common Language Specifications or CLSs and, related to this is the Common Type Specifications (CTS) which sets out the basic types and their core characteristics.
+.NET also uses a just in time compiler like java, that runs whenever a .net programme is run on that machine. C# is the usual language. 
+Unlike py, the .net and c# languages do not rely on pointers to memory spaces but rather rely with references. Such references are usually implied in the language and not explicitly referred to
+
+
+
++++++ Runtime and SDK
+
+.net needs a runtime package, also known as a redistributable package in order to "lock in" various programmes and languages on a machine for compatability. 
+Alongside this, .NET comes with a SDK software compatibility kit when installed.
+
+in the .NET libraries the System classes are known as namespaces and often start with the word microsoft or system. namespaces are position in the hierarcy using . notation as with js and java.
+ Examples:
+ System.IO input output, filestreams
+ System.Collections.Generic  storing info via lists, dictionaries stacks, queues
+
+/////////////////Chapter 4 \\\\\\\\\\\\\\\\\\\\
+We usually write .NET in c# which fundamentally looks like JAVA.
+C# also has the PSVM and same bracket and statically typed class structures as well as semi-colons marking the end of a statement or function:
+
+class exampleBasicProgramme {
+	public static void main {
+		System.Console.WriteLine("First programme done!");
+	}
+}
+
+NOTE that c# files usually are appended with a .cs
+
+Every installation of .NET sdk (software development kit) will come with  IL dissassembler or ildasm on the powershell/DOS command line to start it up. this dissassembler will disassemble a .NET executable and print it out via CIL statements. The CIL is similar to JAVA's Java Virtual Machine middle man, it acts as a middle man to the c# engine and the CLR (Common Language Runtim) which is closer to the machine language that the relevant processor deploys. The CLR thereby translates from C#>CIL>CLR>Assembly Language
+
+NOTE as usual void means exit runtime without any value i.e null exit.
+static, as usual, means that this method/function is attached to a class rather than being an instance method.
+
+NOTE unlike C and C++, the C# compiler does not need an INCLUDE statement as a header to the source code, because it has an inbuilt scanner that checks the relevant .dll(dynamic link library) file that contains all the inbuilt function prototyps that are required such as System(namespace).Console(class).WriteLine(Method).
+Similarly, unlike C/C++ which will, after compilation and before runtime execution, require a linker to run that accesses library files- either a) for standard runtime libraries by having said linker injected right into the executable code or b) in the case that the linked libraries are DLLs, then only references to these DLLs are inserted into the executable code. In contrast, C# simplified the process by having no requirement for library files to be linked, since it has an automatic scanner and thus, the compiler source code is enough- it will, upon being engaged in runtime execution, be able to find the relevant DLL and standard runtime libraries.
+
+Since there exists this scanner, we can thus write the compilation sourcecode with certain shorthand forms. instead of the System.Console.WriteLine() we can write Console.WriteLine() BUT ONLY if we add "using System;" in the sourcecode header - since we need to inform the C# engine that we are referring to that namespace when pointing to any class contained within such as Console.
+NOTE that USING is different to INCLUDE- wheareas include points to libraries, which isn't necessary in C# USING is pointing to namsepaces within these libraries, and can indeed be used, for instance to allow a shorthand pointing to class names without having to repeate their namespace locations.
+
+If we want an even shorter shorthand form, we can instead deploy an alias defined in the header:
+using C = System.Console;  // shortening System.Console with a shortened symbol of C...
+//now we can just preface WriuteLine with C
+C.WriteLine()
+NOTE however two major issues with this approach: 1.using C. will not apply to all cases of C.etc.etc in the source code, but only those methods that are contained within the defined namespace.class (C.System.Console in this case) and 2. more problematically, if there is indeed a namespace named C.whatever. that is being referred to, the compiler will confuse this defined C.whatever custom namespace/class with the shorthand alias.
+On the other hand, one instance where such shorthand can be useful is in the deployment of two difference namespaces but ones which contain DIFFERENT classes of the SAME NAME. In this case, to avoid human confusion, we can shorthand one of these namespace.classnames to a custom referrer while the other can stay as is.Or you could rename both, for clarity.      
+
+//////////////////Strings\\\\\\\\\\\\\\\\\\\\\\\
+
+as usual, the \ is the escape sequence
+
+\0 Null
+\a alert
+\b backspace
+\t horizontal		tab
+\v vertical tab(printing)
+\n newline
+\f form feed (printing)
+\r carriage return (enter)
+\" 
+\'
+\\ \
+\uABCD unicode
+\xABCD	hex
+
+note that when we need to use several escape sequences, it might be tedious to have to deploy them multiple times. for example a directory held in a string:
+
+'c\\Computer\\user\\Documents\\MyDocs\\Images\\'
+
+in this case, a nullifier of the escape sequence requirement is to preface the string with @:
+@'c\Computer\user\Documents\MyDocs\Images\'
+
+Note that the verbatim @ signifier means we can also deploy multiline strings without need for \n or \r
+
+instantiating a string is simple enough: 
+
+string stringName = 'here\''s the string.';
+we can instantiate an empty string of course and fill it later.
+you can instantiate multiple strings, only to fill them later:
+
+string string1 string2 string3;
+
+Or initialise a few on the go:
+
+
+string string1 string2 = 'first string isn\''t done' string3 = 'initialised';
+
+if a string is initialised but undefined, this throws up an exception if we try to deploy it.
+
+undefined doesn't mean not having anything inside.
+We can initialise a string with empty quotes:
+
+string string1 = '';
+or simply set the string to NULL
+string string1 = null;
+
+as usual strings or any other var of any type can be declare within(local) or outside(global) of a local scope
+
+In C# this GLOBAL var  is nicknamed a FIELD
+
+the field can be both declared and initalised (i.e defined with an assigned value), OR it can simply be declared without value to be assigned a value from within the local scope of a function (which will deploy an assignment statemetn calling on the fieldName = assignedValue
+
+If not assigned/initialised, the FIELD will return a 0 value or a NULL value (if it's a string).
+
+an alternative method for instancing a string is the writeLine() method:
+
+public static void System.Console.WriteLine('stringToBeWritten')
+
+NOTE THAT THIS ONE WILL OUTPUT TO CONSOLE. NOT SIMPLY SAVED TO MEM.
+another meth is:
+
+public static void System.Console.Write('stringToBeWritten')
+
+the first skips to a newline \n after every line
+the second doesn't
+
+an empty WriteLine() is useful just for skipping.
+
+
+As opposed to WriteLine(), ReadLine() instead prompts the user to enter a string to the console and reads it.
+
+using System;
+
+class userNameInput {
+	Console.Write('Please enter your full name:');
+	string userName = Console.ReadLine();
+	Console.Write('Thank you, your name is: ' + 
+	userName);
+	}
+}
+
+the Console class belongs to the System super-class. It contains several methods and parameters such as Write(), WriteLine(), ReadLine() -which spits outs the given string but only does so when the user presses the enter key.
+Another Console-class method is Console.clear()which clears the console screen.
+
+Among its properties are Console.Title which displays a title in the titlebar of the console,  Console.BackgroundColor , and Console.ForegroundColor. 
+These properties, like the methods in Console class are PUBLIC ad STATIC (since they are defined in the class scope).
+
+NOTE that these properties are GETTABLE and SETTABLE. This means that these properties' valus can be either set of fetched just by deployeing the property's title/location:
+
+GET:
+
+strign strin1 = Console.Title;
+
+// or: 
+Console.WriteLine(Console.Title);
+
+SET:
+
+Console.Title = 'This is the string for title.';
+
+
+For the colors, note that there is an inbuilt set of ENUMERATIONS, which are hexnumbered properties that are held within the Console class under the property of ConsoleColor. 
+ConsoleColor.Yellow will give us a yellow colour.
+Thus we can change the console's colour scheme by calling on these enumerations via the SET mechanism:
+
+Console.BackgroundColor = ConsoleColor.Black;
+
+
+Another similar inbuilt class to Console is Environment. this one provides a range of useful methods and properties. In this case, we can deploy, for isntance, the NewLine property to shift a line (carriage return):
+'This is the first sentence' + Environment.NewLine + 'and now the second sentence follows on the next line';
+
+One shortcut to having to write Environment.NewLine everytime is to assign it an alias as a string: 
+
+string NLine = Environment.NewLine;
+
+Environement also contains a range of further properties and methods that are useful:
+
+Environment.TickCount;  /// gives a milisecond count of runtime...
+/divide the tickcount by 3,600,000.0 to get the hours.
+
+Environment.OSVersion // gives os
+Environment.Version // gives .Net version
+
+++++++++
+The char type is included in C# alongside strings.
+Basically they are single element strings.
+They can be concatenated with strings and/or intes/floats/doubles
+
+Note however, that any calculations between a string/char needs to be parenthesesed because the C# engine needs to perfome the arithmetic calculation separately to renderng the string/char/int math sequence left to right.
+
+So:
+Console.WriteLine('Two (' + 2 + ') minus one (' + 1 + ') equals' + (2-1));
+
+Note that if we perform divisions or other types of artihemetic ops that will lead to a floating point digit being produced, the full digit to a certain degree of inbuilt scale will be produced. ie.e 5/4.5 = 1.11111111111111
+
+Note that string, char and int are all aliases for real constructs located in the SYSTEM class (System.String, System.Char, System.Int32)
+
+tecvhnically, the Chars construct isn't actually a separate construct from String. Instead, it is a property of the String Class which self-referential (using the THIS keyword). Each char self-references a particular indexPos of a string. Thus a one char string is a char at string[0] position. a five char string is : string[0:4]
+
+some useful char structure static methods are:
+Char.IsControl(stringName[charIndexPos]);
+Char.IsSeparator(stringName[charIndexPos]);
+Char.IsWhiteSpace(stringName[charIndexPos]);
+Char.IsPunctuation(stringName[charIndexPos]);
+Char.IsSymbol(stringName[charIndexPos]);
+Char.IsDigit(stringName[charIndexPos]);
+Char.IsNumber(stringName[charIndexPos]);
+Char.IsLetter(stringName[charIndexPos]);
+Char.IsUpper(stringName[charIndexPos]);
+Char.IsLower(stringName[charIndexPos]);
+Char.IsLetterOrDigit(stringName[charIndexPos]);
+Char.IsSurrogate(stringName[charIndexPos]);
+
+
+
+In other words, like Java which it copies, C# is fundamentally composed of objects and references to these objects, including the inbuilt functions andn properties.
+
+A few useful inbuilt string methods:
+
+string str = 'whatever'; 
+Console.WriteLine(str.Lenght);
+>> 8 chars long
+OR: 
+'whatever'.Length;
+
+
+Note that, like python, strings in C# are get only- not settable i.e. they are immutable and not able to changed in-situ unlike with C or C++
+
+Note that this immutability applies even to case status. So we can't actually change in-situ a string's case status. Deploying the inbuilt .ToUpper() method will simply pump out another string that is upper case, leaving original string untouched.
+
+One way to replace individual chars is the string.Replace(arg1CharToLookFor, arg2ReplacementChar) inbuilt method but NOTE THAT THIS WILL CHANGE ALL found chars passed as arg1.
+
+If we want to be more precise, we can use string.Remove(charIndexPOs, numOfIndexPosToRemvove); and then follow it up with string.Insert(charIndexPos, 'new char to insert');
+
+yet another alternative is to extract substrings using .Substring from the original strings and then concatanate them with any further stuff to create the new string which is the one we want:
+
+originalString = 'Hello I\'m happy to meet you!';
+finalString =  originalString.Substring(0, 5) + 'Jack' +  originalString.Substring(6, -1);
+Console.WriteLine(finalString);
+
+>>> Hello Jack I'm happy to meet you!
+
+One useful tool is the set of constructors included in the String class. For example, passing a new string(arg1, arg2) statement will take arg1 as a particular char or substring and arg2 as an int will repeat that char/substring:
+
+string repeat = new string(r, 10);
+Console.Write(repeat);
+>>>rrrrrrrrrr
+
+Just like strings (although unlike strings they are not held and defined within classes but instead as more primordial structures in c#), ints and chars also hold constructor methods alongside aliases. Thus declaring an int can be by alias:
+
+int number1 = 1;    
+
+or by construct declared but not initialised:
+int number1 = new int();
+
+with full namespace, declared but not defined: System.Int32 number1 = new int();
+OR:
+int number1 = new System.Int32();
+
+
+
++++Conversions are achievable because the conversion methods like .ToString() are part of the System.Object superclass (alias object). thus we can apply ToString() to an int, or other objects:
+
+string stringed = 1234.ToString();
+>>'1234'
+
+ToString has a useful set of characteristics that allow us to convert numbers whether int or double/floats passed to it into a specific format that is given as arg1:
+
+double num1 = 2.45;
+Console.WriteLine('Currency:'+num1.toString("C3"));
+Console.WriteLine('Exponential:'+num1.toString("E3"));
+Console.WriteLine('Fixedpoint:'+num1.toString("F3"));
+Console.WriteLine('General:'+num1.toString("G3"));
+Console.WriteLine('Number:'+num1.toString("N3"));
+Console.WriteLine('Percent:'+num1.toString("P3"));
+Console.WriteLine('Roundtrip:'+num1.toString("R3"));
+Console.WriteLine('Hexadecimal:'+num1.toString("X3"));
+Console.WriteLine('Decimal:'+num1.toString("D3"));
+>>>
+Currency $2.45
+Exponential 2.45E+000 
+Fixedpoint 2.450
+General	2.45
+Number 2.450
+Percent 2.45%
+Roundtrip 2.45000000
+Hexadecimal whatever hex it is
+Decimal  whatever..
+
+
+.Parse(string) will do the opposite, turn a string into int (if it's in available formatting).
+NOTE that .TryParse(string) will try to parse it and, if it can't it won't raise an exception.
+
++++ string formatting epxressions:
+C# has format expressions using placeholders on the left hand side with the items to be displatyed on the right hand side:
+
+Console.WriteLine('{0} times {1} equals {2}', A, B, A*B);
+
+We can write it in any order:
+Console.WriteLine('{2} times {1} equals {1}', A, B, A*B);
+
+or repeat one placeholder's right-side value:
+Console.WriteLine('{0} times {0} equals {2}', A, A, A*A);
+
+or skip placeholders/ignore them on both sides:
+Console.WriteLine('{1} times {2} equals {4}', A,B,C,D,E, B*C, F);
+//A, D, E and F are ignored (B times C = B*C
+
+
+/////////// Primitive Data Types\\\\\\\\\\\\\\
+
+In c#, the short is 16bits wide,
+range is  -32,768 : 32,767 
+the int is 32 bits wide
+-2,147,483,648 : 2, 147,483,647
+the long is 64 bits wide.
+-9,223,372,036,854,775,808 : 9,223,372,036,854,775,807
+
+these are all SIGNED i.e. ABSOLUTE NUMBERS INCLUDED
+declaration is the usua;
+
+int i = 2;
+short s = 3;
+long l = 217481924;
+
+We can IMPLICITLY CAST shorts to ints and ints to longs because the upward movement allows width of numbers. To do so: 
+int i = 3467;
+long l = i;
+
+But ,the other way traffic can be more tricky so we need to force an EXPLICIT CAST which will break if we overdo the number length(i.e. a true Long cannot fit into memspace of an int):
+
+long l = 217407;
+intedL = int(l);
+// will work but bigger things won't
+
+
+C# also accepts unsigned integrals using the following:
+uint, ushort, ulong.
+Rememember that unsigned will have only 0 + POSITIVE NUMBERS ONLY, they won't include the negative ranges and they are HASHABLE.
+
+hexadecimals are preceded with a 0x followed by hexcode:
+
+int hexy = 0x4AbC;
+
+octal or binary literallys arent' accepted by C#
+
+But the byte is: 0 : 255  The signed byte, sbyte is -128 : 127.
+
+consts can be declared : const whatever = 3.14;
+Consts are automatially treated as static so don't need a static keyword
+
+
+NOTE that C# doesn't automatically check for underflow or overflow. So to force a check, we have to include: checked+ when compiling on the command line (as an opt parameter).
+Or within the source code, we can use the checked keyword  before an operation:
+
+int i = checked(c
+
+we can turn off the over/underflow checker:
+
+int i = unchecked(a*b);
+
+we can check an entire block, if we are doing multiple ops:
+
+checked{
+ x = 781248912*b;
+ a = f*r / y;
+}
+
+NOTE remember that CLS Common Language Specification - minimum lang requirements for compatibility with DotNet
+
+
+bool is the usual boolean true or false values. 
+
+floating points can be float or double
+any unidentified default decimal points are considered by C# compiler to be a double. The float is a single-precision the double is double precision.
+
+
+infinity is a specific value that means just that.
+
+NaN is Not A Number.
+
+both float(System.Single) and double(System.Double) structures have static methods like: isPositiveInfinity, isNegativeInfinity, IsNaN.
+Several properties they share include: MinValue(minimun double/singleFloat val), MaxValue(mas possible float/double value), Epsilon (for E exponent)
+
+% modulus is the remainder operator.
+
+C# also holds a special type DECIMAL(System.Decimal structure). This provied 28 points of decimal precision. This one is particularly useful for monetary values,  but not scientific calcs.
+Unlike the other types, and usefully, DECIMALS AUTOMATICALLY TRIGGER UNDER/OVER FLOW exceptions making them more secure. no need for checked/unchecked.
+
+Another utility of decimal is that it stores PRECISELY the passed digits into memory unlike floats/doubles which store a very close calculated estimate of the value- thus making them better for math/scientific affairs.
+
+The System.Math class contains static methods and two constant fields Math.PI and Math.E. Most methods are defined solely for doubles. 
+Math.Abs() returns absolute values of a passed arg.
+Math.Sign() will return a 1 for a positive int, a 0 for 0 and a -1 for negative int.
+
+Math.Floor() and Math.Ceiling() are for doubles only  givine the lowest or largest  whole number equal to or lowerThan/biggerThan the passed argDouble
+
+Math.Round() workds for doubles and decimals. rounds up or down. If arg1 number is in the middle, it opts for the nearest even number: 4.5 will round to 4, 7.5 will round to 8
+
+Math.Pow(arg1, arg2) will exponentiate arg1 by arg2
+
+Math.Sqrt(value); is squarrooted
+
+etc.. with sin and cosine etc..
+
+///////////Operators and Expressions  \\\\\\\\\
+
+Usual operators scheme with left-to-right order EXCEPT for assignment ops which are right-to-left
+
+Primary  (x) x.y f(x) a[x] x++ x-- new typeof 
+					sizeof checkedunchecked
+					
+Unary			+ - ! ~ ++x --x (T)x
+
+usual rules of precedence 
+
+Multiplicative   * / %
+
+
+Additive  +  - 
+precedence of multiplicative over addition
+
+Shift <<  >>
+
+shift operator shifts and integer on the left (int, uint, long, ulong) by a specified number of bits
+
+Relational   < >  <=  >=  is  as
+
+usual relationals
+
+Equality ==  !==
+
+usuals
+
+Logical AND  &
+usuals 
+
+Logical XOR   ^
+
+exclusive OR... i.e. EITHER lefthand OR righthand but Cannot be BOTH true
+
+Logical OR     |
+
+inclusive OR, i.e. either left hand or righthand and CAN BE BOTH true
+
+Conditional AND   &&
+
+lefthandside is one situation, and and && (so long as left hand condition holds true) then if right hand condition is also true then overall evaluates to TRUE. example:
+
+A=1 && B>=2;
+
+Conditional OR    ||
+
+same as above but instead of rightside being evaluated only if leftstide is true, in this case, it's if leftside if false that the rightside is evaluated. If left side is true, then no need to check for the other option (rightside) since its either or.
+
+NOTE however, that C and C# accepts both && and & and || and | for the type of conditional evaluations above.
+Conditional  ?:
+
+a ? b  : c
+if a true then b. If a false then c
+
+Assignment  = *= /= %= += -= <<= >>= &= ^= |= ??
+
+Usuals
+///////////SECLECTION AND ITERATION\\\\\\\\\\\\\
+
+++++ usual conditional loops
+if(a <= b)
+	c += a;
+
+for more than one statements us a block {
+}
+
+if else is usual and can be nested:
+if (a<5){
+	...
+}
+	else{
+		if(a>5){
+		...
+		}
+			else{
+			...
+			}
+	}
+
+NOTE, c# doesn't have elseif so we just use else if as two separate keywords for same purpose
+
+++++switch ...case
+
+usual switch-case-default-break construct:
+Note we can deploy a DEFAULT keyword in case none of the potential cases are trigger.
+Note also like C and unlike Java, C# does havea GOTO keyword
+NOTE also that c# doesn't allow fall through between one case and another EXCEPT if a case exists but is blank(i.e. it has not paras) - in other words we can't set two separat var values or undertake two separate method ops in two separate cases, it's either one case (with the various var values and methods we want to deploy) or the other case:
+
+switch(a){
+	case 1:  // this case does fall through since 
+					 //its' empty
+	case 2:
+		b=1;
+		c=2;
+	case 3:
+		b=2;
+		goto case 4
+	case 4:
+		c=1;	
+	default:
+		b=4;
+		c=5;
+	break;
+}
+
+++++ iteration loops:
+
+usual while - do and for constructs:
+
+while (a<5){
+	do ...
+	}
+	
+do {
+	....
+}
+while (a<5);
+
+for (i=0, i<x, i++){
+	...
+}
+
+orwe can dump variable right into the for iteration construct:
+
+for (var i=0, i<100, i++){
+
+}
+
+NOTE that deploying this form means that var i is LOCALLY SCOPED to the for construct, not available outside that block.
+
+foreach is similar to for but iterates through a passed colleaction (like an array, list or other collection):
+
+longString = 'whatevers...';
+foreach (char c in longString){
+	...do stuff
+}
+NOTE that foreach doesn't work which whhichsoever collection, only with those collects which implement C# IEnumerable interface thus allowign iteration.
+
+like C and unlike JAVA, a useful trait of the goto reserved keyword construct is that it allows us to jump around the source code. All we need is to deploy a LABEL construct which is at tileName followed by : colon. Thereafter, we can goto that label:  eg:
+
+thisMustBeThePlace:
+
+goto thisMustBeThePlace:
+
+/////////////THE STACK AND HEAP\\\\\\\\\\\\\\
+++++++ Mem management
+
+In C# classes are REFERENCE TYPES, STRUCTURES are VALUE types 
+
+stacks are basic mem storage frameworks - uses a LIFO last in first out model.
+in  the earlier days of stack design, the mem limitations meant that this design was occupying the "top" of a memory block - i.e. it had limits of how much mem space could be efifciently used.
+However, with improvements, stack modeled mem management is actually much more efficient and allwos for massive code interpretation. Also, stacks exist in plural multithreading contexts, not so much anymore as a single stack 
+
+One issue that emerges with a stack is that, although certain PRIMITIVE data types like consts, ints, etc can be expected to have a set memory size on the basis of what their value translated to binary is- other types of HUMAN-engaged data, i.e. CUSTOM data types, like strings (input our output) are much less predicatble. A string can be of an arbitrary length (and so too can a list with multiple strings as its members or arrays for instance) 
+Thus, the HEAP is another memory management model. A LOCAL HEAP (private to whichever runtime execution processes are ongoing) is the typical mode of a heap format. With a heap, a MUCH MUCH LARGER and random-sized chunk of available memory is allocated ad hoc to required processes during runtime exec
+BUT NOTE that these two formats/models of memory management work IN TANDEM. So for example, a string's VALUE is stored IN THE HEAP, BUT it's KEY i.e it's placeholder Variable that points the machine's processor to its HEAP-stored value is executed and temporarily created accessed and stored ON THE STACK.
+
+To illustate:
+
+static void Main(){
+	int A = 3, B = 4;
+	long C = 127401;
+	string longString = 'This value is stored on the heap, it/'s lefthandside placeholder pointer 
+											 is on the stack for fetching and modifying purposes';
+}
+
+___STACK___     ________HEAP___________________________
+| int A    |   | 												            	|
+| int B    |   |																			|
+| long C   |   |																			|
+|longString|===| Actual longString Value stored here	|
+|__________|   |																			|
+							 |______________________________________|
+longString var REFERENCES (===) the MANAGED HEAP space -i.e. dedicated space.
+NOTE that this is a key-reference model that 'maps' heap space to relevant stack references.
+Unlike the earlier (C-style) POINTERS model, with this model, if a reference is deleted on the stack, then it's corresponding MANAGED HEAP content will be deleted (garbage collected) eventually SO LONG AS THERE ARE NOT FURTHER stack references making claim to that MANAGED HEAP.
+
+
+NOTE that empty and NULL are two different things in memory. With an emptu value. such as a string that is instantiated but not given a value, the string is considered to be an orphaned object in memory and could eventually be garbage collected. 
+In contrast, the NULL value is a specific REAL value that says that particular variable object has been assign a value that is null. BUT note that the value referred to by a NULL reference is a special zero-value in memory- not stored in the heap but in the stack.
+
+///////////////ARRAYS   \\\\\\\\\\\\\\\\\\
+arrays as usual constructs 
+
+arrays declared in C# using [].
+simplest declaration is:
+int[] myIntArray;  // declares an empty nt array
+
+NOTE you can't instantiate and populate in one stroke so you must first isntantiate and make the reference in memory on the managed heap via stack using NEW keyword  and the size of the new memory object assigned to array's heap space.
+ONLY thereafter can you populate using, foe instance a for loop:
+
+if we want to make a simply instantiation with populated space that is meaningless, use NULL keyword:
+myIntArray = null;
+
+now carve into memory :
+myIntArray = new int[100]; // note this creates 
+													//100 32-bit int spaces
+
+now loop 1-100 to popualte space:
+
+for (int i = 0; i<100; i++)
+		myIntArray[i] = i;
+0
+1
+2
+3
+4		
+
+NOTE if we deploy an abs number or go outside of the range craved out, or if we go outside of the memory range available for the type deployed, the we get an IndexOutOfRange exception
+
+we can deploy attached methods as usual like .length()
+myIntArray.length() // acts like len() in py
+
+foreach is the for loop iteration over an array:
+
+foreeach (int i in myIntArray)
+	Console.WriteLine(i);
+
+
+Arrays are modifiable IN SITU but note that, as with all reassignments in memory references to orphan managed heap objects will be garbage collected over time and lost.
+
+arrays can be declared in any type, for example a double. and we can in fact both instantiate and populate but we use two different brackets to do so:
+
+double[] doublesArray = new double[3] {3.14,4.5,5,66};
+
+if we want an interactively generated array we can use the console to ask for input, read that input and generate array size from it:
+
+Console.Write('How large the array?: ');
+int arraySize = Int32.parse(Console.ReadLine());
+double interactiveArray = new double[arraySize];
+
+we can instantiate multiple arrays simultaneously:
+//decimal is c#'s type for monetary vals
+decimal[] sales, income, postTax, assets, liabilies;
+
+with types that have a fixed memory presence (i.e. primitives lik ints, doubles, float, decimal, long, short)then fixing the memory value allocated to their respective array constructions is not complex, because whatever int we give as an array size, that int will be the respective primitive types' memory space required for one iteration of one unit of that type.
+
+int[5] intArray = new int[] {1,2,3,4,5};
+// creates a five 32-bit integer memory space i.e. 5 natural numbers' space carved in managed heap with reference held by intArray key
+
+But for uncertain memory constructs, like typical a human-written string, the simple solution is that, whatever int is passed to the array constructor for that string type array will not determine a fixed memory size but rather instruct th carving out of a NULL reference in the stack or its respective (as yet unpopulated/undetermine) managed heap space. Example:
+
+string[4] myStringArray = new string[];
+// here instead we have just carved out 4 mem spaces on managed heap assigned NULL string references on stack... their size can thus change as we defined what those strings are, since obviously strings are of arbitrry size:
+
+
+Note that we can access any of the array's elements by deploying a further [indexPos] brackect but on the right hand side of the array declaration:
+string[] newStringArray = new string[] {'one', 'two','three'}[1];
+//points to the 'two' value held at array indexPos 1 (base 0 count)
+
+++++++Multi-Dimensional Arrays
+
+the simplest declarator for multi-dimensionals is to use a comma that designates the 'levels-deep' that the array is to go to:
+int[] oneLevelIntArray;
+int[,] twoLevelsIntArray;
+int[,] threeLevelsIntArray;
+
+passing an int to each of these will, for the primitives and more complex mem objects like strings, designate the managed heap space tp be carved out on behalf of each level of the array:
+
+int[10] oneLevelIntArrayWith15_32_BitIntsCarved;
+int[4,6] twoLevelsFirstLvl4_32BSecondLvl6_32Bit;
+int[10,20,30] threeLvlsAsAboveEachWith32BitInts;
+
+the inbuilt .length() and .rank() methods will return 1)total length of the entire array and 2) number of levels deep respectively.
+
+
+NOTE we can also have JAGGED ARRAYS, that is, arrays whose members are themselves arrays(which can themselves have multidimensions).
+One of the reasosn for deploying these is because they save space in situations where one collection of data varies from another in terms of memory size required for storage. Thus the name jagged because the size of the sub-arrays contained varies
+
+string[][] jagged2Deep = new string[4][2];
+//note now we go one one level deep to the first of the sub-arrays held in jagged2Deep 
+
+jagged2Deep[0] = new string[5];
+jagged2Deep[1] = new string[8];
+jagged2Deep[2] = new string[12];
+jagged2Deep[3] = new string[3];
+
+now go second level deep to one of the varying length string array element's content:
+//here its 1st levelsub-array1, 2ndLevel subarray2- which allows up to 8 individual strings to be populated:
+jagged2Deep[0]= {}
+
+COPME BACK TO THIS  
+/////////////// Methods \\\\\\\\\\\\\\\\\\
+
+function/method
+
+Like JAVA, every C# programme must have one method/function which is a MAIN methd for runtime exec.
+A basic main meth programme taking input strings might be:
+
+class InputStrings {
+
+	static void Main() {
+		
+		string firstName = prompt('Please enter your first name: '); 
+		string lastName = prompt('Please enter your first name: ');
+		string age = prompt('Please enter your age: ');
+		
+		static string	prompt(string strPrompt){
+			Console.Write(strPrompt);
+			string response = Console.ReadLine();
+			return response;
+		}
+	}
+}
+
+NOTE that prompt method also must be STATIC, just like main. The VOID keyword means that the the code at the end of the runtime execution will return no outputs (i.e. they can have a simple return satement at the end without any outputs). Non-void methods must return something proper to the TYPES and actions of the main function block - like a numbered code (like for example exceptions).
+
+
+- broadly same as usual functions/meths,
+- like Java there always has to be a MAIN meth that executes runtime
+-void return means that the ereturned output isn't a code or other numeric output, but rather a void from machine and human-induced output defined and add as the final statmeent of the main meth block.
+basically same look as Java funcs:
+
+
+using System; 
+
+class MainMethClass {
+
+	static void main() {
+		
+		string whatever = prompt('Please enter 
+											whatever');
+		string moreWhatever = prompt('Please enter 
+ 													whatever more');
+
+		displayIn(whatever, moreWhatever);
+		
+		static void prompt(string promptString) {
+			Console.WriteLine(promptString + ': ');
+				return Console.ReadLine();
+		}	
+		static void displayIn(string whatever, string 
+													moreWhatever) {
+			Console.WriteLine('You wrote:' + whatever);
+			Console.WriteLine('and also:' + 
+												 moreWhatever);
+		}
+	}	
+}
+
+-note also the usual use of STATIC as meaning that this meth or var is to have its information saved between runtimes- thats what  makes it static - and not ethereal.
+
+- a var can be declared static and it will, like a CONST retain its value bewtween runtime execs. BUT the difference between the two is that the CONST is evaluated at compilation whereas the static var is evaluated at Runtime.
+
+-unlike Java, c# does support method overloading - allowing multiple outcomes from multiple inputs on calls to the same meth.
+
+for the above example printout whatver user inputs, we can make this smoother by using two overloaded abstract meths:
+
+using System;
+
+class improvedInputOutput{
+//declare our const and static to be deployed. 
+static vars declared but undefined, they are static and will be defined during the running of the whatever meths
+		const string colon = ': ';
+		static string whatever, whateverElse;
+	
+	static void main() {
+		getWhatever();
+		showWhatever();
+	}	
+	
+	static void getWhatever(){
+		whatever = getWhatever('Please enter 
+													 whatever:');
+		whateverElse = getWhatever('and add anything 
+															 else ');
+	}
+		static string getWhatever(promptString) {
+			Console.Write(promptString + colon);
+				return.Console.ReadLine();
+		}
+	
+	static void showWhatever(){
+		Console.WriteLine();
+		Console.WriteLine('You wrote' + colon + 
+											whatever);
+		Console.WriteLine('as well as' + colon + 
+											whateverElse);
+		}
+}
+
+C# function calls default to a pass-by-value system, as with C.
+BUT, if we want to use a pass-by-reference system, we can deploy the REF keyword in front of the relevant var that we would like to pass by reference. Note however, that we must deploy this ref keyword BOTH when declaring the var AND when deploying it in the meth().
+
+Below are two classes doing the same function , first passing by value the second passing by ref:
+
+use System;
+class PassByValue {
+	static void Main(){
+		int i = 11;
+		altInt(i);
+		Console.WriteLine(i);
+	}
+		static void altInt(int i){
+			i = 22;
+		}	
+}
++++++
+use System;
+class PassByReference {
+	static void Main(){
+		int i = 11;
+		altInt(ref i);
+		Console.WriteLine(i);
+	}
+		static void altInt(ref int i){
+			i = 22;
+		}	
+}
+
+Passing by value in default mode will actually make a carbon-copy of the stack-declared and defined object(i.e. var) on the stack while undertaking runtimeExec, thus allowing for the originally declared/defined memory object to be distinct from that carbon copy that is acted upon during runtime of the main meth(). This means that the two impressions of these objects (compilation and runtime impressions) can have differing values.
+
+If we instead force the C# engine to pass the object by REFERENCE then what we are forcing is a unique impression that survives runtime execution. SO ANY CHANGES MADE TO THE INITIAL VAR'S VALUE IS NOW REFLECTED IN POST-RUNTIME ENVIRONMENT.
+
+
+The same can be done to an array. a passed-by-value array will MAKE A COPY OF THE ARRAY REFERENCE OBJECT NOT THE UNDERLYING ARRAY ITSELF. AND THAT COPY IS SIMPLY ANOTHER STACK-HELD POINTER TOWARD THE ORIGINAL ARRAY ELEMENT KEY-VALUE PAIRINGS WHICH SIT ON THE HEAP. 
+
+in contrast, if passed-by-ref using REF, then THE ARRAY AND ITS ASSOCIATED KEY-VALUE OBJECTS on the heap WILL BE FUNDAMENTALLY CHANGED IN THE POST-RUNTIME EXECUTION ENVIRONMENT. THERE IS NO CARBON-COPY MADE OF THE STACK-HELD REFERENCE TO THE UNDERLYING HEAP-HELD KEY-VALUE ELEMENTS SO ANY CHANGES AT RUNTIME WILL REFLECT THE FIXED VALUE OF THE ARRAY and its elements.
+
+++++++ skipped Params.
+
+
+///////////////Exceptions\\\\\\\\\\\\\\\\\\
+
+documentation often refers to the relevant exceptions available for a particular class/method
+for example, Double.parse has three exceptions of relevance:
+1.FormatException - if arg isn't in correct format
+2.OverflowException - if out of bounds of min/max value
+3.ArgumentNullException - if the string arg to the meth is null
+
+usual try-catch structure:
+
+double dblIn;
+try {
+	dblIn = Double.Parse(Console.ReadLine());
+}
+catch{
+	Console.WriteLine('You typed an invalid number');
+	dblIn = Double.NaN;
+}
+
+In a proper exception-granting programme, we would probably create looped requests for further inputs.
+
+using System;
+
+class dbleInputs {
+	static void Main(){
+		double dblNum = getDouble('Enter the base number: ');
+		double expNum = getDouble('Enter the exponent: ');
+		Console.WriteLine('{0} to the power of {1} is {2}', 
+											dblNum, expNum, Math.Pow(dblNum,expNum)
+										 );
+	}
+	static double getDouble(string promptStrg){
+		double dbleInp = Double.NaN;
+			do{
+				Console.Write(promptStrg);
+					try {
+						dbleInp = Double.Parse(Console.ReadLine());
+					}
+					catch{
+						Console.WriteLine();
+						Console.WriteLine('You typed an invalid number.');
+						Console.WriteLine('Please try again.');
+						Console.WriteLine();
+					}
+			}
+			while (Double.IsNaN(dbleInp));
+				return dblInp;
+	}
+}  
+
+as usual, if the runtime exec action tries for an exception and hooks one, then it will stop current process, GOTO the catch block and execute that code. Then it will continue the remaining block.
+NOTE to consol out a stack trace and other useful info, use exc generic marker as arg1 of consol'd:
+Console.WriteLine(exc);
+
+As with Java, all exceptions derive from the Exception gigaclass. But interestingly, with C#, because of the Common Interface Language (CIL) construct, it is possible to throw an exception from the CIL, not only from an inheritor of the Exception gigaclass.
+
+We can be very precise in specifying the type of exceptions that we are looking for, and it is a good idea to finish the try-catch blocks with a final try-catch for any other potential exception using exc:
+
+try{
+	input = whatever to be tested and runtim'd;
+}
+catch(FormatException form){
+	blabla
+} 
+catch(OverflowException ovfl){
+	..
+} 
+catch(ArgumentNullException ArgNul){
+	...
+} 
+catch(Exception exc){
+	handle any other exceptions unforeseen;
+} 
+
+NOTE that the parsing order of the runtime exec means that whatever first catch block is caught as relevent to the thrown exception will be the one that is executed- so order of appreance MATTERS. Placing the general exc block  earlier can 'overshadow' more specific exception blocks, making specific understanding of what went wrong more difficult.
+
+just as Double.parse can raise three specific exceptions, Console.ReadLine can alsor raise three:
+IOException - input error
+OutOfMemoryException -  not enough mem to store string given.
+ArgumentoutOfRangeException -the number of chars in the string exceeds the Int32.MaxValue i.e. 2,147,483,647. 
+
+
+Note that alongside multiple, specific exception catch blocks, we can also add the usual  FINALLY block which will force execution of whatver is remaining in its block REGARDLESS OF EARLIER THROWN AND CAUGHT EXCEPTIONS.
+
+finally {
+	//do this regardless of exceptions above
+	and only then exit runtime exec;
+	useful because some of the earlier catch 
+	blocks might well have a RETURN clause which 
+	is telling runtime exec to stop what it's 
+	doing and give a value back (like an error 
+	report). But the finally overrides this and 
+	makes sure it's block gets parsed before any 
+	return exit that outputs normal and exception 
+	block info.
+}
+
+
+Regardign throwing, we simply include the THROW keyword in the standard compilation blocks that define our functions/programme
+NOTE that when we throw in this compilation section of our programme, we should provide an instance of an Exception-class object 
+
+throw new Exception();
+
+Ideally we  give a specific Exception type (i.e. an Exception-class sub-class object) and we can give a string in our arg1 that names the exception context of the Exception constructor meth:
+
+if (strgInput == null){
+	throw new IOException('String Input 
+	IOException.');
+	
+	remaining code to be done if no exception 
+	thrown
+}
+In combination with the relevant CATCH block's message out, then if we get an IOExcept on the string we have entered the console will return:
+
+Catch Block Custom Message...
+Parameter name: String Input IOException.
+
+Although exception handling is quite useful, there are also alternate mechanisms for dealing with exceptions outside of the formal exception handling THROW-TRY-CATCH triad. For example, we can use the checked() method to run a mathematical op while also checking for an OverflowException in a default setting (i.e. outside of our custom throw-try-catch block formatting)
+
+Also, there are some capabilities of C# in a .dotnet environment that allow us to PREVENT exceptions by pre-empting them. For example, the tryParse() inbuilt meth will return a bool value that will say if the string or other input given to it was successfully parsed.  
+
+//////////////Classes and objects  \\\\\\\\\\\\\\\\
+++++++
+usual OOP concepts at work.
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+
+++++++
+///////////////Constructors \\\\\\\\\\\\\\\\\\
+
+constructors are simply pre-fab'd classes or structures that, when initialised, have a set of parameters that set them up for init. This is useful for setting basic starting groundwork for the objects that we initialise and then we can manipulate them further.
+They are denoted using the new keyword and when called they are allocated, with all the basic paras, on the heap. If those paras are undefined, then they will default to a 0 value in the case of class objects and a NULL value in the case of other structures.
+NOTE that constructors will not output a returned value, just an instance of what's constructed
+
+broadly same as JAVA for constructors:
+NOTE also as a general rule that any constructor method denominated as a STATIC one using that keyword will take PRECEDENCE IN RUNTIME EXEC BUT WILL NOT BE ABLE TO TAKE ANY PARAMETERS (BECAUSE STATIC MEANS THEY BELONG WHOLLY TO THE CLASS-SCOPE AND NOT ABLE TO HAVE INSTANCED SCOPE).
+
+But note this one shorthand for a limited parameter constructor call (i.e. if we want to call a constructor but we don't want to call every parameters. C# allows a shorthand. This is useful if our general class has multiple constructor meths and some of them might have overlapping functionality one only ONE or SOME of the args... then we can duplicate those args only in shorthand.
+
+using System;
+
+class myConstructor{
+	
+	private var1;
+	private var2;
+	
+	public argLessConstrct(){
+		para1 = 'value1';
+		para2 = 'value2';
+		para3 = 'value3';			
+	}
+
+	static public argLessStaticConstrct(){
+		para1 = 'value1';
+		para2 = 'value2';
+		para3 = 'value3';			
+	}
+		
+	public argFullConstructoer(arg1, arg2, arg3){
+		para1 = 'value1';
+		para2 = 'value2';
+		para3 = 'value3';				
+	}
+}
+
+class mainRuntimeClass{
+
+	static void Main(){
+		etc RUNTIME..;
+	}
+}
+
+///////////////   \\\\\\\\\\\\\\\\\\
+++++++
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+
+++++++
+///////////////   \\\\\\\\\\\\\\\\\\
+++++++
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+
+++++++
+///////////////   \\\\\\\\\\\\\\\\\\
+
+++++++
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+
+++++++
+///////////////   \\\\\\\\\\\\\\\\\\
+
+
+
+

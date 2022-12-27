@@ -1,0 +1,2205 @@
+////////////////////////Eloquent JS   \\\\\\\\\\\\\\\\\\\\\\\\\\\
+based on Eloquent Javascript by Marijn Haverbeke, No Starch Press, 2014
+
+Usual points regarding types. 
+However some extra points of note:
+
+regarding nums: 
+JS has a infinity and -infinity special type nums. 
+Also, there is the NaN which stands for Not A Number - which stands for any numerical value that doesn't have a solvable or valuable value... like dividing 0 by 0 for example.
+Note also that NaN will be the only number type in JS that can actually be found NOT to equal its out same value :
+1 == 1 will give a TRUE but NaN == NaN will give a FALSE. 
+
+regarding strings: 
+the usual /n will create a newline. 
+strings can be achieved via either '' or ""
+
+remember the unary operators like: typeof(var) which, for instance, gives a type of the variable being queried.
+
+conditional or TERNARY OPs:  for example an either case can be written using the varCaseTrue ? thenOption1 : OrOption2
+
+empty values are expressed through NULL or UNDEFINED.There is no real difference between the two.
+
+JS undertakes auto-type conversion due to the looseness of its type setting. Thus it will automatically try to convert types that are being operated upon when they are different.
+
+
+Usual operators, including the logical operators ** // || && etc
+
+
+STRUCTURE
+
+JS has certain keywords allowing binding: 
+LET is a keyword that allows for binding a value to a variable of any type as named:
+let ten = 10;
+let six = 9;
+
+we can, usually, use VAR or CONST to create bound values-to-placeholders:
+var will hold variable values
+const will hold constants.
+
+consts will be bound so long as they are being used by the sourcecode... they act a little like customised versions of inbuilt functions. 
+Note also that JS has the usual list of reserved keywords like break, case,private etc..
+
+but we can revalue variables as we like. And we have a shortcut for updating the binding values by using the += or -= if we which, for example to add a int value or concatanate a string section 
+
+ Functions can be manifested in a variety of ways. There are alternating approaches to control flow logic including broadly:
+ 
+ 1.conditional execution, that provides a choice
+ 2. loops, while and do and for...
+ 3. we also have the switch construct
+ 
+ 
+Usual function rules. blocks, form etc
+we can deploy the shorthand => arrow format in order to give a value to a function that will deliver or do something. We can either express what we expect that function to do using the usual function block curlies { } or simply by adding our operation on the right hand side of the => arrow operator. 
+
+JS allows for optional arguments to be passed. JS is extremely flexible, even on the question of missing arguments in functions, or too many arguments in a function. For example, if we create a function that has only one defined argument but then is called with reference to multiple args, then JS simply takes the arguments that do exist by order of precedence, and then ignores the other extra ones. 
+
+function f(x){			// argument x is there but it is only one 
+	return x * x;		// parameters explain action to be done
+}
+console.log(f(4, true, 'hello'));
+consoles out: 16    // other passed values are ignored, they dont' 						//match any of function f's args. 
+
+Similarly, any situation in which the args are too few and the parameters don't match will mean that the parameters will return the value UNDEFINED.
+Because of this loose typing approach, this means there is a risk of having unrecognised mistakes.
+
+
+CLOSURE 
+
+Closure refers to the process by which a function can be ENCLOSED within an area of action/scope. We define a main "selector" function with a generic arg (that will be called by further functions) as well as parameters that include a local scoped variable that acts as a switch placeholder for customisable variable values (to be defined outside of the selector function block). Outside of the selector function block, these switching variable values are given definition, which will then be absorbed into the function block's arg and thereby "feed" the switch placeholder's value. It acts like a function version of the switch/case conditional block.
+example follows: 
+
+function selectorFunction(switchableArg){
+	let localPlaceholderVar = switchableArg;
+	return () => localPlaceholderVar;
+}
+
+let outsideVarValue = switchableArg[case1];
+let outsideVarValue = switchableArg[case2;
+let outsideVarValue = switchableArg[case3];
+
+//etc  and whichever the outside var value is given to the various cases, then that will feed into the switchable args which can then be called by the modifiable function.
+
+The process of closure has two clear benefits:
+
+1. Closure allows us to deal with the dangers of untracked and arbitrarily bound variables and functions. The reason we use enclosed type functions and vars is because we can make mistakes and overwrite existing values bound to existing variables/functions in our source code.  
+
+2. Second, we enclosed functions because it allows us to make creative and easily modified values for each of the switchable args within the enclosing function. 
+
+RECURSION++++
+
+as with other languages, this refers to a function that calls itself. 
+NOTE recursion is EXPENSIVE in resource terms
+
+an example of recursion may be in the following example where we try to create a recursive function that, given a particular integer, seeks out every possible sequence of multiplication addition of other numbers that will produce the inputted integer:
+
+
+function findSolution(target) {
+|1|    function find(current, history) {
+|3a|    if (current == target) {
+			return history;	// success, tells how we got here
+		}
+|3b|		else if (current > target){
+			return null;			//keep fishing 
+		} 
+		else {
+|4a|			return find(current + 5, '{$history} + 5') ||
+			// here we modify by adding five 
+|4b|    		return find(current * 3, '{$history} * 3');
+           // now we modify by multiplying by 3 
+           }
+           // THIS IS THE RECURSIVE PART OF THE FUNCTION BECAUSE IT IS IN THIS NESTED FUNCTION THAT THE RETURNED VALUES TRIGGER THE GENERAL FIND() FUNCTION. 
+|2|		return find(1, '1');
+		//these are the inputs into the main function.
+	}	
+}
+
+
+NOTE WHY RECURSION IS EXPENSIVE, this recursive function doens't find the shortcut to the answer, it finds every answer until the right answer is found. 
+Therefore in order it goes: 
+
+|1|    function find(current, history) {  <<===================   					||											  ||
+|2|		return find(1, '1');								  ||
+ 															  ||
+|3a|    if (current == target) {	  |CONDITIONAL|			  ^^
+			return history;									  ||
+		}													  ||
+|3b|		else if (current > target){	 |CONDITIONAL|		  ||
+			return null;									  ||
+		} 													  ^^
+															  ||
+	+++++++++++++++RECURSIVE NESTED FUNCTION++++++++++		  ||
+	|4a|	return find(current + 5, '{$history} + 5') ||  >>===
+	|4b|    return find(current * 3, '{$history} * 3');
+            }
+
+Recursive because it is BOTH CALLING AND SUPPLYING THE constructive function find() :
+1. it called find() 
+2. it supplies find() with the two arguments (+5/*3)
+ 
+
+Recursive functions have a danger of being resource hungry. But if they are well designed, then we can use them as "growing functions" - that is to say, they can be used to handled multiple and "additional" variables and thus can tend toward leanness.
+
+An example of a growth function would be one in which we want to keep track of some ids or different objects as they are added to a list of vars. A typical example would be with inventories that need to be tracked as they are added/removed. 
+Note that although this is still an example of recursive function design, the key change here is not the language/machine side, but rather the human conceptualisation of the object oriented side. Examples follow:
+
+		+++++++++Non-RECURSIVE FUNCTION FOR INVENTORY++++++++++
+
+function inventoryChecker(adidas, nike) {  //function instanced
+1|	let adidasString = String(adidas);	//var created which acts 
+										// as a conversion of the 											//adidas inventory INT 											//count into a STRING
+2|		while (adidasString.length < 3) {//padding conditional loop
+3|		adidasString = "0" + adidasString; //which adds a 0 in 											   //front of converted 										  //string converted 											 //number (as long as it 
+										//is under 3 ints long.
+		}
+4|	console.log('${adidasString} adidas trainers in stock');
+		//consoled out to a string: 024 adidas trainers in stock
+1|		let nikeString = String(nike); 				// same her
+2|		while (nikeString.length < 3) {
+3|		nikeString = "0" + nikeString;
+		}
+4|	console.log('${nikeString} nike trainers in stock');
+}	
+
+Note the recursion is not occurring in this lengthy approach.
+
+		++++++ RECURSION with multiple possible objects+++++++
+
+We can use an alternative design in order to make this function malleable to absorb other variables/objects. We achieve this by creating a recursive "generic" function that relates to the non-recursive "variables" function.
+
+// GENERAL FUNCTION CONTAINS A WHILE LOOP BLOCK WITH RECURSION. THIS GENERAL FUNCTION ALLOWS US TO CREATE AN ARBITRARY NUMBER OF DIFFERENT INVENTORY QUANTITIES AND PRODUCT BRANDS TO FEED INTO THE ARGUMENTS. FEEDING IS DONE BY THE SEPARATE INTERLINKED SECOND FUNCTION
+3| function printInventory(inventory, product) {
+	let inventoryString = String(inventory);
+		while (inventoryString.length > 3) {
+4|			inventoryString = "0" + inventoryString; // recursive 														 //here because
+													 //it refers 
+													 //to itself
+		}
+5|		console.log('${inventoryString}, ${product}');
+}   5 consoles out   
+
+//SEPARATE INTERLINKED SECOND FUNCTION> HERE THE ARGS ARE FED BY THE THE FURTHER BELOW THIRD ELEMENT (THE METHOD) THAT FEEDS THIS SECOND FUNCTION WITH THE INVENTORY NUMBER FOR EACH OF THE PRODUCT PLACEHOLDERS> THEN THIS FEEDS IN TURN THE MAING GENERAL FIRST FUNCTION'S ARGS ABOVE . THERE ARE FOUR RECURSIONS HERE: 1 METHOD >> 2 SECOND FUNCTION >> 3 MAIN FIRST FUNCTION >> 4 WHILE LOOP
+2| function printByProduct(adidas, nike, reebok) {
+	printInventory(adidas, "adidas");
+	printInventory(nike, "nike");
+	printInventory(reebok, "reebok");
+ }
+
+1| printByProduct(12, 15, 9); 
+
+
+
+		++++++++EVEN SIMPLER OOP CONCEPTUALISATION+++++++++++
+At a further level, we can cut down on the number of recursions by creating another level of abstraction. 
+
+// MAIN FUNCTION CREATES GENERALISED MAIN FUNCTION THAT CAN TAKE THE VARYING TALLY AND NUMBER OF 0s SPECIFIED IN THE SECONDARY FUNCTION. 
+
+3| function inventoryCount(tally, inputSpace) {
+	 let countString = string(tally);
+		while countString < inputSpace {
+			countString = "0" + countString;
+		}	
+	return countString;
+}
+ 
+// SECONDARY FUNCTION ESTABLISHES THE SPECIFIC BRAND NAMES WITHIN THE ARGS. THE FUNCTION BLOCK PARAMETERS OUTLINE CONSOLED OUT SPECIFIC BRAND NAME COUNT AS WELL AS NUMBER OF 0s WHICH ARE CUSTOMISABLE FOR EACH BRAND AS WELL AS FINAL PART OF STRING 
+  
+2| function printInventoryCountsAndBrands(adidas, nike, reebok){
+	console.log('${inventoryCount(adidas, 5)} + adidas shoes');
+	console.log('${inventoryCount(nike, 3)} + nike shoes');
+	console.log('${inventoryCount(reebok, 10)} + reebok shoes');
+}
+
+// MEHTOD IS WHERE USER INPUT IS FED IN, STARTING RECURSIVE CHAIN REACTION.
+1| printInventoryCountsAndBrands(10, 4, 30);
+====================
+consoles out: 
+
+00010 adidas shoes
+003 nike shoes
+0000000030 reebok shoes 
+
+
+/////////////////////DATA STRUCTURES\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+variables can be organised into sets of data like arrays, lists and sets.
+In JS, we call the array using the simple 
+let array1 = ('arrayValue1','value2', 'etc');
+
+we select the array value by calling the array index number begining at 0:
+console.log(array1[0]);  >>> consolesout  arrayValue1
+
+properties are those characteristics belonging or attached to a variable. We can examine/append properties by using simple concatenation: . 
+Many properties are inbuilt into JS. for example, the length query: 
+string.length 
+NOTE one quirk is that some types of var value like NULL will give no length by the very nature of their value.
+
+Further inbuilt properties can be called that are very useful. For example with arrays we can call the arrayName.PUSH property- something that will push the array var value into the array. For example:
+
+let array1 = [1,2,3,4];
+array1.push(5);
+array1.push(6);
+console.log(array1)
+consolesout 123456
+
+we can also use .POP to pop from the stack the latest item:
+
+console.log(array1.pop());
+this pops the last item i.e. 6
+
+Objects are evidently an important part of the constructions in OOP programming. We can also query our objects using the various logical tests that would make reference to the object via concatenation.
+
+let object1 = {
+	booleanCondition1 : true;
+	arrayOfProperties ["property1", "property2","property3"]
+	};
+
+so now hen we query JS via console, we have some replies about the object's conditions/properties. For example: 
+
+console.log(object1.booleanCondition1);
+>>> true
+
+console.log(object1.property4);
+>>> false
+
+
+We can use the delete inbuilt function to cut off a bound property from an object. 
+For example:
+delete object1.property3;
+
+console.log(object1.property3);
+consoles undefined since its not deleted.
+
+you can query the properties of any object using the Object.keys notation:
+console.log(Object.keys({x: 0, y:1, z:2}));
+
+we can also use the Object.assign notation to get an object's properties overwritten or newly assigned.
+
+Object.assign(object1, {property1Overwritten: property1NewValue, property2NewlyWritten: property2Value});
+
+MUTABILITY
+
+NOTE that simply assigning the same value to two different objects doesn't mean that the two objects are the SAME. their values may be the same but they are DISTINCT.
+
+However, if we werte to make a sub-reference or binding from one var to another, then, since they would be sharing not only the same value but also the same reference to the same originating object, it WOULD INDEED BE EQUIVALENT.
+
+
+
+NOTE - coefficient correlation can be calculated in a parallel way to statistical correlation of variables. We use the same coefficient correlation formula based on phi 
+
+Array loops
+With array loops, there can be a looping of iterations of array values. Using a loop is very common since it allows us to go through the range of the array in order up or down, as if we were going through a list. 
+The traditional for loop through an array looks like this
+
+for(let i= 0, i <arrayName.length; i++) {
+	let arrayElement = arrayName[i];
+	further parameters doing something with arrayElement;
+}
+
+We can manipulate and analyse arrays in order to gain in formation from the array for analytical purposes. We can see this in two instances following: 
+1st we can examine the array index values to determine how many of the array index values are javascript events- something that tells us about which of the array indices are actionable as opposed to perhaps more quiescent index values.
+
+function arrayEventsCompiler(array) {
+let events = [];
+	for(let arrayIndexVal of array) {
+		for (let event of array.events) {
+			if(!events.includes(event) {
+				events.push(arrayIndexVal);
+			}
+		}
+	}
+return events;
+}
+
+//we see the function scours the array by create the events variable which placeholds for the array index values. There are three conditional loops:
+1. for as long as there is an array entry index value in the array THEN:
+ 	2. ALSO for as long as there are inbuilt Javascript event objects being found in the array.events property AND
+ 	   3. if any Javascript event objects are found that are NOT ! 			in the events variable that's constructed (i.e. not 		found as we loop through the array values) 
+	THEN in which case push to the array values stack this newly 		found, non-indexed javascript event AND
+
+THEN RETURN ALL EVENTS FOUND>>>
+
+2nd we can further this analysis by using the same structure to find the relevant "hits" in the array where one or a correlation of values is being found. And we can even use this above structure to then push a further array index to the stack with a value that gives a new type of description which covers the correlated events we were looking for. We achieve this by changing the search terms of the above function: 
+
+for (let arrayIndexVal of array) {
+	if(arrayIndexVal.events.includes("specificArrayVal1")
+	&& !arrayIndexVal.events.includes("specificArrayVal2")){
+		arrayIndexVal.events.push("newSpecificArrayVal");
+	} 
+console.log(phi(tableFor("newSpecificArrayVal", array)));
+}
+consoles out with the correlation coefficient (phi) of the newspecificvalue as it is "hit" in the array.. 
+
+
+Further array inbuilt functions are callable within the JS framewwork alongside the builtin push and pop. Two further methods are SHIFT() and UNSHIFT() which essentially do the same but, instead of doing this at the end of the stack, they do this at the beginning of the stack. 
+
+Other inbuilt functions include indexOf and lastIndexOf will bring up an index of the array from either the beginning or the end.
+SPLICE will take a cut from either the start(indexOf) or the end(lastIndexOf) for whichever number of array index positions it is given (including whitespaces).
+CONCAT will concatanate at the position of index entry.
+
+Strings also have a range of appendable inbuilt methods like TRIM which cuts off a certain number of chars from the string as indicated. 
+indexOf will give the char value at an indexed position
+zeroPad will give padding of empty string chars as passed in arguments for however many extra padding strings we wish before the beginning of the string itself commences.  
+
+We can write REST PARAMETERS in functions. This simply achieved using the ... within the beginning of the paras (brackets)
+This will create a set of parameters that are considered to be placeholders for all of the array index values
+This is typically used in combination with inbuilt functions that calculate the overall value or distinguishing value of a whole set of values like those held in an array. Thus we can use the elipses within an array to include all of that array's values in the function method we are deploying.
+
+A typical use might be the max() math function which will calculate the highest number in a set:
+
+let nums = [1, 2, 3];
+console.log(max(...nums));
+>>> 3
+
+We can equally deploy the ellipses in order to expand the full contents of one array into another array:
+ 
+let words = ["three", "four"];
+console.log(["one", "two", ...words, "five"]);
+
+
+Another builtin object is the MATH object which has sub-properties like MAX and MIN etc... other useful math properties are the FLOOR and CEILING properties 
+
+JSON stands for Javascript Object Notation is essentially a mechanism for saving JS work into secondary memory as opposed to its passing position in main memory. Instead of taking up the bulk memory and data transfer space required for a standard file, a JSON object is basically a simplified, serialised, version of source code description for whichever object is being stored/transferred.
+JSON objects appear as a simplified and de-constructed version of their vanilla JS sourcecode expression. They do not include typical method call brackets etc and simply are descriptive of the object components and positions.
+
+JSON.stringify and JSON.parse are two built-in methods that allow us to convert JS data to JSON and vice-versa stringify will take JS and convert to JSON
+
+
+////////////////////////Higher Order Functions\\\\\\\\\\\\\\\\\\\\
+
+Higher order is related to abstraction. Abstraction is necessary in human as well as in programming life because it is the way we can conceptualise large numbers of objects under common purposes, characteristics or other shared properties. 
+
+Higher order functions are functions that abstract over other "regular" functions. They allow us to abstract the purpose and actions of other functions under "higher order" organising principles.
+
+First we can consider a case were a function needs to have a certain number of iterations to be achieved. If we were to loop it simply, it would be very time and resource expensive. Instead we can create a "principle of looping item" function that we can then fee d with the specific values that we wish to  ,at that moment enter:
+
+function repeatNumber(n) {
+	for(let i = o; i < n; i++){
+		console.log(i);
+	}
+}
+
+
+// the above is useful for simple number operations. but we can equally automate at a higher order the "doing" action of a set of functions that we would otherwise have to customise:
+
+function specificFunctionRepeater(n, specificFunction){
+	for(i = 0; i < n; i++) {
+		specificFunction[i];
+	}
+}
+
+// if we treat are function actions as entries in an abstract array, we can use the recently noted array index manipulation like the use of PUSH to actually inject values into these functions from an abstract function creator array:
+
+let sepcificFunctionsArrayValue = [];
+repeat(n, i=>{
+	specificFunctionsArray.push('StringValue ${i + 1}'); 
+	});
+// here we see that the customisable n number of times will allow use to repeat whatever fixed string value we want to repeat by continously pushing in the array the i-number. NOTE that this will work only with simply numerical increments or decrements or other simple operands.
+
+Of course we can abstract to even higher levels:
+
+For example, we can create a higher order function that carries out a specific task. For example, it might be function that carries out a greater than calculus on specified numbers passed in the body of the functions.
+ Then, when we want to calculate specific instances of this function we simply adapt the greater than function by "feeding" it whichever specific number we wish to undertake the calculus.
+ 
+// the first function below essentially creates a placeholder for the actual values being passed to the "greater than calculator" "higher order" function. n is the value passed to greaterThanCalc whereas m is the returned LOGICALLY TRUE OR FALSE value as it calculates if the m number is greater or lesser than the passed n value. 
+
+function greaterThanCalc(n) {
+	return m => m > n;   
+}
+let greaterThanCalc(n) = 5; 
+console.log(greaterThanCalc(8));
+
+>>>consolesout true
+
+
+A further higher order function would not only change values but rather actually makes changes to the functions themselves.
+
+function adaptableMetaFunction(f) {
+	return (...args) => {
+	console.log('custom string declaring', args);
+	let result = f(args);
+	console.log('customstring', args, 'furtherString', result);
+	return result;
+	}
+};
+
+// note here that it is the f placeholder that we will be changing according to whichever specific functions we want to pass to the metaFunction. 
+Note also that whatever custom arguments are to be passed to the function will be absorbed into the sub block with the return method. 
+Within this sub-block, we consoleout the args  and also undertake whatever custom function, such as a math.max or math.floor function that f will take the form of. This gives us our result which is return also within the return block.
+
+
+We can also organise functions that are customisable with respect to the organisation of different control flow as opposed to the traditional loops. This is a true pain in the ass. 
+For example, we can create a negative if conditional that is not actually allowable in the inbuilt functionality. Example follows:
+
+function unlessNegativeIfConditional(conditionalExpressedAsArg1, Arg2AsActionToBeDoneAsExpressedInRecursiveFunction2){
+	if(!conditionalExpressedAsArg1) //parameter here 			   
+}
+							||DOUBLE RECURSION
+							||
+function recursiveAndRelatedActionFunction2(){
+	parameterMethodOutliningActionsIfCOnditionMetOrUnmet(FirstArgDefaultsUnmetAction, SecondArgDefinesMetActionWithParametersFeedingIt => {	unlessNegativeIfConditional(arg1ValuePassedOnConditionalExpressed, arg2ValuePassedToActionToBeDone){
+	whateverActionIsToBeDoneParameter
+	WhateverFurtherActionLikeAConsoleOutOrWhatever
+		}
+	})
+}
+
+Arrays in JS also provide an option for higher order recursive abstract repetition. This is achieved simply using (THANK GOD) the inbuilt forEach method, thus not requiring any modified functions. Follows:
+
+["arrayValueA", "arrayValueB"].forEach(1 => console.log(1));
+// here every time an arrayValue is encountered
+
+Another customisable array format that can create shortcuts for data processing, including parsing through sourcecode for relevant "Live" in use scripts is one which filters out elements that do not pass a simple test. We prepare the way outlining the array to be examined, but NOTE the IMPORTANTLY we want this to be a PURE or PASSIVE process.... we are only looking for something, we don't want to make ACTIVE changes to the sourcecode. Thus we will consoleout the result of our query to an entirely new array which will hold the found values.
+NOTE also, below, how our process needs us to use the inbuilt FILTER array function, which does the parsing, and the inbuilt DOM ELEMENT identifier, in order to identify the relevant DOM located scripts that we wish to filter out and select from the main array. 
+Following is the array that filters out into a new array:
+
+function filter(arrayToBeFilteredName, testForFilteringName) {
+	let passedFilteredArray = [];
+	for(let element of filteredArrayName) {
+		if (testforFilteringName(element)) {
+			passedFilteredArray.push(element);
+			}
+		}
+	} 
+	return passedFilteredArray;
+} 
+
+console.log(filter(whicheverArrayNameWeWantCreated, testName => DOM.named.location.we.are.looking.to.filter))
+
+>>>> consoles out with a new array named whicheverArrayNameWeWantCreated which will contain a range of values that are found to have matched out filter test.
+
++++++ MAPPING+++++
+
+Building on the previously outlined filtered array one of the issues that presents itself is that this previously outlined array will be consoled out to us in the form of a new array but its values will be in "raw" format... that is to say, they will be "literal" string values... What if we want a more human-readable format? we can use the MAP function that transforms this filter version into a readable string NAMES format.
+ 
+To do this we can refer to the previous array in building a new array which is the result of the MAP inbuilt function, It will look the same as the previous approach except that, in this instance we pass the args we want to the map() function with ARG1 being the name of the new "mapped" array that we wished to created and the ARG2 being the DOM ELEMENT PROPERTY (in this case .NAME) that we wish to parse from the existing filteredArray. Example follows:
+
+function map(passedFilteredArray, transformationArgName){
+	let mappedArray = [];
+		for (let element of passedFilteredArray){
+			mappedArray.push(transformationArgName(element));
+		}
+	return mappedArray;
+}
+
+console.log(map(passedFilteredArray, placeholderForTransformationArgName => placeholderForTransformationArgName.DomElementLocation))
+
+REDUCTION+++++
+A reduction is simply a LOGICAL REDUCTION OPERATION AS WITH FORMAL LOGIC= We abstract into ONE OBJECT a SET.
+ 
+We start with a pre-existing (either defined in another place or to be defined in the runtime execution of the consolelogout) array. This takes the first arg position of our reductionFunction. The second arg position is filled with the action sub-method which will be defined in the reductionFunction paras. THe third arg is the starting condition, arbitrary and defined at runtime exec:
+
+function reductionFunction(preExistingArray, subMethodActionDefinedAtRuntime, startingValueDefinedAtRuntime) {
+	let ongoingResult = startingValueDefinedAtRuntime;
+	for(let element of preExistingArray){
+	ongoingResult = subMethodActionDefinedAtRuntime(ongoingResult, element);
+return ongoingResult
+	}
+}
+So at runtime exec, we can pass an existing array or define it as arg1, and the other two args are also defined at runtimeexec.
+NOTE; within the subMethodActionDefinedAtRuntime the first arg ongoingResult takes the form of the first additional, and is itself changed as the calculation is updated. The second argument is every element of the given array being encountered as the machine parses the array.
+eg:
+
+console.log(reductionfunction([2,2,5,3],(a, b) => a + b), 0);
+
+>> 12
+
+DOUBLE REDUCTION ++++++
+
+double reduction can be useful in case where we wish to create a doubly recursive function that allows us to parse through two different arrays that are nevertheless inter-related. For example, if we wanted to parse one array "quantitatively" as "raw" element data but then we wished to separate each iteration of this quantitatively submitted data from based on the separate submissions of such data (such as a string to be be counted up in terms of chars) from a further reduction function that would each of these separate submissions' counts into separated vars a, b, which could then be manipulated/computed separately (although recursively in the sense of the reference between the different reduction functions): below is an example:  
+
+function characterCount(script){
+	return script.ranges.reduce(count, [from, to]) => {
+		return count + [to - from];
+	},(0);
+} 
+console.log(scripts.reduce(a, b => {
+	return characterCount(a) < characterCount(b) ? b : a;}))
+
+Higher order functions are especially useful when they are deployed to create PITHY and CONCISE function, often with RECURSION.  This is useful because they can be ELEGANT and deal with somehwat complex issues in a minimalistic way. 
+
+HOWEVER just because WE CAN, doesn't mean we SHOULD. RECURSION is RESOURCE HUNGRY and using more elegance can also cause a lot more processing power to be expended. 
+
+In other cases, it is fruitful to deploy complex and multi-recursive functions. For example, if we wanted to do a function that takes an array of values that are subsequent parsed twice with the first instance being a parsing of the array itself followed by a sorting according to some organising principle. 
+
+
+///////////////////////OOP IN JAVASCRIPT\\\\\\\\\\\\\\\\\\\\\\\\
+
+JS doesn't have automatic OOP inbuilt like Java. Instead, traditional vanilla JS deploys a range of alternative models for example, deploying constructors and what JS calls PROTOTYPES instead of classes and the usual JAVA/C++ style organisation. 
+Although these are points of distinction, the practical effects are the same. Also, there are points of agreement, such as the concepts of inheritance and the public/private split in assigning scope. 
+
+Generally, the separation of classes and objects is done via interfaces and is considered as the process of ENCAPSULATION.
+
+In JS, the OBJECT.GETPROTOTYPEOF keyword is reserved for clarification of an inheritance relationship of dominant over subordinate classes/objects.
+
+In fact, to some extent similarly to JAVA, there is indeed one overall "grandfather" class that acts the "ancestral" prototype from which other js prototype objects derive their basic features.
+This is the object.prototype "ancestor" constructor.
+ 
+SO in older JS, we simply use the prototype language to call/invoke the class relationship. In the newer versions of JS, we do have the introduction of the class keyword. 
+
+The prototype class then can then be filled with properties/characteristics that will be passed on to the child objects/classes which will inherit these properties.
+
+++++ over-riding the derived properties+++
+A simple general rule is that the priority on overriding of properties follows a basic downward-upward priority. Whatever is first given priority lower down the ranks, outweighs whichever properties are imposed from above at the higher levels.
+So if we have prototype derived properties that are being passed to an object, then this may not override if we add the same properties at the "local" level. For example : 
+
+there is a further call that we can do on the prototype which is the toString which essentially acts like join("[element],[element]"). 
+
+++++++MAPS+++++++
+
+mapping is the same as with the map() inbuilt function. Because the object prototype lies at the heart of the formation of further sub-objects, we can actually use the generalised/abstract properties and inbuilt functions like toString which is part of the object.prototype inbuilt prototype class "ancestor".  THis means thata boolean query of an array of object.properties that have not been assign will indeed give us a FALSE. However, if we query the toString property, it will give us a TRUE. That is because every prototype object has this toString property. 
+
+
++++++++++Polymorphism+++++
+Polymorphism is the concept of defining one core template class with a var/function that can be called upon/deployed by many varying objects- objects that can have different forms (polymorphism) but still can make use of this template's methods/vars in the same way.
+In Javascript, the template class's properties/methods that are being polymorphically deployed are called interfaces
+
+One issue that can appear is if we have multiple interfaces that use the same property name but have different contextual meaning in their deployment depending on which object is deploying them.
+Javascript avoids such problems by ensuring that the property declaration for polymorphic properties is done via that inbuilt Symbol() function. This function ensures that the named property as a symbol doesn't become a string and it prevents reusing the same name/sequence of chars twice.
+
+Iterator:
+
+class Matrix{
+    constructor(width, height, content =() => undefined){
+/*constructor method- whatever value is passed in arg1 and 2 by the user for THIS instance of the matrix class will be given to  the constructor as the arg1 width and arg2 height.
+the third content arg3 is optional. It refers to whichever array element that the THIS object is pointing to and offers a chance to give that content a general base value using content=() or, if arg3 
+isn't used, it defaults to an undefined value. */
+        this.width = width;
+        this.height = height;
+        this.content = []; //array element pointer
+    
+        for (let y=0; y < height; y++){
+            for (let x=0; x < width; x++){
+                this.content[y * width + x] = content(x,y);
+            }
+/*in these two loops, we are filling the array out. First loop ensures that the y Height value increments or "fills out" to the extent of the height var avalue passed in the constructor method above... i.e. it increments out until finding the max... 
+But the block in loop1 makes sure the same is done with loop2, which does the same with the width aspect.
+
+Then loop3 follows the first two loops' values as they fill up the array/iterate their values and ensures that whatever position this iteration/looping1&2 is at gets filled with either the default undefined vaue or the custom default value passed in arg3 of the constructor */
+        }
+    }
+
+    get(x,y){
+        return this.content[y * this.width + x];
+    }
+    set (x,y, value) {
+        this.content[y * this.width + x] = value;
+    }
+/* these last two either fetch the value containt in the array element pointed to by the position as per their hegiht-width coordinated (x,y) or they set them with hegih-width coordinates to locate the array element and then the assignment operand = with the value variable that is constructor Arg3 left default undefined expect if user gives it a definition now with the 3rd arg of the set() method */     
+}
+
+
++++Getters Setters and Statics
+
+getters and setters are methods whose purpose is to fetch and change property values of objects that are held in the class
+
++++Inheritance
+
+JS uses the same inheritance concepts as other langs 
+
++++InstanceOF
+console.log(className instanceof otherClassName);
+will give us a boolean TRUE/FALSE as to whether the first passed class/object is inheriting from the second.
+
+
+
+//////////////////HTTP and FORMS\\\\\\\\\
+
+HTTP/S protocol, ports etc.
+NOTE that alongside GET marker, we can also send (but not necessarily recieve reply) with a DELETE- to delete a page, PUT- to replace a page, adn POST- to send info to a page.
+
+Form elements in the DOM can send info to server via GET or POST. But GET will send openly the contents of the information being filled in the form.
+
+NOTE the format is that the form's DOM address will then be followed by a QUERY STRING, demarcated by a ? sign which then queries the values passed for the form's sub-elements like: name, message content and other field content. 
+Note also that the reason why we often get %20 and other such escape sequences is because with URL ENCODING the escap symbol is % and the sequences placehold special chars like $ or ?
+
+with POST, the query string will be appended to the body of the HTTP request and will be hidden from the URL, thus making it more secure for information sending.
+
+++++++ Fetch
+
+calling fetch('serve/directory') is a different technique.
+With fetch, we recieve a PROMISE of resolving the passed address to a RESPONSE object. 
+the response object has special properties that correspond to the various elements of metadata: status (which includes server/host errors in network), Content-Type(which refers to the type of content being sent to the browser from the server- i.e. text for example).
+
+The then() method is actually inheriting from Promise class: Promise.prototype.then(). 
+
+Its arg1 is the response object to be returned if the promise is fulfilled. Optional arg2 is a response object if promise IS NOT fulfilled. These response objects are defined earlier (using their parameter blocks to add the content of successful/failed response):
+
+//first we create the var (with fetch this is already hardcoded):
+
+var connectNotification = new
+	Promise((arg1Fulfilled, optArg2Rejected) => {
+		arg1Fulfilled('Done Deal!');
+		optArg2Rejected('Too Bad!');
+});
+
+//now deploy the promise and responses using THEN
+//note how the arg1 and arg2 for promise is now beign represented by placeholders in the then() implementation of connectNotification var:
+
+connectNotification.then(fulfilledFyi =>{
+			 console.log(fulfilledFyi);
+			 },
+//consol'd>>> Done Deal!
+			 	 rejectedMsg =>{
+			 	 console.error(rejectedMsg)
+//consol'd>>> Too Bad!
+			 	 }
+);
+
+But NOTE THAT FETCH is already pre-determined with the responses - relating to parameters that deal with networking metadata.
+
+Note also that this object is actually mapped onto a MAP-LIKE object in memory that treats its keys as case insensitive. This quirk is because the http headers that are sent in metadata are meant to be case insensitive.
+
+//Note that arg1 takes either an http/s address ?
+//or it can take a SeverName/directoryLocation for the FETCH method. 
+// And for the THEN method arg1 is the SUCCESSFUL responder, which, in this case, can have multiple parameters (already pre-defined in hard-coded fetch construct). Among theses parameters are some metadata about the network response:
+
+fetch(server/directoryLocation).then // OR:
+fetch(https://www.whatever.com/index/directoy1/sub-directory2/).then(response => {
+	console.log(response.status);
+	console.log(response.headers.get('Content-
+	Type')); // can be written: CONTENT-TYPE
+})
+
+>> outputs: 200 (no network error) and text/plain
+
+NOTE that even if there is a network error, fetch will return metadata about that as part of the first Arg successul resolution section... it will just send an error network code like 400, 500
+
+What about fetching the content of a fetched resource? Well we can get plain-text content by using the : text() method that is inbuilt into the fetch() construct. For this, we will need to deploy two thens: 
+
+	- the first for the arg1 of Fetch which will 
+	need a FIRST then to convert whatever resource 
+	is passed to that Fetch(arg1) into a successful 
+	response of fetch's inbuilt 
+	promise(arg1SucessResponse) deployment 
+
+	- and the SECOND then will now fill the 
+	consoleOut with whatever text was called up by 
+	Fetch's inbuilt text(arg1Contents) method whose 
+	own response was  chained down by first then to 
+	the  promise(arg1)'s parameters for output 
+	action (outputted by second then)
+This is an example of chaining then promises:
+
+fetch
+fetch(https://www.whatever.com/index/directoy1/
+			sub-directory2/).then(
+					response => response.text()
+				).then(
+						text => console.log(text)
+					);
+
+Javascript also allows for a similar action but instaed of text, we can get the output in JSON format. NOTE also that arg2 of the fetch method provide options to define which method to make the http/directory request. It defaults to GET but can also deploy as PUT, DELETE or POST:
+
+fetch('https://www.cool.com/resource/text.html', 
+			method: 'POST').then(
+				response =>{
+					console.log(response.status);
+					console.log(response.headers.get(
+					'Content-Type'));
+					};
+				).then(
+						response => response.json()
+						).then(
+							json => console.log(json)
+							);
+
+++++++ FORMS
+
+web form consists of any number of input fields grouped under a <form></form> tags
+fields are often held under the <input> tag because they allow us to determine the type of field input to be entered. Among these types are the : 
+text - line of plain text
+password - as above but occulted
+checkbox - multiple tickboxes
+radio - radio button, only one tick allowed
+file - upload a file from host 
+
+NOTE that for multiple lines of text entry, there is a separate html/DOM tag called <textarea>
+	line 1
+	line 2
+	line 3
+	line 4
+</textarea>
+
+Another special construct is the <select></select> and concomittant <option></option> tags. These allow for custom options to be provided for the user to choose from and allow for longer text being written for each of the options- so in a sense they are to radiobutton/checkbox what textarea is to text:
+
+<select>
+	<option>choice1</option>
+	<option>choice2</option>
+	<option>choice3</option>
+	<option>choice4</option>
+</select>
+NOTE, the options are rendered as a DROP-DOWN MENU Whenever an option is selected, it fires off a CHANGE event
+
+form fields can actually appear outside of <form> demarcations BUT any of them outside of the form structure will not be allowed to submit their input in a normal HTML mannyer: 
+to be submitted for http/s transfer to server/network, it needs to go via the <form> section 
+OR we can override this using Javascript to force a CHANGE even to be fired upon clicking on submission for those fields outside of the <form></form> tags
+
+++++++Focus
+
+the HTML/DOM structure  automatically sets the focus of the keyboard on either the whole page or a selected text or textarea field (and cycling via tab allows cycling through buttons, boxed, options etc).
+
+But with JS we can also override this using JS' focus() and blur() meths and using the document.ActiveElement.tagName in the parameters to verify which of the active elements on the page is being focussed on.
+NOTE also that document.querySelector is a DOM document class method -querySelector()- which returns the first DOM element encountered with a given CSS selector tag which can be either a higher level element like <p> or <body>, a more precise sub-element like 'p.first', 'p.other' or an id #myP #anotherP. The querySelector on its own just returns the first parsed hit, but querySelectorAll() returns every instand of that sought(sub-)element.
+
+<html>
+<head>
+	<script>
+	document.querySelector('input.txtIn').focus();
+	console.log(document.activeElement.tagName);
+//>> Input.txtIn is focussed on element
+	document.querySelector('input.txtIn').blur();
+	console.log(document.activeElement.tagName);
+//>> body is returned as now focussed on 
+	</script>
+</head>
+	<body>
+			<p>
+				Hello please fill out this form below 
+				and select the correct option for you: 
+			</p>
+		<br>
+			<form>
+				<input class=txtIn type='text'>
+				<input type='checkbox'>
+				<input type='radio'>
+			</form>
+			<p>Thank you!</p>
+	</body>
+<footer></footer>
+</html>
+ 
+Form fields can be disabled via the DOM using the simple DISABLE keyword:
+
+<form>
+	<button>1</button>
+	<button>2</button>
+	<button disabled>3</button>
+	<input disabled>4</input>
+	<input>5</input>
+	<select>
+		<option>6</option>
+		<option disabled>7</option>
+		<option>8</option>
+	<select>
+	</form>
+
+
+++++++ THE FORM element in the DOM
+
+In HTML, when we deploy DOM elements using tags like <form></form> we are basically telling DOM to instantiate an instance of the FORM element class. This FORM class has properties including a property called ELEMENTS. This property is a collection of fields that the FORM class is to contain within it's scope. 
+FORM class has an attribute called ACTION which can be deployed in HTML using action=... to provide a CHANGE event action that is expected (like opening a URL)
+
+Underneath this elements property, each generated field [sub-]element can also be assigned a NAME attribute that corresponds to its belonging within the FORM class' ELEMENTS property/collection. NOTE that the ELEMENTS collection's various field [sub-]elements can be given (and thereby accessed via) their NAME attribute in EITHER A 0-BASE ARRAY-STYLE indexPos int OR VIA THEIR ACTUAL NAME (like a key on a MAP data structure) as it has been written in HTML.
+In tandem, when we instantiate a field [sub-]element of any type via an html tag [<input>, <text>, <password>, <button>, <select>, <checkbox> etc] within that <form> [super-]element, the DOM thereby also executes the creation of these field [sub]-elements AND here, instead of a property of ELEMENTS being held by these field [sub-]elements, they INSTEAD HAVE A PROPERTY THAT LINKS TO THE MOTHER [super-]element, namely the FORM class element that is holding them in its scope via <form> html markup.
+<html>
+<head>
+	<script lang='Javascript'>
+let bodyVar = document.querySelector('body');
+let formVar = document.querySelector('form');
+let psswdVar=document.querySelector('password');
+   console.log(formVar.elements[1].type);
+//consol'd out the type of second [sub-]element in the FORM CLASS, namely the ELEMENTS PROPERTY's SECOND[base0-count 1 selected] field [sub-]element, in this case it is psswd which is of PASSWORD field type in DOM/HMTL. So consol'd out>>> password  		
+   console.log(formVar.elements['email'].type);
+>> same as above but using the keynam(maplike) approach, this time we get the consol' >> text
+because it's a text field [sub-]element	
+//we can even use boolean ops to check if a form class [super-]element, a field [sub-]element or even a field [sub-]element's linking [mother]FORM PROPERTY is of a particular type:
+   console.log(formVar == formVar);
+//TRUE -rememebr formVar is a FORM class JS placeholder var we instanced earlier
+   console.log(formVar == bodyVar);
+//FALSE
+   console.log(formVar.elements[0] == formVar);
+//FALSE
+   console.log(formVar.elements[1] == psswdVar);
+//TRUE   
+   console.log(formVar.elements.name.form == 
+   formVar);
+//TRUE because the formVarp JS placeholder's FORM DOM [super-]element/class contains a property of elements collection/array which has a name attribute id'ying ever of its [sub-]element which themselves EACH have that linking [to mother]FORM attribute that point back to that FORM dom [super-]element
+	</script>
+</head>
+	<form action='https://www.mysit.com/
+	submit.html'>
+   Please enter your email address and password: 
+ 	  <input type='text' name='email'><br>
+    <input type='password' name='psswd'><br>
+    <button type='submit'>Log In</button>
+  </form>
+<footer></footer>
+</html>
+
+NOTE a DOM button element with a 'submit' attribute will trigger a SUBMUT event that sends the form to the passed location in the form's ACTION attribute.
+NOTE also that the action attribute will default to accessing the http/s page passed using either GET or POST. But we can override this default behaviour using Javascript:
+
+<form action=http://www.mysite.com/whatev.html'>
+	Enter your message and submit:
+	<input type='text' name='message'>
+	<button type='submit'>Submit</button>
+</form>
+<script>
+	let formVar = document.querySelector('form');
+	formVar.addEventListener('submit', event =>{
+		console.log('Sending this message:', 
+		formVar.elements.message.value);
+//consol' out the string as arg1 and the actual content of the message being sent for the user to see it.
+		event.preventDefault()
+//here we are using JS to override the usual submission by DOM form class' action attribute triggered by Button's submit event.
+ 		}
+	);
+</script>
+
+Why would we want to block a default submit? 
+Well in the Javascript we can deploy further code that achieved further operations on the submitted text: such as parsing through the text and verifying the user has submitted something acceptable.
+Or we could want to stop the site page from sending the info and reloading automatically. We can override default submit and instead have our JS script have a fetch() construct that sends the text to the server without making the the page reload, and instead demonstrating a submitted successfully message on successful transmission.
+
+++++++ Text fields
+
+In the DOM architecture, the fields generated by HTML's <input> tags which are of the PASSWORD and TEXT types and <textarea> tag all share a common interface This interface provides all of these (textual)field (sub-)elements a VALUE property that holds their content as a string. Changing that VALUE property directly via JS will override what has been generated via HMTL tags. 
+The interface has further properties that are inherited by textual fields. Among these are:
+selectionStart 
+selectionEnd 
+these two markers share a equal (base0) indexPos when no text within the field has been selected. For example, if the pointer is at the start of the field's text that is in focus, then the two properties will have an indexPos of 0.
+If we start selecting parts of the text, then the starting and ending char indexPos will be represented by these two properties. We can again use JS to inject and delect chars as we which from the textual field's string, using these two properties.
+We can also use this property and the general DOM architecture via JS to achieve particular results. For example, we can use JS to override the DOM architecture and have every section of text that is selected being replaced with a passed subString using the DOM's replaceSelection() meth:
+
+<html>
+	<head>
+		<script defer lang='Javascript'>
+			let textVar = document.querySelector('textarea');
+				textVar.addEventListener('keydown', event =>{
+						if (event.keyCode == 17){
+						replaceSelectText(textVar, 'imparando');
+						event.preventDefault();
+						}
+					}
+				);
+			function replaceHighlightedText(relevantField, triggerText){
+				let fullTextStartPos = relevantField.selectionStart;
+				let fullTextEndPos = relevantField.selectionEnd;
+				
+				relevantField.value =	relevantField.value.slice(0, fullTextStartPos) + triggerText +
+															relevantField.value.slice(fullTextEndPos);
+				relevantField.selectionStart = fullTextStartPos + triggerText.length;
+				relevantField.selectionStart = fullTextEndPos + triggerText.length;
+//Note these last two statements just return the text cursor to the next position after the //
+//word is found - not really neccessary. Remmber that cursos indexPos is where selectionStart
+//and selectionEnd meet.
+			}
+		</script>
+	</head>
+	<body>
+			<p>Please read the following text in Italian and identify every time the exact 
+			equivalent of 'studying' is used. <strong>To identify the hold down the contrl (CTRL) 
+			key and double click on the word in the text that you think is the match:</strong></p>
+		<form>
+			<textarea name='textIn' rows='10' cols='20'>Qui siamo imparando l'iataliano perche 
+			imparare sta bella lingua e molto facile. Imparare altri lingue posso stare piu 
+			difficile etc...</textarea>
+		</form>
+	</body>
+<footer> </footer>
+</html> 
+
+Note that the above example only fires a change event when the field loses focus. What if we wanted to respond immediately and continuously to infield changes (like typing or deleting chars being wordcounted?) To do this we register an an event handler for the textarea or text type input:
+
+<script defer lang='Javascript'>
+	let insertedText = document.querySelector('textarea');
+	let count = document.querySelector('#wordCount');
+		insertedText.addEventListener('textarea', () =>{
+			count.textContent = insertedText.value.length;
+			}
+</script>
+<textarea>Write or paste something in this textbox and you will see the word count below
+</textarea>
+<p id='wordCount'>0</span>
+
++++++ Checkboxes and Radio Buttons
+
+The checkbox is a binary toggle. This field has a property title 'checked' which holds a
+boolean checked(true)/unchecked(false) 
+
+the radio button is somewhat similar except it is implicitly linked to other buttons making it exclusive of other Boolean selected TRUES
+
++++++ Select Fields
+
+Remeber the select fields are customisable with the <option> choices being provide as each potential selected option. NOTE that these selectors are mutually exclusive, like the <button> construct.
+However, NOTE that this default setting can be overriden using the SELECT DOM class' multiple attribute. If deployed, then any number of <select> (sub-)class/elements can be chosen and also this will OVERRIDE the browser's default manner of portraying the selections which are drop down menu by default 
+
+The <select>(parent/super)class/element's VALUE is an attribute that sets out what the content it has is. Unlike a button, it doesn't resolve to a simple TRUE/FALSE binary. Instead it assimilates the value option of whatever the value of the currently selected <option> is. If an option does not have an excplitly assigned value property, then the default is that whatever that option sub-element's text content will be the value
+
+BUT what if we have a MULTIPLE <select> field ? In this case, assigning only ONE of the option values will ignore all of the other (checkbox style) selected options. 
+
+However, just as the DOM's FORM (super-)class has an ability to access the individual FIELD (sub-)element, so too the SELECT structure has a property called OPTIONS which acts as a pseudoarray collection holding each of the <option> elements'  properties. 
+Among these are the SELECTED property, which outlines if that relevant option element has be selected and communicates that to the parent SELECT structure.
+
++++ File Fields
+
+file fields are inbuilt and can be combined with JS for various purposes, for example a confirmation message of a file that user wants to submit :
+
+<html>
+	<head>
+		<script>
+			let submitButton = 
+			document.querySelector('button');
+			let fileUp =
+			document.querySelector('#fileUpload'); 
+				input.addEventListener('change', ()=>{
+					if (fileUp.files.length > 0){
+							let fileUp = input.files[0];
+// file input parsed via DOM upload
+							console.log('You are uploading' +
+							fileUp.name + 'please confirm by 
+							pressing the submit button: ');
+				   			submitButton.addEventListener(
+				  		 'submit', event =>{
+									console.log('Thank you you 
+									have submitted the file'); 					
+									}
+								)
+							}
+					);
+		</script>
+	</head>
+	<body>
+		<p>Please upload your file here and confirm 
+		submission once you verify that this is the 
+		file you want to upload:</
+		p><br>
+		<form>
+			<input type='file' id='fileUpload'>
+			<button type='submit'>Submit</submit> 
+		</form>
+	</body>
+	<footer></footer>
+</html>
+
+NOTE just as previously, the FILES (super-)class/element in the DOM holds a FILES property which is a pseudo-array collection of (sub-)elements. It starts out empty and uses the usual 0-base indexPos pointers.
+NOTE also that like the SELECT construct, the FILES (super)-element also holds a MULTIPLE property that allows the selection of multiple files for upload simultaneously
+
+The (sub-)-elements populating the FILES pseudo-array collection are themselves objects (as is the FILES collection) and they have their own set of properties relevant to each individual file being uploaded. These include: name (filename), size(in bytes), type(filetype - i.e. text/pdf, text/plain, image/jpg, video/mpg4)
+
+NOTE however, that this indiviidual file sub-element construct doesn't have a property that holds/reads the contents of the uploaded file. That's by design because the size and complexity of a file needs ASYNCHRONOUS interfacing, otherwise there can be hangups and outright freezing of the parse.
+To achieve this, we deploy the DOM's filereader object constructor method FileReader().
+the file reader DOM construct has several methods and eventhandlers. here we use the LOAD eventHandler, which fires a Load event when a file has been successfully read. If there is an error, filerReader also has a range of error events that are automatically fired off.
+The method deployed here is the readAsText() which reads the loaded file as a plaintext format.
+
+<input type='file' multiple>
+<script>
+	let fileIn = document.querySelector('input');
+		fileIn.addEventListener('change', ()=>{
+	   for (let file of Array.from(fileIn.files)){
+	   		let readFile = new FileReader();
+	   		readFile.addEventListener('load', ()=>{
+	   			console.log('The file', file.name, 
+	   			'starts with :', 
+	   			readFile.result.slice(0,30));
+//NOTE: DOM FileReader.result returns the file's 
+//contents but only when read op/parse is done
+//here the file is read and first 30 chars are
+//consol'd out for user to check the file is ok.
+	   			}
+	   		);	
+	   	}
+		 }
+		);
+	readFile.readAsText(file);
+</script>
+
+NOTE this DOM-based format was prepared before the later addition of the aforementioned PROMISE-RESOLUTION constructs. We can also wrap the file reading processes and error processing into a PROMISE structure.
+
++++++Storing  Data Client-Side i.e. cookies
+
+There are many cases when we want data to have persistence. The problem is that data and events handled via Javascript/DOM do not have persistence. They run, then are wiped when a session ends.
+
+Obviously, server-side work is a solution, but it is slow and expensive.
+Browsers instead have small localStorage memory space (customisable and set by each browser) that creates a segment of that space for each new website that requests access to the mem space. We access it using window.localStorage DOM property of the window interface class. It allows access to a storage object which itself has methods and properties allowing access to collections of data stored with respect to each website(domain), for example setItem(keyName, value) which can then be fetched using getItem(key,value) or removeItem(key)
+
+localStorage.setItem('username', 'Johnny');
+console.log(localStorage.getItem('username','Johnny'));
+localStorage.removeItem('username');
+localStorage.clear();
+
+
+//////////////////NODE\\\\\\\\\\\\\\\\\\\\\\
+
+NODe is a programme intended to allow JS development outside of the browser environment - for command lines or even servers
+
+Node was initially concieved to allow for asynchronous programming via JS that would avoid multithreading and other resource heavy ops for input-output ops. Since JS doesn't have inherent native input-output handlers, node was also a useful addition for this purpose.
+
+Node is installed via NPM.
+
+the node command on command line console will execute a passed JS file:
+
+helloWord.js>>
+let message = 'Mother*** run this tribe';
+console.log(message);
+
+node helloWord.js     
+
+NOTE that with NODE, the consol'd out acts more like Py or Java, i.e. consol'd out to actual console not browser.
+
+running node without a passed JS file will give a prompt allowing us to write javascript code right there and have an immediate runtime exec via console still.
+
+NOTE NODE has global bindings, some of which are shared with vanilla JS (Array, console[although its the OS console not browser], Math, JSON) while others are node-specific (process) for example. 
+Meanwhile JS' browser-specific bindings like document and prompt are missing from the Node ecosystem.
+
+NodeJS tends to ignore global scoped bindings, with the exception of the few binds mentioned above. But modules/libraries can be implemented using the REQUIRE keyword
+
+When require is deployed using the / ./ and ../  directory pathnames (bash-style meaning) 
+Note that adding a simple directory ending with a name will see Node try to open a file called whatever that name is within that directory path:
+/tmp/roboto/robot >> node will try to open robot.js in that roboto directory
+
+If no such file exists, then Node will assume a possible filename of index.js
+
+if neither is available, then it assumes that this is refering to some node_modules directory library 
+
+libraries are usually installed using NPM
+NPM acts as an interface for thes JS and Node libraries 
+Node's ini package for example allows for parsing through a package's configuration file using the PARSE property.
+
+init is an initialiser that creates a package.json file
+
+++++++ NODE FS
+
+Node's file system module (fs) is commonly used
+This module, for example, holds a function called readFile() which reads a file  and arg3 calls a callback function with the file's contents:
+
+let readFile = require('fs');
+readFile('fileName.txt','utf8',(error, text)=>{
+	if (error) throw error;
+	console.log('The file contains: ', text);
+	}
+);
+
+NOTE the arg2 utf8 encoding. If we don't pass this arg, then NODE will return the file in binary via a bufferObject rather than text string.
+
+Alongside readFile, there is writeFile()
+
+const writeFile = require('fs');
+writeFile('graffiti.txt','Node was here',err=>{
+	if (err) console.log('Failed to write to 
+	file: {$err}');
+		else console.log(File successfully written);
+	}
+);
+//Note that with write Node instaed assumes that we are writing to string, not a binary buff.
+There are further inbuilt FS functions and most of them take a arg that is a callback Func. Among them are:
+readdir() - returns files in dir as array of str
+stat() - retrieve file metadata
+rename() - rename file
+unlink() - remove file
+
+NOTE most of these and many Node package members are designed as ASYNCHRONOUS processes. 
+but sometiems synchronous is more useful. Helpfully, several of these members have a sync version, for example readFileSync
+
+BUT the issue with synchronous processes is that it hangs/freezes other processes. So wiating for a file to exectute/read etc can take time, block other actions and annoy user.
+
+Note that NODE doesn't have promies integrated but some packages lik mz provide alternatives
+
+++++++HTTP MODULE
+
+http is a core npm module providing functions and properties relating to running HTTP servers and requests. A very simple http server looks like this in Node:
+
+const createServer = require('http');
+	let basicServer = createServer((request, response)=>{
+		response.writeHead(200, {'Content-Type': 'text/html'});
+		response.write();
+			<h1>Welcome</h1>
+			<p>This is the following address: <code>${request.url}</code>.<br> 
+				 Site is under construction
+			</p>
+		response.end();
+		}
+	);
+basicServer.listen(8000);
+
+when someone opens an address the request becomes passed to createServer function on the server-side. 
+Arg1 reuqest is an object representing incoming data continain info about request
+response is an object that represents outgoing data. it is defined in the paras which
+include writeHead meth which will write out response headers (metadata of response back to browser/client). Here arg1 is status cod 200 (all ok) and arg2 is content type metadata
+then the rest of the para is the actual response, written in HTML but bookended by write() meth and end() meths.
+NOTE if we want to stream this response slowly (a kind of buffer) we can actually deploy write() and end() multiple times.
+The final statmeent tells the basicServer to listen for requests incoming on port 8000
+
+If we wanted to reverse the process, and instead be a client sending request to a server, we can do so:
+
+const clientRequest = require('http');
+	let requestStream = http.request({
+			hostname: 'siteaddress.com',
+			path: '/whateverdirectory.html',
+			method: 'GET',
+			headers: {Accept: 'text/html'}
+		},
+		response =>{
+			console.log('Server replied with code:', response.statusCode);
+		}
+	);
+	requestStream.end();
+
+here arg1 gives the request metadata its various values. 
+Arg2 response object aain allows us to write and end() - in this case we don't deploy write() because GET requests must not have data encapsulated into their body (rememebr that they leak on the http transmission unlike POST. so instead it's a consol'd out message on the browser.	
+
+NOTE that this approach to making client-side requests on server is quite bulky and NPM provides a package, node-fetch to undertake a fetch() similar to those used in Vanilla JSS on browser.
+++++++STREAMS
+
+writable streams are commonly used in Node. they usually have a write() which can be passed a string or Buffer object end() meth which can optionally write an output upon closing.
+
+both meths can take a callabale as an arg which adds further functionality
+
+alongside writeFile() there is the createWriteStream() in order to write to a file... the first option outputs directly while the second option is more buff'd meaning it will be less demanding on resources but slower.
+
+On the other hand, reading from streams is a bit more complicated. it is not done via methods but rather via event handlers. Event emitting objects in Node are similar to the addEventListener() meth in vanillaJS
+readable streams have a data and end events. data is fired every time data is incoming. end is trigger when the stream ends
+NOTE however, that this is best suited for STREAMING data. The createReadStream is the best Node library function suited for this purpose.
+
+++++++CREATING A FILE SERVER
+
+COME BACK
+
+
+//////// HTTTP/S AND FORMS\\\\\\\\\\\
+
+++++++ FETCH
+
+fetch is a JS interface function allowing HTTP requests to be made via the browser (GET POST etc)
+fetch('example/data.txt').then(response => {
+	console.log(response.status);
+	//error or ok? if ok we get 200 code,
+	//if server error then 500 code
+	//if network error, 400 code like 404
+	console.log(response.headers.get('Content-
+	Type'));
+	//get the content type? here returns text/plain
+	})
+
+calling fetch returns a promise that  revolves to a response from the server on the queried information. even if there is an http error, the response will be returned
+
+fetch(arg1URLLocationHTTPOrARelativeAddressOnSameDocumentOrStartWith/MeansNewDirectoryPathAfterServerInitialName, {optArg2ModePOST/DELETE/PUT/GETdefaultIsGet})
+
+if we want fetch to not only return metadata but also the text version of the metadata outputted to a txt file, we can use the text() meth
+	fetch('example/data.txt').then(resp => 	
+	resp.text()).then(text => console.log(text));
+
+a similar method fetches but outputs to JSON, the json() meth.
+
+++++++ form fields
+
+forms contain any number of designated fields like radio button, dropdown menu, text input area etc.
+
+several fields use the form's DOM <input> property that allows for clients to input data:
+radio -chosoe one only option
+file - upload file
+checkbox - multiple tickboxes
+text - text
+		NOTE the <textarea></textarea> subnode is 
+		available for multiline text inputs
+password - hides text
+
+NOTE that form fields don't necessarily need to be within a <form> node.
+
+the select node and <option> sub-node allows a choice of multiple cases:
+<select>
+	<option>option1</option>
+	<option>option2</option>
+	<option>option3</option>		
+</select>
+it creates a dropdown menu field and when one option is selected it triggers a change event
+
+NOTE that form fields can trigger keyboard focus whenever they are selected or clicked on by user/client. This means that the keyboard will no longer pertain to the window but will focus on the field that has been selected (for example a text area can be written into). This all takes place thanks to a property of the document object in the DOM called document.activeElement.
+
+Javascript allows us to control this keyboard focus using focus() and blur() methods. The first method focuses on the particular activated element, while the blur "zooms out" of it back to the main document window:
+
+<input type='text'>
+<script>
+	document.querySelector('input').focus()
+		console.log(document.activeElement.tagName);
+	document.querySelector('input').blur()
+		console.log(document.activeElement.tagName);
+</script>
+
+fields can be disabled by using the DISABLED keyword:
+
+<button disabled>FadedOut</button>
+
+when a field is contained in a <form> element, the field's DOM element will have a FORM property linking back to the form DOM element. 
+
+The <form> element has its own property called ELEMENTS which holds a collection of fields.
+
+The ELEMENTS collection actually acts as both an array-like object(index 0base access) and a map object (access by name)
+
+the form field's NAME attribute determines the way it is handled when it is submitted:
+
+<form action='example/submit.html'>
+	Name:<input type='text' name='email'><br>
+	Password:<input type='password' name='passwd'><br>
+	<button type='submit'>Log In</button>	
+</form>
+<script>
+	let form = document.querySelector('form');
+//make variable FORM which has value of document.form node
+		console.log(form.elements[1].type);
+//password (type) via array value 1 i.e the second element in the elements pseudoarray held as a property of the document.form node
+		console.log(form.elements.passwd.type);
+//password (type) same as above but we directly named the sub-node (passwd)
+		console.log(form.elements.email.form == 
+		form);				
+//TRUE because here the document.form node's pseudoarray form.elements property if referred to by each of the ELEMENTS members which, when they are populated, create their own property named FORM which link back to their 'parent' document.form object: "the field's DOM element will have a FORM property linking back to the form DOM element. Thus comparing any of these document.form.elements.[indexPos]/keyName members' form attribute will evaluate to true when compare to their parent document.form node
+</script>
+
+
+///////////////DOM\\\\\\\\\\\\\\
+
+
+the dom refers to the structure of the document object model that is presented/interacts with the browser window.
+
+syntax trees and their nodes (and sub-nodes) allows a DOM hierarchy to be navigated.
+
+document is the global binding object from which all other nodes follow. Its document.documentElement property serves as the root element/node - kind of like a server's hard drive has a root folder representing all meaningful content it holds.
+
+The DOM is an example of a tree-structure with the parent and children nodes in the Document Object Model each referring to their respective HTML elements in its representation. nodes without children are called LEAVES
+
+
+Just as the document object has a property, so too does each node have a nodeType propert that has a code identitifying which type it is.
+a data structure can be properly called a tree when: 
+1. it has a single, well defined root object
+2. has a branching structure
+3. it has no cyclical (self-containing) nodes
+
+nodes can have their own child nodes and they will have a parent node above them, but nodes can also have no children, in which case they become like the leaves on the tree- the front-facing/end-use objects
+
+in HTML/DOM, document.body is an example of a node.
+
+in the DOM, each node has a nodeType property which is a number code that identifies what node type it is. Among these are:
+elements, which are consts document.ELEMENT_NODE (code 1)
+text, const document.TEXT_NODE (code 2)
+Comments, const document.COMMENT_NODE (code 8)
+
+the children property is special because it is reserver to element(code 1) child nodes, and not any other code type.
+
+Note , the DOM also interacts with XML and other markup langs.
+
+NOTE the DOM tries to fit across different platforms/langs like JS, XML, HTML, PHP etc because of this, many of its objects/features are not designed for strict compatability with any particualr one of these langs
+
+there are also limitations. For example, with the DOM, we cannot both create a new node AND add childNodes appended to it. We have to do the first action and then add the children one at a time.
+
+Note, the childNodes are like elements of a stack. So for example: document.body may be the parent node, with document.body.<h1></> being child 1 (element 0 on the stack), document.body.<p></p> being child2 (1 on stack)
+
+like a stack pointers toolsfound in php or jave, the document.node.firstChild and document.node.lastChild DOM properties are pointers to the DOM child stack members of a particular node. .previousSibling and .nextSibling are the equivalent of prev() and next() in php, cycling through the stack members
+
+Note that for the first childNode and last childNode, calling .previousSibling or .nextSibling will return a NULL value.
+
+The utility of this is that we can then automate through thedocument object's various nodes and childrenNodes using loops or other recursive functions. For example, assuming the node being examined is a html body section, and the children node are either it's element nodes (like a form field) or its text nodes (paragrphs for example), and let's say we are searching for a substring. We create a recursive loop for substring as a function  using node.nodeValue.indexOf() for searching the text(indexOf searches longString for subString, and nodeValue is a representation of the string content of any particular text (code 2) node childnodes and creating a custom if loop for parsing through (with the usual let i=0, i<node.childNodes.length, i++ structure) the element childNodes looking for subString.
+
+Although looping through all nodes/childNodes in the document is useful in such a context, there are other times when this iterative parsing through is not useful. For example, if we want to specifically 'goto' a specific node/childNode, it would be laborious and perhaps incorrect to start from the document.body node and follow a step-by-step path through it. This is complicated by two factors. First, the need to hop from one node/childnode to another can actually cause problems because, if we write a JS script to achieve this in order to 'goto' the relevant DOM location, what happens afterward, if someone goes to the HTML directly or via JS/php and changes that structure? Our scripted loop is now worthless since the DOM structure has changed. 
+The second complication is that in fact, even whitespaces are given text node DOM elements- in a similar way that empty strings instantiated in Java or Python or php are really objects in memory - even if they are 'empty' to us in human meaning.
+
+This is where two attributes of nodes/childnodes become useful for 'goto' purposes: the tag and id. On the html/xml markup side, where we invoke DOM properties and characteristics, we can give a particular node or childnode a tag name (<body>/<footer>/ or <custom> in xml) or id( id= '...'). Now we deploy two JS functions of our choice:
+getElementByTagName() will fetch every element matching arg1 tagname.
+
+getElementById() is more precise, fetching every element falling into that specific id's element
+
+NOTE getElementByClassName() will fetch all hits for a particular class named element
+
+
+as just mentioned, there are possibilities of manipulating the DOM structure not directly via HTML/XML or php but instead via JS. This is thanks to JS shepherding DOM attributes and methods. For example, nodes have methods for remove, appendChild, insertBefore
+
+insertBefore will 'swap' one node for a preceding one- kind of like pushing 'up' a stack an element. 
+
+we can also create nodes of different types, for example createTextNode()
+if we wanted, for example, to parse through the entire document looking for a specific <tag> type and replace or delete that tag throughout. We could replace it with a different type of element for example, we can remove the actual images int he document and replace them with their respective alt-text (IF they have any), we can do so using a loop - although there are two peculiarities of such a loop in Javascript to bear in mind:
+1. first, remember that we not looping through a strict array but rather a pseudo-array of elements in the DOM architecture. SO we cannot simply deploy a for/of type loop to cycle through the array. Instead we deploy an IF block, that when that condition is matched then whatever actions in the IF block parameters are ordered will then take place.
+2. the second peculiarity is that, PRECISELY BECAUSE this isn't a fixed array in main memory but rather a live collection populating the DOM HTML/XML/PHP structured document, this means that any for loop that acts as an iterator of these encountered DOM elements that are to be changed in the IF block paras will need a REVERSE COUNT starting at the FINAL element on the DOM architecture's images count (i.e. allImages.length -1) and going backwards in count instead of forward (-- instead of ++). that's because as we go through this iteration, we are CHANGING THE STRUCTURE OF THE DOM ARCHITECTURE since we are REMOVING or CHANGING DOM elements. So we MUST START at the end. If we start at the beginning, the loop will break. 
+3. A third peculiarity to note is that although fetching the images in our document by their tag name can be achieved using getElementsByTagName() replacing them by their resepctive alt-text element is a bit trickier because the alt-text is itself a childNode of the image element/childNodes themselves - so we need a slight move of REFERRING TO THE IMAGE PARENT NODE FIRST,THEN REFERRING TO ITS CHILD in order to 'pinpoint' the alt-text children:
+
+<script lang='Javascript'>
+	function replaceImgToText() {
+	let allImages = 	
+	document.body.getElementsByTag('img');		}
+   for (i = allImages.length -1 ; i >= 0; i--) { 
+//NOTE we have i greaterThanOrEqualTo0 because we are backtracking through the document. i.e. 'SO LONG AS AN IMAGE EXISTS IN THIS DOCUMENT THEN...'
+			let oneImage = allImage[i];
+				if (oneImage.alt) {
+//NOTE .alt is a DOM alt-text attribute for element
+					let altText = 
+					document.createTextNode(oneImage.alt);				
+					oneImage.parentNote.replaceChild(
+					altText, oneImage);
+				}
+	 }
+	}
+</script>
+NOTE tecnically we can converted document.images pseudo-array into a real array, to render the collection of img elements static rather than live
+
+The previous example demonstrates how to create a textNode, but what about creating element nodes?
+
+Element nodes are like 'containers' for both element and text and other type nodes. To manipulate them, we follow the same principles as with textNodes BUT WITH A HIGHER LEVEL OF ABSTRACTION, because we the DOM only sees elements, whether node or childNode. So we are the ones who have  to distinguish them for human understanding. For example, let's say we had some longString but want the ending part of longString to be formatted a certain way? For example, let's say we have a bibliogrpahy and we want certain referencing format to be applied. We can do so by:
+1. creating an abstraction COLLECTION PSEUDO-ARRAY of our children sub-elements that will be 'contained' by our created element childNodes
+2.create a custom function that parses and cycles through these children and executes, WHERE APPROPRIATE, the formatting changes we want.
+
+<html>
+
+	<body>
+		<p>main </p>		
+		<p> site </p>
+		<p>content </p>
+		<section> 
+			<h3><strong>Bibliography:</strong></h3>
+				<datalist id='reference'></datalist>
+		</section>
+	</body>
+<script lang='Javascript'>
+// first the element creating and parsing loop function is defined
+
+	function refStyle(stylType, ...subElemKids){
+	let styleElement = 			
+	document.createElement(stylType);  
+		for (let oneKid of subElemKids){
+			if (typeof oneKid != 'string') 
+				node.appendChild(oneKid);
+			else node.appendChild(
+				document.createTextNode(oneKid)
+			);
+		}
+	return styleElement	
+	}
+//now use the function to format the reference
+
+document.getElementById('reference').appendChild(
+	refStyle('footer', '-',
+		'LastName, firstName. ',
+			refStyle('em','bookTitle. '),
+				'(pubLoc: , pubName, yrPub. Available 
+				online: )',	
+					refStyle('u','URL'),
+						'.',	
+	)		
+);
+</script>
+</html>
+
+>>> 
+	- lastName, firstName. bookTitle[in italics]. 
+	pubLoc: , pubName, yrPub. Availabl online: 
+	URK[underlined styling]. 
+ 
+++++ customising attributes 
+HTML allows us to customised attributes a as we like for elements/nodes/childNodes in the DOM. And JS allows us to navigate and manipulate them as we like using the the getAttribute() and setAttribute()
+
+generally we should customise the custom attribute names with some kind of prefix like data-[customAttributeName] or cstm-[customAttributeName]
+
++++++ Styling manipulation 
+
+Of course JS allows us to manipulate style as we like using various either HTML- or CSS- related functions like: 
+
+generla DOM layout manipulation via HTML:
+
+clientHeight() - changes pixel HEIGHT of chosen (sub-)node's internal space
+clientWidth() - changes pixel WIDTH of chosen (sub-)node internal space
+offsetHeight() - changes pixel HEIGHT of chosen (sub-)node external space
+offsetWidth() - changes pixel WIDTH of chosen (sub-)node external space
+getBoundingClientRect() - returns a rectangle around the (sub-)node element - which has its own left|right|top|bottom properties that can be addressed
+pageXOffset() - (sub-)nodes' position as against document page HORIZONTAL from the left side
+pageYOffset() - (sub-)nodes' position as against document page VERTICAL from the top side
+
+or via HTML's style=... attribute within any element can be set simply by pointing the style attribute's DOM concatanted location and uising the console.log to write the style attributes change to current memory:
+
+let element = 
+		document.getElementById('relevantElement');
+console.log(document.element.style.color);
+document.element.style.color = 'blue';
+
+
+OR via CSS 
+
+When it comes to CSS manipulation, we use JS "query selectors" which relates to the DOM element's CLASS attribute and is one way that CSS selects the various elements that it modifies.
+
+With JS we can use the querySelector() or querySelectorAll() meths to select these DOM CLASS attributes that and thereby make changes to their styling or other properties. NOTE that querySelector() cycles through the relevant attribute one at a time and will make changes one at a time. Also, unlike getElementsByTagName() the objects returned by querySelector() isn't LIVE, but STATIC, so changes made via querySelector() WILL NOT AFFECT DOM ELEMENTS STRUCTURE.
+
+
+
+////////////////////BUGS   \\\\\\\\\\\\\\\\
+
+Broadly, bugs can be either SEMANTIC or SYNTACTIC. The latter is always easier to detect and fix- because they relate to specific formatting of expressions/statements. They can actually be picked up by IDEs for example.
+The semantic ones are harder, because they relate to meaning and purpose- which is HUMAN-derived and also UNCERTAIN - there are multiple ways to design a programme, and multiple flaws/benefits with different approaches. When is a semantic bug just another path? it is somewhat a question of interpretation (so long as the programme does its job, even it is does so inefficiently and in an ugly way).
+
+JS is notoriously loose, even with the syntactic bugs. Nonsense or meaningless computations will often just return NaN or Undefined. On the other hand, clearly breaking basic syntax will throw up exceptions - BUT UNLIKE other langs, JS may well continue computation/runtime, without an exit- despite the error.
+
+JS actually has a simple lang-wide parameter that allows it to be a little less loose- we enable it by simply typing the string 'use strict'; in our function block:
+
+function strictDebug() {
+	'use strict';
+	for (counter = 0; counter < 10; counter++) {
+//NOTE, we forgot to put LET counter = 0
+		console.log('Yeas');
+	}
+}
+>> ReferenceError: counter is not defined
+
+NOTE, without 'use strict'; this would work because the looser JS will assume you forgot LET counter = 0 and instead make counter a GLOBAL var equalling 0, as if we had defined counter outside the function block as a global variable
+
+strict can thus be useful.
+
+Another example of this limitation of JS defaulting to global scope assumption is the use of the THIS keyword in a function which isn't being called as a method. In other words, we have a function that has a constructor method, but when it is deployed to create a var holding an instance of the function's object, the NEW keyword isn't deployed. that means that, instead of the var being tied to the constructor function method, it becomes a SEPARATE GLOBAL-SCOPE var. Without the strict mode, javascript will just assume that the function is to be disregarded and that the var holding this object instance is actually just a straightforward global-scope value assignment. With strict mode, an exception is thrown showing the isue:
+
+	function Person(name) {
+		this.name = name;
+	}	
+let anton = Person('Anton');
+console.log(name);
+>> Anton  //loose mode
+
+Strict mode:
+
+'use strict';
+	function Person(name) {
+		this.name = name;
+	}	
+let anton = Person('Anton');
+console.log(name);
+>>> TypeError.... 
+CORRECTED:
+'use strict';
+	function Person(name) {
+		this.name = name;
+	}	
+let anton = new Person('Anton');
+console.log(name);
+>> Anton
+
+with types again, JS is loose.
+It tries to convert types implicitly when running. So it is A GOOD PRACTICE TO ADD A COMMENT BEFORE A FUNCTION LETTING THE USER KNOW WHAT TYPE IS EXPECTED TO BE FED INTO IT FOR RESULTS/INSTANTIATION OF INSTANCE
+
+TypeScript enforces typechecking at the compilation level (liek java/C#)
+
++++++ Testing
+
+automating testing is better than manual testing.
+Writing tests is like writing functions, except we are doing functions-on-functions like a 'supervisory' role. 
+A test function creates a supervisory template, through which all the relevant various sub-functions/actions being tested can be run through. For example to test different languages successfully are turned to upper-case chars:
+
+function upperCaseTest(testName, actualTest){
+	if (!actualTest()) console.log('{$testName} 
+	failed');
+}
+
+upperCaseTest('Latin Upper Case Conversion 
+						  Test', ()=> { 
+											return 
+											'test'.toUpperCase() ==
+											'TEST';
+							       }	
+						 ); 
+
+Usual we can use test running software or programmes to automate this test writing itself.
+
+debugging, however, isn't simply about fixing syntax and running tests. There is also a lost of analysis, interpretation and creative thinking/trial and error involved to find the bug(s).
+
+NOTE that alongside IDES, browser's have a debugger capacity in developper tools. Deploying  a debugger statement will set a breakpoint in running a programme that will stop it and allow for debugging.
+
+Note, alongside this internal code checking, there is also the need to bear in mind the fact that once code is live, it is also interacting with human input on the other end. Humans can make mistakes that have either been foreseen or, in many cases, are unforeseeable in the way to interact with the code. So it is good practice to have some level of ERROR PROPAGATION- i.e. some actions planned for when an error on the USER/CLIENT's side is foreseeable or, if unforeseeable, at least to inform the USER/CLIENT that something has gone wrong and that they should try again or wait for a solution.
+
+in the first case, with foreseeable errors, such as for exmaple a human input of a variable whose type is not the one intended in the source code (like for example entering a char for a program that is supposed to undertake some double-based math operation), we can simply create an if -else construct where the else uses some of the inbuilt type checkers, like JS' NaN, to verify what the human input is and, if the input is wrong, to send out either a string message or a default value (we can choose here between NULL, -1, or UNDEFINED which all would approximate to the same inaction):
+
+function inputNum(mathOp){
+	let result = Number(prompt(mathOp));
+//NOTE Number func inbuilt will convert any type it can to a double equivalent
+		if (isNaN(result)) 
+			return NULL;
+		else return result
+}
+
+Now we can send out a default value, or ask the user to submit again a proper value.
+
+There are limits to such simple error propagation models, however. 
+For example, if the error propagation returns a NULL or -1 value, it can lead to a kind of meta-error propagation due to the fact that, if this function is returning a null-value error multiple times, then a higher-level error checking of the error-checker itself will be required, which then can lead to a next level of error-checked, checking on the error-checking error-checker... this can lead to multi-level error propagation that becomes cluttered.
+
+Another issue is, what if the interaction of the programme doesn't have a simple error filtering vector like a type check (like if it is a double or NaN). In such a case, it becomes harder to 'isolate' the error situation. In such a case, it might be possible to create an 'error object' that is 'wrapped' (i.e. holds) the conditions of failure/error. This object then can be used in distinction for the normal runtime execution of the programme. NOTE the reason we need such a wrapper object construct in these cases is because we need a custom definition of the error filter/vector, since the simple, type or other primitive/inbuilt construct filter/vector is not possible.
+
+
+++++++ exception handling.
+
+handling exceptions is when we have instructions in the source code which tells a programme, upon encountering an error/exception, to goto a specific block in the source code that will tell the programme how to handle the exception (either exiting with a NULL, -1 etc OR continuing runtime exec with or without error reporting for either/both the programmer/client).
+
+instead of goto, in this case we use the usual THROW-TRY-CATCH language for these various laying, trying and catching an exception as with JAVA, C++, PHP, PY etc.
+
+NOTE that this 'goto' that happens when a thrown exception is tried and caught, is called UNWINDING THE STACK (so called because an exception jumps out of the usual stack of function calls executed at runtime from sourcecode and instead zooms down to the first relevant 'hit' of an exception definition - that is a try-catch block)
+
+NOTE it is also a common practice for a catch section of the try-catch block to consoleOUT a stack trace - which basically is a trace of the functions that were called during runtime up to the exception being thrown. 
+NOTE also that it is common practice to use the Error() constructor to outline the exception value
+And NOTE also that a useful aspect of this structure is that all the functions that are not relevant/affected by the potentially thrown-tried-caught error do not get involved with the exception handling process (or of couse, we can have multiple exception handling processes simultaneously present in source code).
+
+Example: 
+
+function funcOneThrowing() {
+	let result = prompt(userQuestion);
+		if (result.whatever() == 'certainCondition') return 'oneAction';
+		else (result.whatever() == 'anotherCondition') return 'anotherAction';
+	throw new Error('Invalid Response: ' + result);	
+}
+
+function otherFuncNotAffectedByExceptionHandling() {
+	if (blabla(soimething) == 'other condition') {
+		paras
+	else {morebla...
+		otherParas;
+		}	
+	}
+}
+
+//tryBlockFunc
+
+try{
+	paras related to trying;
+	catch{
+	paras for caught error;
+	console.log('An error occurred: ' + error + 'Please submit another response');
+	}
+}
+
+NOTE things don't necessarily go as smoothly as what might first seem. For example, a function A that seems to be unliked to the other function B that DOES throw an exception may well have a breakdown IF, despite function A not direclty throwing its own exception, it is dependent on some action happening in function B- in which case, there could be a hang up in function b due to a caught exception which, ultimately DOES impact function A.
+
+In reality, this problem is a GENERAL ONE of OBJECT ORIENTED PARADIGM: having objects being interlaced and interrelated means that one failure in the chain can ultimately affect others. THe best practice, beyond directly trying to foresee such breaks (which becomes quasi impossible in large scale programmes) is to instead maintain the ENCAPSULATION principle of standalone units and also to have EXIT STRATEGIES for contingencies in which code fails to work smoothly.
+
+One such exit strategy may be to stop a particular action/computation ALTOGETHER, including naything that has been computed/acted upon by adjacent function blocks that have been affected by one function blocks exception-caused breakdown. Although this si a good solution for infrequent exceptions and breakdowns, it would lead to very buggy apps/programmes if happening constantly...
+
+Another tactic in relation to avoiding exception-handling caused breakdowns is to deploy the FINALLY keyword at the end of our TRY-CATCH block 
+ This keyword tells JS that, NO MATTER WHAT THE RESOLUTION OF THE TRY-CATCH BLOCK for whichever relevant FUNCTION's earlier source-code thrown mistake, the JS parser HAS TO RUN THE REMAINING CODE IN THE current TRY-CATCH Block. OBviously such code could, for instance, encure a continuation of the rest of the programmes function blocks (despite the thrown and caught exception which could quietly be logged or send a warning to the user who can choose to ignore it).
+ 
++++++Selective Catching
+
+If an exception makes its way all the way through the relevant runtime sourcecode stack without throwing/catching any exceptions then this is not the end of the affair. In fact, browsers and other environments have their own exception parsing. 
+In the case of browsers, generally the runtime process continues and the browser basically makes a note of the exceptions it has caught on its own outside of the handled exceptions in the sourcecode(if there are any). 
+NOTE that in NodeJS, a non-browser environment, any unhandled exceptions will actually lead to exiting runtime because node doesn't want data to be lost/corrupted (especially since it often works as a server.
+
+For internal testing/debugging therefore, letting unhandled errors go to the browser action is not too bad an idea because it will give us a further tool for inspection.
+
+But, for end result where certain issues are forseeable and expected to cause allowing unhandled exceptions to persist is no good.
+
+NOTE one limitation in the JS try-catch block is that it doesn't have a mechanism for selectively picking out one or another thrown exception- it either catches all of the above thrown exceptions or it doesn't catch any of them. This makes it somehwat difficult to really deinterlace which relevant thrown exceptions has actually been caught in the try-catch block.
+
+Regardless, the problem of knowing WHICH of the exceptions is the one that has been caught from those that have been thrown is a prolem in JS unlike java or other langs. 
+
+There is a workaround this issue:
+
+1. we can create an inheriting Error class that is custom-named and given not parameters. This custom error class can inherit the error constructor meth from the Error super-class (this constructor takes an arg1 string as defining name of whichever error is being thrown in the connected try-throw block below)  
+2. when we define the try-throw block in the rest of the sourcecode we then split the catches by way of if-else if-else sub-blocks with the first if and subsequent else ifs will hold the distinct custom-defined Error-subclasses and relevant actions to be undertaken in their parameters. The final else sub-block will instead just throw e as a generice instance of the Error super-class, meaning it will pick up any built-in syntactic or other error.
+
+Template:
+
+class CustomError extends Error {}
+//note, empty of paras but inherits Error's constructor meth 
+
+function whateverFunc(action) {
+	let result = prompt(action);
+		if (one condition whatever) return 'whatever';
+		if (one condition whateverelse) return 'whatever';
+	throw new  CustomError('String About Error Inherited From ErrorSuperclas constructor' +  
+	result);
+}
+
+for (;;) {
+//NOTE the ;; denotation is a construct that forces a perpetual loop regardless of that loops conditions breaking them in a traditional sense. This is useful for a constant check on errors BUT can become a problem if we have a bug inside this bug-delineating Error-class function block. That's why we can deploy the force loop but only in the context of a distinguished customError sub-class alongside the generic Error thrower class (as we are doing here:)
+	try {
+		let action = actionMeth('parameter');
+			console.log('do whatever is normal');
+		break;
+		}
+	catch (e){
+		if (e instanceof CustomError) {
+			do customerror action;
+			console.log('Caught a: ' + e);
+			}
+		else {
+			throw e; //generic Error instance
+		}
+	} 	
+}
+
+
+//////////////////// EVENTS  \\\\\\\\\\\\\\\\\\\
+
+Event handling is the usual manner to await(listen) and respond to actions from non-predictable human-inputs like keyboard strokes, mouse movement/clicks
+
+JS event handling also overlaps with certain DOM node attributes. Because of this JS piggybacking on the DOM. 
+But DOM nodes have certain restrictions- for example a node cannot have more than one of its attributes set to respond to user actions (like for example a node's onclick attribute cannot be set more than once per node).
+In contrast to this handlers like the addEventListener method used by JS allows for as many of these listeners to be set per DOM node as we like.
+In JS, however, we must remember that any action to add a handler and to remove the selfsame handler MUST INVOKE THE SAME FUNCTION.
+Example: 
+
+<button>ClickME</button>
+<script>
+	let button = document.QuerySelector('button');
+		function clicked() {
+			console.log('Clicked');
+			button.removeEventListener('click', once);
+			}
+		button.addEventListener('click', once);
+</script>
+
+NOTE that above the arg1 property of CLICK is an EVENT OBJECT which is a property of every eventHandler. For example, click is a mouseclick property. MOUSEDOWN is another property, relating to WHICH MOUSE BUTTON WAS CLICKED.
+Event handlers can also take a arg2 which relates to further details about the event. 
+For example, in relation to the MOUSEDOWN event, we can pass an arg2 for more details which outlines an event object which itself takes further parameters describing its properties:
+
+<button>ClickME</button>
+<script>
+let button = document.QuerySelector('button');
+	button.addEventListener('mousedown', event =>{
+			if(event == button.0 ){
+				console.log('Clicked left button');
+			}
+			else if(event == button.1 ){
+				console.log('Clicked middle button');
+			}
+			else if (event == button.2 ){
+				console.log('Clicked right button');
+			}
+		}	
+	);
+</script>
+
++++++ Propagation
+This relates to situations where two DOM nodes both have the same event handler each deployed in their own sphere. In a way, this is similar to the CSS cascade because propagation is where when this concurrency occurs, the MOST SPECIFIC DOM ELEMENT will be the one whose event handler takes precedence. Thus with a paragraph element implementing an event handler and a button element implementing the same event handler, it is the more specific button that takes precedence. The button-event PROPAGATES out to the paragraph element and up to the body parent node, then once all of the lower-down events have had their turn to handler their events, the window-level events are registered and activated.
+
+Propagation like this can be stopped at any point and this will break this upward chain of events. In other words, a button's event handling will not propagate to its paragraph parent element. To achieve this, we deploy stopPropagation method 
+
+++++++
+Event objects mostly have a target property that specifies the owning/author node. This target property thus allows us to pinpoint where the event is propagating from, and thereby block any unwanted propagation from nodes that we didn't want to handle the event. An example of where this would be handy is such a situation as where we would have a parent element/node that holds multiple children each having the same event being listened for. In this case, it might be better to have the target pointed at each childNode being ready to fire out an outcome while the eventListener sits higher up the DOM architecture, held by the parent Node since any of the children's events being trigger will be fundamentally the same event, it's just which of the childNodes that gets affected. 
+Example code:
+
+<button>First</button>
+<button>Second</button>
+<button>Third</button>
+<script>
+	document.body.addEventListener('click', 
+																				event=>{
+			if (event.target.nodeName == 'BUTTON') {
+				console.log('clicked', 
+										event.target.textContent);
+			}		
+		}
+	);	
+</script>
+// the body takes the eventListener that is anyways underlyingly shared by the various childNodes. Arg1 is the type of event being bolo'd (in this case a click) while arg2 is the instructions for whichever childNode event is being targetted -picked up by the parent listener- then enacting whatever action - in this case a consol'd out of the text of t he button's field. 
+
+++++++Defaulting | KeyEvents
+
+many events have a default hard-coded into them for browser interaction. We can use preventDefault to override these.
+
+Key Events are those events that relate to a pressing down of a keyboard button.
+
+What a key is pressed down, it fires off a keydown event. vice-versa == keyup event
+
+The key property of the event object holds various relevant characteristics relating to this such as up, down. Some keys have a hardcoded setting, like the Enter key has its own presence in the key attribute of the event action. Shift is another such key that can modify key events when held down as well as ctrl, alt and meta
+Tab has special role in changing the focus of the browser's pointer/keyboard input. But althugh most nodes don't have a tab property by default attached to their event objects, these can be added.
+Note that for textfields or any other type of written input field, there are 'input' events that fire off whenever the text inputted into the field has changed.
+
+++++++ pointer and mouse events 
+
+clicks are the traditional mouse-related event 
+mousedown/up is equivalent to keydown/up. mousedown pressed, mouseup-released
+
+there is also a dblclick event after a quick second click.
+with mouse up-and-down, this is considered to be one WHOLE event (both mini events). So whenever i click mouse down and then release the mouse (up), this will fire off the event on the element that I am currently pointing at.
+If, let's say, I click mouse down but then hold it down adn drag to another element. In this case, BOTH elements have been implicated into the WHOLE up/down action. So whatever is the LOWEST COMMON DENOMINATOR ELEMENT that both of those elements clicked (one clicked down, one click release above it) are tied together in will be the place for any event being fired off (if any related event has been spelt out in the code relating to that 'higher up the food chain' element of course).
+
+Events also have a clientY and clientX (relative to the top-left corner of the window) or pageY/pageX relative to the top-left corner of the whole document) property which relates the PIXEL based horizontal and vertical positions of an event's firing.
+
+Following is a bbasic dot painting program. Whereve we drop the 'anchor' i.e. we click the mouse, it will draw a dot there on the document:
+
+<style>
+	body {
+		height: 200px;
+		background: beige;
+	}
+	.anchor {
+		height: 5px; width: 5px; 
+		border-radius: 2.5px; //rounding of square 
+													corners to make circle
+		background: red;
+		position: absolute; //fix on page
+	}
+</style>
+
+<script lang = 'Javascript'>
+	window.addEventListener('click', event=>{
+				let anchorDrop = 
+							document.createElement('div');		
+						anchorDrop.className = 'anchor';
+						anchorDrop.style.left = (event.pageX 
+															   - 2.5) + '4px'; 				
+						anchorDrop.style.top = (event.pageY 
+																 - 2.5) + '4px';
+				document.body.appendChild(anchorDrop);
+			}
+		);  
+</script>
+// note the -2.5 on the pageY and pageX = needed to avoid the radius of the anchorDrop not to disappear when reaching edges of the document.
+
+mouseMove is another event that is fired off, in this case whenever the mouse is moved from a resting pos. 
+In combination with a mouseDown we can use this one to have a drag and drop position.
+Alternatively, we can have a scroll bard change color or size as the mouse moves across whatever element is holding etc...
+
+
+There are now touch specific eveents that relate to the fingers 'dropping' on a touch screen, two fingers holding the screen and scrolling throgu h the screen. These are : touchstart- for finger drop,  touchmove, and touchend.
+For multiple fingers in fact, each finger touching the screen fires off a touches event- every one of these touches event has the pageX/Y clientX/Y properties that locate it from the top-left corner of the document/window.
+
+scroll events have various useful properties such as scrollHeight. COmbining these with the total height of the window, for example, and then converting into a percentage by creating a modulus of the pageYoffeSet position divided by the scrollable height *100 will give us a percentage of progress through the document window. 
+<style>
+ #pgProgress {
+		border-bottom: 2px solid blue;
+		width: 0;
+		position: fixed; 
+		top: 0; left: 0;
+ }
+</style>
+<script lang='Javascript'>
+	document.body.appendChild(document.createTextNode('Lorem 
+								 Ipsum Whatever'.repeat(1000)));
+	let scrollBar =
+						document.querySelector(#pgProgress);
+	window.addEventListener('scroll', ()=>{ 
+			let maxPgSize = document.body.scrollHeight 
+																	- innerHeight;
+			scrollBar.style.width = '${(pageYOffset /
+															maxPgSize)*100}%';
+		}
+	);
+</script>
+
+++++++ focus is another event that places particular input/action focus on one element or another.
+
++++++ load events are those events associated with elements that need to somehow import or execute some 'external' or non-DOM native (i.e out of HTML/XML) text- like a PHP or JS script or an image placed via URL ref.
+the related beforeunload event is useful because it prevents an automatic unloading of the page's contents (i.e. the page is being closed or the user is navigating to another page). If deployed, it will show a dialog to the user asking for confirmation of leaving/closing the page.
+
+++++++ The event loop relates to the asynchronous nature of event handlers- they are scheduled to occur when an event fires them off BUT they are also limited by the fact that they must wait for other scripts to terminate before having 'their turn in line'.
+If there are too many such events lined up (including non-event activities,relating to windows on the browser) then this can cause a hangup/freeze, until each of the scripts being executed have a chance to finish.
+There is one side-hack to this, which is the use of web workers - these are kind of 'side calculators' to whom we code whatever computation we need to be doing and, instead of placing this inside a DOM structure, we run them on the side as JS files. Whatever problem/issue needs computing by a triggered event/interaction on the DOM/document side will be communicated to the JS file, which takes the inputs that are prepared, runs the calculation on the side (and thus not affecting the DOM/windows' work-rate/looped event handling, and then the web worker JS doc sends back the calculated outcome for the DOM-facing JS to deal with.
+NOTE these have a certain structure, for example they use a postMessage method that fires off a message event for the DOM-side JS reciever to recieve instructions coming from the web worker.postMessage takes as arg1 its message- but there is a restriction on these messages, they can only be in a format acceptable to JSON objects. Another fundemental piece here is that the web-workers' global-scope vars cannot ever be sharing or referencing DOM-side JS vars. They are separate, compartmented, pieces of JS code, with web-worker 'running alongside' DOM-face embedded/external JS scripts and they are running for particular purposes.
+
+
+++++Timers
+
+setTimeout is part of the async JS queueing of events. It sets up a milisecond timer for a function to be called after an initial function has been called.
+
+If we want to cancel this setTimeout schedule, we can do so by creating a placeholder var that will contain our setTimeout func but, later on when opportune, we can call the clearTimeout(placeholderVar) function on it to get rid of the timeOut.
+
+With animations, we can do a similar process using cancelAnimationFrame on a placeholder var that contains a requequestAnimationFrame func
+
+What if we want our timers to repeat at certain intervening periods? We can do so using the setInterval and clearInterval(to nuke the intervening period set). 
+
++++++Debouncing 
+debouncing refers to setting 'rational limits' to certain event triggers that can be easily repeated like, for example clicking a mouse multiple times. The dangers of doing that is that the user can overload the window with too many events if the script is on a BOLO for such events. 
+
+in order to combat this, we can use the timeout construct to put 'breaks' on too many of these events being caught.   
+		
+
+////////////////regExprs\\\\\\\\\\\\\\\\\\\\\
+
+regexprs as usual, shorthand left-right-side manner of processing/modifying strings
+++++++ constructor
+In JavaScript, the regexprs are actually objects that can be constructed/initialised in two ways, one formal, the other informal:
+1.using the RegExp keyword:
+let reggie = new RegExp('my string');
+
+2. informally using bookending /forward slashes/
+
+let reginald = /bookended string now regexp'd/;
+
+NOTE that in the formal version, the ('') is denoting a formal string, so all the usual escape sequence issues must be respected. But, in the informal second version, the // slashes specifically create a 'regexp' zone in which escape sequences are a bit different. For example, if we want to deploy a forward slash inside our reggieZone we need to notify the parser by deploying a backslash first (obviously otherwise the parse will think the end-market for reggieZone has arrived when encountering the second forward/. So we need /https:\/\/www.google.com\/this\/escaped/
+
+Another difference is that, whereas in normal string escape sequencing, the backslashes that aren't part of an explicit sequence like \n, \' are ignored by the parser, in this case an such loner backslashes in the reggieZone will be parsed. And, some special chars like a ? of + actually need a backslash escape in the reggieZone (i.e. \? \+) to be read literally by the parse, unlike in the string standard (where they are just 'deployed ? + without escape'.
+
+++++++ regexps meths
+Reggies have multiple meths builtin. for example, the .test(arg1String) returns a Boolean t/f about whether the arg1String pattern matches anything in the concatanated reggie:
+
+console.log(/reg/.test('reggie is cool'));
+>> TRUE found the reg in reggie
+
+reggie meths like .test() are particularly powerful because they provide a search for much less linear search inputs- for example, the above search could also have been done using a string object's indexOf() method
+But in the below example, we see how a regexp can consider IMPLICIT search terms, without need to make them explicit:
+
+console.log(/[0-9]/.test('Throughout the 1990s')) 
+>> returns TRUE because a number 0-9 has been caught in the 1990 part
+
+this range or set of reggie inputs for the search (like [0-9] or [a-g]) is one of the strengths of regexps. But having to outline such ranges persistently can be tiresome. thus, some commonly deployed sets have shortcut escape sequence chars:
+\d -any digit char
+\w - alphanumeric char (i.e. letter or digit)
+\s - any whitespace (tab, space, newline)
+\D - any non-digit
+\W - anything not alphanumeric
+\S - anything other than whitespaces
+.  - any character EXCEPT For \newline
+
+such codes can optionally be deployed inside [] brackets, for clarity.
+Using the ^ wildcard will say that you expressly want the inverse of the search regexp i.e. anything other than what is specified in regexp.
+
+
+NOTE, these regexps always need ONE AND ONLY ONE RELEVANT HIT to return their boolean true/false. Just one relevant match will trigger a result.
+
+++++++ sequence repetition
+
+we can flag a section of regexp pattern that we are to look for is repetitive- it will give us a true ONLY if the pattern or char we gave is repeated. We do this by adding a + to the regexp:
+
+console.log('/\w+/'.test(string));
+>>true because there is more than one w (alfanum)
+
+the dict type {} marker is used to specify a specific number of repetitions for a regexp char that we want. If the specific number of repetitions is not present, then it gives us a false. passing two ints within the repetition blokc {int1, int2} signifies an acceptable range of repetitions for true. Note that this can be combined with a \d or \w or any other of the shrotcut char escapesequencers:
+
+console.log(/\d{1,2}-\d{1,2},\d{1,4}
+						\d{1,2}:\d{1,2}
+						\w{1,2}/.test('30-01-2003 08:40
+						AM'));
+>> true
+
+The * wildcard is kind of useless, it means find basically anthing, even if there is nothing like an empty string. it always returns True.
+
+the ? wildcard is also (like +) placed after the regexp char/sequence we are submitting. But in this case, liek the ternary operator, it suggests an optional -i.e. find this search sequennce but what comes after the ? marker is optional, if it's not in the longString, that's fine give me a true anyway:
+
+console.log('/labou?r/'.test('The United States of America has banned slave labor'));
+>> true - regardles of US spelling labor.
+
+if we want a subString to be sought from the passed longString (as opposed to a char-by-char analysis) we can use the standard brackets () to hold the substring and thereafter flag our regexp marker of choice:
+console.log('/United States (of America)?/i'.test('The United States of America has banned slave labor'));
+>>true because either styling is accepted here ?
+
+NOTE, adding a simple i char at the end of the reg expression will make our search term case insensitive.
+
+
+note that we can mix both a subString match flagged AND flag a single char WITHIN that sub-string. the expression will now look for BOTH the substring and the individual flagged char within that separated substring:
+
+console.log('/ban(n+ed)?/i'.test('The United States of America has banned slave labor'));
+>>true because nn occurs more than once and ban/ned is optionally acceptable
+
+++++++exec
+this simply carries out the regexp query but also pumps out the resulting hit to the console:
+
+let hit = /\d+/.exec('one two three 400');
+	console.log(hit);
+>> ['400']	
+	console.log(hit.index); //give us indexPos
+14 //indexPos where hit begins in longStr	
+
+++++++match
+match is similar to exec but is reserved for STRING values on the left hand side appended to it (while it's arg1 is the regexp).
+
+console.log('/one two 200'.match(/\d+/));
+>> ['200']
+
+either match or exec can take multiple regexp flaggers and ,whenever matched according to those flags, can output multiple elements of the output array - i.e. it will exhaustively output to different elements of the output array the number of iterations of each hit relevant to the regexp according to each flag meaning (which dictates the different iterations)
+
+++++++ Boundaries
+
+the ^(beginnign) and $(end) markers enforce a hit that spans the entire passed string. they can be used alone, to signify a subString must start with a given flagger, or end with a given flagger, or they can be combined to forced the entire substring to contain ONLY the flagged chars:
+^! - hit in longString must start with ! char
+^\d - hit must start with a digit char
+$\w - hit must have longString end with word chr
+^\d$ - subString hit must be digit only in 
+			 longString
+
+the \b markers enveloping the subString says that there is a word boundary that checks if the subString passed is at the ending of the longString. The word boundary is demarcated in any place in longString where there is, on either side, a \w word type char and, this is followed on the other side with a non-word char like a number or whitespace or special char like \n:
+
+console.log(/\bcat\b/.test(concatanate));
+>> FALSE- cat appears neither at beginning or end.
+
+++++++ pipes
+
+As with bash, a pipe is a CHOICE demarcator. We deploy simply when we want to elucidate the choice between multiple subString options :
+
+let myLongStrng = 'A farmer sat on top of the 
+									 hill etc..';
+let whatevers = /^(a|b|c)i/; 
+	console.log(whatevers.test(myLongStrng));
+>> TRUE - longString starts with an a (rememebr the i wildcard).
+
+++++++.replace()
+this is a general string-acting meth: 
+template is  replace(arg1Original,arg2Replacement);
+BUT, we can pass our regexprQuery to arg1, with expected replacement in arg2.
+NOTE also that the ending g modifier in the replace() meth's arg1 will ENFORCE ALL HITS to be replaced. NOTE that the default is FIRST INDEXPOS HIT ONLY is subject to replacement.
+
+console.log('whatevers'.replace(/[^at$]/, 
+						 'ich'));
+>> whichevers // replace wh^at$ with wh'ich'
+
+//using g modifier:
+console.log('abracadabra'.replace(/a/g, 'i'));
+>> ibricidibri
+  
+this meth is particularly useful for cleaning up formatting- for example in swithching arround subString positions using basic string numbering placeholders ($1,$2 etc):
+
+console.log('lastName, firstName'.replace(/(\w+), (\w+)/g,'$2 $1'));
+>> firstName lastName
+
+NOTE that the method also accepts a predetermined FUNCTION for EITHER/OR/BOTH arg1/arg2 - for input or output of the modded string:
+
+for instance, a recursive function that deploys the 'transforming' function simultaneously to a replace function to transform a string's input based on numbers into correct formatting when the numbers change:
+
+let inventory = '10 Oxford Shoes, 12 Ballet 
+								 Pumps';
+
+function transfFunc(hit, quantity, object){
+	for (Number(quantity)-1){
+		if(quantity>=3){
+			return 'We have a few pairs of' + ' ' 
+									+ object + 'left';
+		}
+		else if(quantity==2){
+			return 'We have two pairs of' + ' ' + 
+									object + 'left';
+		}
+		else if(quantity==1){
+			object = object.slice(0, object.length-1);
+			return 'Wow, we only have one' + 
+								 ' ' + object + 'left!';
+		}
+		else {
+			object = object.slice(0, object.length-1);
+			quantity = 'Sorry, we have no more ' + ' ' 
+									+ object + 'left!';
+		}
+	}
+}
+
+console.log(inventory.replace(/(\d+), (\ws$)/g, 
+						transfFunct));
+
+++++++greed
+General principle is that repetition operators(+ * ? and {}) in regexprs are GREEDY, meaning 
+they match as many hits as they can .
+To make them nongreedy all we do is add a ? after: +? *? ?? {}? and now they will limit the match queries to the smallest possible focus match.
+
+++++++search
+the string-related indexOf meth cannot have regexpr passed to one of its args, but the search() function can. One difference, however, is that unlike indexOf, this search() meth can have the query jump to start at a different indexPos- it always starts at the 0 base.
+here's an example use the not a whitespace flag:
+console.log('  string start at indexPos3 after two whitspaces'.search(/\S/));
+>> 2
+
+++++++ looped match
+we can use a while loop to parse through a longString looking for particular regexpr query hits:
+
+let longString = 'Longstirng has 2 many things including numbers like 12 and others like 88, 
+									we want the indexPos base0 of course';
+let qryRegExpr = /\b\d+\b/g; //i.e. find me all instances of a digit sitting on it's own
+let hits;
+	while (hits = qryRegExpr.exec(longString)){
+		console.log('We found this number: ', hits[0], 'at the following indexPos: ', hits.index);
+	}
+>> 
+We found this number: 2 at the following indexPos: 15 
+We found this number: 12 at the following indexPos: 52
+We found this number: 88 at the following indexPos: 72
+//note that base0 isn't counted because the first \b requirement isn't satisfied (it's not bookended by a non alphanumeric char like whitespace to the left)
+
+/////////////////////Packages\\\\\\\\\\\\\\\\\\\\\\
+
+The main module/ package manager is NPM. Vanilla JS doesn't have access to this functionality.
+
+we use the REQUIRE keyword in the same sense as we use the IMPORT in every other sane and useful language (py, java, php).
+
+++++++eval and function secure use
+eval() is very dangerous since it allows potentially total access to a host (remote code execution vuln).
+
+let ourCode = Function(arg1StringOfCodeInput, Arg2 actionToBeExectudeOntheReadCode);
+
+
+//////////////////////ASYNC\\\\\\\\\\\\\\\\\\\\\\\
+
+as usual, denotes a non-linear runtime execution framework. the reason for using it is to avoid the linear synchronous constructs. Using async will allow us to create multiple threads of processes that can be executed conjointly, without having one await the next one. The benefit of this is that we can undertake different tasks that might need more or less waiting/processing and each task will be returned by the runtime exec as they are resolved by the processing/networking that they require to be achieved.
+With JS, we creating a two-form construct with the following keywords: ASYNC to declard that this function is to be processed asynchronously and AWAIT otherFunctionName, as a resolver of the function, telling the processer to await whatever other function is named to be resolved before it's own asynced execution is 'released'. We don't HAVE to use await, but it is useful to create some order, especially when deploying multiple asynchronous threads simultaneously.
+
+NOTE that NodeJS is particularly useful in the sense that they provide a SINGLE THREAD ASYNC capacity (comeback? to this  need to read NODEJS manual)
+
+Alongside the more obvious and clunky EXPLICITY async-await construct, there are some layers of further complexity which, although more complex, allow for a smoother and more efficient resolution of the async'd runtime processes. In particular, they also can support less confusing overall source code because, although they are complex to understand when first architecting them, they do make the management of the different 'chains' of asynchronous events/processes that are supposed to be undertaken, the order of these chains' elements, and their error handling much clearer than having a range of disparat async-await constructs.
+
+a basic way of achieving such chains is to deploy so-called 'callback functions' which can be thought of as a simple 'one dimension' IMPLICIT async construct. 
+They are called callbacks simply because that callback element of the wrapping function (which is implicitly asynchronous and doesn't need to be declared via ASYNC keyword) is telling the processor (whether an operating system as would be the case with a server via Node or a client-side browser) that it has finished off whatever asynchronous process has been expected and it is now informing the wrapping function i.e. calling back over to it, that it's done it's job. The wrapping function then has it's own either implicit or explitly outlined actions that it can undertake upon recieving that information of the callback (which doesn't need to be only information, it can also contain data, for example data fetched from a user's input to be sent to the server or vice-versa, sent from the server's database to the client side).
+
+example here of a simple wrapper which is the inbuilt setTimeout function that tells either the node-side server or the browser to wait a certain time in miliseconds (arg2) and then within the wrapper's arg1 there is a callback outlining an action to do, in this case it's an instruction to undertake the inbuilt console.log() function with a string output:
+
+setTimeout(()=> console.log('calledBack after 1 sec', 1000));
+
+
+++++++Promises:
+
+the promise architecture takes the one-dimension callback to a multidimension or nested level. Bascially, the Promise construct introduced with EcmaScript6 framework, created a Promise object class which basically holds mutliple methods within it's parameters (accessible via the usual . indicators). 
+
+the promise object itself is essentially an inherently asynchronous object that holds one or more promises of actions that are to be achieved in the future and, if achieved, will be returned as information to the user/client.
+
+
+Thus Promise.resolve relates to a parameter of the promise object which constructs the promise object itself with its ensuing parameters.
+Note that, like all constructors, WE NEED TO DEPLOY THE NEW keyword. Note also the use of the RESOLVE keyword to denote that a promise has been resolved.
+
+NOTE also that we must deploy the promise object within a function block and whatever is promised within that function block will be async'd and whenerver each of those passed promise actions are resolved, they will be returned, without the need for constructing multiple callback functions each achieved their own separate async'd actions.
+
+Promise.then  is instead another parameter that gives an instruction as to what to do AFTER the promised action(s) have been resolved. 
+
+another plus with regard to the promise architecture is that, unlike multiple async'd callback functions that will need various try-catch blocks, the promise architecture has a FAIL keyword that reacts to a failed action/enaction which will then contain error handling instructions.
+the fail keyword relates to the Promise.reject attribute of the promise object. failures can be dealt with either IMPLICITLY, using just the fail keyword and leaving JS to resolve the reasons for failure or they can be handled EXPLICITLY, using the CATCH keyword as usuall. Promise.catch is another attribute of the promise object allowing such explicit handling. 
+
+Thus, the chaining of multiple .then and .catch statemetns allow us to more smoothly handle a range of expected outcomes and how to deal with failures of outcome using just one promise object as a constructor within a function block that defines (or doesn't) the initiating actions (followed by promises of further potential actions)
+
+
+function myFunct(arg1Constrct,arg2ConstrctProp) {
+	return new Promise(resolve => {
+		arg1Constrct.doSmthing(arg2ConstrctProp,
+					 outcome => resolve(outcome)); 
+	}); 
+}
+
+myFunct(arg1ValuePassed, arg2ValuePassed)
+	.then(
+		doSubsqntStff => defSubsqntStff(arg1,arg2,)
+		console.log('did this: ', doSubsqntStff)
+		throw new Error('Caught an error ', e);
+		)
+		.catch ((e)
+			console.error(e.message);
+			)
+	.then(
+		doFurtherStuff() => 
+			console.log('more stuff done because 
+					     no fail was caught'); 
+		throw new Error('but i caught another 
+	     				 error now: ');	
+		)
+		.catch( (err)
+			throw new Error('Found another error: ', 
+							err');	
+		)
+		
+
+++++++custom error handling
+
+because networks in particular are complex, with multiple physical and human (programmer/user-side) reasons for failure, we cannot simply depend on the inbuilt erorr handling by throwing generic errors.
+As with the traditional error handling architecture, we can also customise our PROMISE-based error handling using boolean logical checkers within the action blocks/meths. In the following case, we mix the promise architecture with a traditional callback function (which comes second after the nested promise function, to define the timeout callback).
+
+
+class CustomPromise extends Error{}
+function netFunc(instance, domainTarget, 
+					 protocol, content){
+	return new Promise(resolve, reject) => {
+		let done = false;
+		function cnctAtmpt(i) {
+			instance.send(dmnTrgt, prtcl, cntnt	
+			(dropped, value) => {
+				done = true;
+					if(dropped) reject(dropped)
+						else resolve(value);
+			})
+			setTimeOut(()=> {
+				if (done) return;
+				 elseif (i < 3) cnctAtmpt (i+1)
+					 else reject(new Timeout('Sorry 
+					 the connection timed out'));
+			}, 250);
+		} 
+		cnctAtmpt(1);			
+	}); 
+}
+
+
+Instead of this somehwat onerous promise, we can introduce a recursive callback function within the fourth parameter of the connectHandler method that can polymorphically deal with three different outcomes: 1. a successful connection, 2. a network or other failure, 3. an exception of some sort either relating to the failure or due to another cause.
+To achieve this smoothly, we must have a wrapper function connectRequest which will hold the connectHandler as one of its args. Inside of this wrapper function, we create a connectInstance method which instantiates an actual connection request instance. it takes whatever the various details of our connection as its first args, but the last arg is a callback function which is immediately expaned and defined via the => arrow notation.
+the callback is itself wrapped by two constructs: 1) a broader try-catch block which serves to allow for the error handling as option 3 of the polymorphic callback outcomes and 2) a Promise.resolve() method which wraps the two 'standard' outcomes of response or failure within the Promise framework.
+These two standard outcomes are thus defined, with sucess being defined as having two args which once this time recursively refers to the connectInstance method instead of the wrapper function. It gives a null value to the connectInstance's first arg1 meaning there is no name defined to the connectionInstance and instead gives the values of the response to arg2 i.e. the various connection parameters relating  to destination, content, source. Thus it achieves a response validation to a successfully connection instance attempt.
+If there is a fail it gives a callback failure arg1 which is auto handled by the Promise architecture:
+
+function cnctRqstWrapr(cnctNme, cnctHndlr){
+	cnctInstance(connectName, (dest,contnt, src, 
+									cllbck) => {
+		try{
+			Promise.resolve(cnctHndlr(dest, contnt, 
+							src)
+		    ).then(
+		    	response =>cllbck(null, response),
+				response =>cllbck(failure)
+		    );
+		}
+		catch (exception){
+			cllbck(exception);
+		}
+	});	
+}
+
+++++++ collections of promises
+
+Using the promise architecture, we can deploy promises within an array construct, thus allowing use to set up multiple promises as a collection and have a 'if one promise fails, all promises fail' approach.
+We can do so by using map() to create key-value paired array elements that relate to the elements being undertaken as promises. When it comes to running the Promise, we use the ALL attribute of the Promise class object to cycle through that mapped array and run these array elements as promised- except if any of them fail or throw an exception, in which case the entire Promise.all construct also fails.
+
+Note that the ASYNC keyword in JS demonstrates an IMPLICIT outline of what has been done EXPLICITLY above i.e. an implicit promise of expecting some resource/event in some future time.
+
+
+++++++generators
+
+generators are an alternate construct to the promise construct.
+to generate a generator, we add the * wildcard at the end of the function keyword i.e. : function* means it's a generator funct.
+instead of using the PROMISE keyword, generators use the YIELD keyword, which is basically a promise to generate a yield/result/outcome of the action defined in the generator's function block. For example, a simple generator would be a basic multiplication loop. The difference with an iterator loop and generator is that the generator sits in a rested state as and until the generator's NEXT attribute is triggered, upon which point it would calculate and yield the relevant math result- in contrast a traditional loop, onced runtime exec'd will just keep looping until told to break.
+
+Note that the ASYNC construct is actually itself a type of generator function. async produces a promise object which is reolved (i.e. achieved) or rejected (fails). the outcome, regardless of which of the two happens, is a yield which is an awaiting output marked by the AWAIT keyword.
+
+++++++
+
+
+//////////////////////   \\\\\\\\\\\\\\\\\\\\\\\
+
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+
+++++++
+
+//////////////////////   \\\\\\\\\\\\\\\\\\\\\\\
+
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+
+++++++
+
+//////////////////////   \\\\\\\\\\\\\\\\\\\\\\\
+
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+
+++++++
+
+
+
+
+

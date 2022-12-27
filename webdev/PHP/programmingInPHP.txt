@@ -1,0 +1,3024 @@
+////////////////////////////////ProgrammingPHP   \\\\\\\\\\\\\\\\\\\
+Notes on Programming PHP by Kevin Tatroe, Peter Macintyre and Rasmus Lerford. (O'Reilly, 3rd edition 2013)
+
+
+////////////////////////////////Lexical structure\\\\\\\\\\\\\\\\\\ 
+PHP is flexible on case sensitivity 
+statements as usual are found either within function blocks, or outside them usually as variable assignment for example.
+Unlike JS, there has to be a semicolon at the end of every statement except for those formulating a function or calling a function method.
+
+PHP ignores whitespaces as usual
+comments can be done in shell # style, c++ style (//) or c style /* */
+vars are demarcated using $ notation . capitalisation is ignored
+
+usual types..
+
+PHP uses a particular construct -> which enables us to "fetch" or "deploy" a var (and its value). It is like an inbuilt method. we use the shaped brackets to fetch the var/value and we use curlies{} to deploy:
+
+$classInstance1 = new className1;
+$classInstance1->classProperty1('Value1');
+echo "String1, {$classInstance1->classProperty1}\n";
+
+consoles out: String1, Value1
+
++++RESOURCES/HANDLES+++++
+
+Resources (also termed "handles") in PHP are the way that memory management is organised. There is a resource lookup table that organises references between objects assigned to memory. When a referal expires or is disconnected, then garbage disposal occurs.
+Each resource has an unique identifier in memory that correspond with whatever has been allocated on the stack.
+
++++Callbacks++++
+essentially this is the usual error/exception handling
+
+Null is PHP equivalent to VOID
+
+we can replacements of variables values while maintaining the same variables reference in memory by using the $$ instead of the single $
+
+We can relay the placeholding variable to a new variable which will link to the same value in memory by using the =& operand:
+
+$var1 = "value1";
+$var2 =& $var1;
+echo($var2)
+
+consolesout value1
+
+NOTE the preceding value for var2 is now decoupled in the memory stack. But NOTE ALSO, it is not in fact overwritten/wiped... until garbage collection presumably.
+
+Note that when we use the built-in unset() function on one or another of these variables (whether the original referrer or that which has been paralleled) the unset/decoupling only occurs on the var/vars that have been called under the unset() function. Any paraelleled vars/original var with the value will retain that value in memory.
+
+Vars can have the usual different scope. This can be local, global, static and function parameters.
+
+The local vars are confined to the scope of their function block. Any action on these vars from outside the function block will not make any changes. Vice versa, any method within the function block will not have any impact on the global variables. 
+
+However, if we do use the GLOBAL reserved keyword to declare our global variable within the function block, then any method within or outside the block will indeed have effect.
+
+We also have the option of using the  $GLOBALS[] reserved keyword  which initates an array of global vars
+
+Declaring a var to be STATIC will basically ensure it is saved to static memory within main (RAM)memory. This is useful because it means that it will not be overwritten or affected by a global var of the same name. It is only when the global var is called outside of the local function context that it will have its value referenced. Example:
+
+function localFunction1() {
+	static Var1 = 2;
+	$Var1++;
+	echo "Static Var is now worth {$Var1}\n";
+}
+
+var1 = 19;
+
+localFunction1();
+localFunction1();
+
+echo "Global var is worth {$var1}\n";
+
+consols out: 
+Static Var is now worth 3
+Static Var is now worth 4
+Global Var is now worth 19
+
+
++++++Garbage collection +++++
+
+There are two methods of memory management in PHP:
+the copy-on-write method allows for copying reference links to vars, thus not requiring further main memory storage- we simply make a copy of the symbolic link itself to the preceding link which links to the object in main memory.
+NOTE however that making a change in the value of a variable will indeed thereafter carve out a new space in main memory that will take up this new vars value.
+The second method alongside this is the the reference matrix/array in which each of the mem allocations are give a symbolic link to a referent in the array table.
+variables will have a natural reference count of 1 when they are created in main memory. However, if we make a symbolic copy of their reference, they will then have a reference count of 2. Further copies will up the reference count. Vice versa, changing the value of a referenced/copy of a variable will change its own and the respectively previously aligned variables' reference counts.
+Another case where a reference count will drop is when a function parameter or a locally scoped(within function) variable reaches the end of its scope- i.e. it is no longer called by the function within the source code. 
+
+We can check if a variable has had a value assigned to it and we can clear a variable of any values by using the following inbuilt functions:
+isset($varName);
+unset($varname);
+
+/////////////////////////////// Operators\\\\\\\\\\\\\\\\\\\\\\\\ 
+
+following keywords are operators interacting with PHP sourcecode:
+
+
+new clone 		=  create a new object
+[] 				= array
+~ 				= bitwise NOT
+++				= increment
+--				= decrement
+(type i.e. bool)= sets type
+@ 				= inhibit errors?
+instanceof		= type test
+! 				= logical !NOT
+* 				= multiply
+/ 				= divide
+% 				= remainder
+^				= powerto
+**				= multiplied by itself
+// 				= sqrooted
+.				= string concatenation
+>> or <<		= bitwise shift left or right
+<= =>			= less than or equal to, vice versa
+== 				= equals VALUE ITSELF
+= 				= ASSIGNATION
+===				= TYPE AND VALUE equality
+&				= bitwise and
+|				= bitwise OR
+!				= bitwise NOT			
+^				= bitwise XOR
+&& and			= logical and
+|| or			= logical or
+^^ xor			= logical xor
+,				= statement separator
+
+Usual precedence rules apply
+usual string concatenation.
+usual auto-increment/decrement when added to a var i.e.
+$var++   $var**   $--var  $var--
+
+comparison operators:
+== equality
+=== identity
+!=  inequality
+!==  unidentical
+
+> greater than
+< lesser
+>=		<=  usual
+
+There are also bitwise operators.
+There are also casting operators which allow us to change types of
+called variables:
+We set out the type to be changed to between standard brackets ()
+
+$a = "11";
+$b = (int) $a;
+echo $b;
+consoles out: 11
+
+We can use casting to perform a trick by which can shift object/class characteristics/values into an array:
+
+class ClassConstruct {
+	var $var1 = "string1";
+	var $var2 = 2;
+	var $var3 = 22.4;	 
+}
+
+$castVar = new ClassConstruct; 
+$castedArrayVar = (array) $castVar;
+print_r($castedArrayVar);
+
+consoles out: 
+
+Array (
+	[var1] => string1;
+	[var2] => 2;
+	[var3] => 22.4;
+)
+
+The reverse process can be achieved by casting to an object from an array and thereafter calling from the object's characteristics/array values:
+
+$castObject = (object) $castedArrayVar;
+echo $castedArrayVar -> var1;
+
+consoles out string1 
+
+
+////////////////////////////////Flow Control\\\\\\\\\\\\\\\\\\\\\\ 
+
+if and if-else statement operates as usual:
+if(conditionalStatement):
+	statementsToBeAchieved;
+	
+if(conditionalStatement):
+	statementsToBeAchieved;
+else 
+	otherStatementsToBeExecuted;
+
+
+We can use the ternary conditional operator ? : 
+to make another version of the if conditional shorter:
+
+<?php echo $statement/variable ? trueValue : falseValue; ?>
+
+Switch conditional:
+
+
+We may have a situation in which a single variable can have multiple values which lead to multiple different conditions. We could write this as a series of if/elseif conditionals but we can instead use the switch, case, break system:
+
+switch($varName) {
+	case 'value1':
+	statements;
+	methods;
+	break;
+	case 'value2':
+	statements;
+	methods;
+	break;
+	case 'value3':
+	statements;
+	methods;
+	break;
+endswitch;
+}
+
+
+A simple loop is achieved using the while operator. It will loop the parameters set out so long as the conditional arguments hold:
+
+while (conditionalArgumentHolds): 
+	thenParameter1;
+	parameter2;
+endwhile				//optional
+
+We can use a do keyword to ensure that the while loop does some preordained actions if the while conditionality is met.
+
+For can also be the basis of a conditional loop= i.e. for as long as a condition holds true, then do whatever action..
+
+The FOREACH keyword will execute a loop on the condition that FOREACH CASE in which on variable/array is the same as another var/array, then do this... 
+
+
+
+
+try catch loops are basically the usual exception handling:
+
+tryBlock {
+}
+catchBlock {
+}   // return to exception handling later
+
+the declare statement allow us to make set of instructions for a specific batch of source code. 
+declare(argThatDirectsWhatToDo) conditionStatementTriggeringIt 
+
+exit and return 
+this takes the form of the die() function which exits the source code when it is reached and exits with the value produced which can be an exit code if it is a process, or  with a string to be printed out. 
+
+goto is a special function implemented in C and C++. It allows us to take the source code from one specific function to another in a jump. example:
+
+for ($i = 0; $i <$c  1 $count; i++) {
+	if ($error) {
+	goto cleanup
+	}
+}
+
+We use the include reserved keyword with whichever PHP file we want to import into the sourcecode: 
+<?php include "fileName.php;"
+code 
+
+code ...
+?> 
+
+
+We can also deploy the require reserved keyword to force the inclusion of this file's sourcecode. However, in this case, the imported sourecode HAS to be successfully loaded otherwise it breaks the current sourcecode.
+NOTE that the imported filename can be arbitrarily named, it can be a .php, .html or otherwise named filed.   
+
+
+If we enable the allow_url_ option in the main php.ini file within the build files, then we can also include source code drawn from a URL: include "url/fileName.html/php/php5..." ;
+
+There is an option to include_once or require_once... they will behave normally upon the first loadup, but will only attempt loading up the php sourcecode file once and will give up on any subsequent attempts.
+
+NOTE: if we deployed the include or require keywords within a looped conditional, then we must deploy them WITHIN the conditional's function block: 
+
+for($i = 0; i < $count; i++) {
+	include "filename.php";
+	require_once "https:// etc../file.html";
+	parameter1;
+	parameter2;
+}
+
+We can include PHP in an html file easily by embedding it using the <?php ?> brackets... But we can also declare php's presence within the <script language = php> </script> or we can use the SGML tag which simply ignores the php marker: <? .... ?> 
+
+
+
+
+////////////////////////////// FUNCTIONS\\\\\\\\\\\\\\\\\\\\\\\\ 
+
+
+Functions work the usual manner - we have the function name, ([para1],[para2],[para3]) and statements in the function block.
+
+so the usual form will be :
+
+functionName(para1, para2, para3) {
+	statement1;
+	statement2;
+	method1() {
+	methodStatement1;
+	methodStatement2;
+	we can use reserved keywords like : BREAK if it's a loop,
+	RETURN if we want a returning value
+	}
+}
+Usual scope limits apply: local and global. Use the GLOBAL reserved keyword to apply global scope to a variable
+
+The STATIC keyword ensures a var is static in main memory- this is useful for when we need to save the variable for further operations in the sourcecode. A typical example of this may be with the use of a counter, which requires us to keep in static memory the variable as it is being incremented, or decremented etc.
+
+We have two ways to pass parameters within functions: by reference or by value.
+
+By value the parameter is passed to the funtion directly, it "feeds" the function by passing/providing it a value.
+
+Passing by reference is different. By reference we pass the parameter via a VARIABLE ONLY- not via constants. This means we can thereafter only refer to this passed parameter placeholder variable (which must always be preceded with the ampersand & symbol ahead of $variableSymbol). Since this is by reference this saves processing power and memory space because a full memory copy of the object is not necessary, a reference to the object will be created that maps to the placeholder object.
+
+<?php 
+	function doubler(&$value) {			//function defined
+		$value = $value << 1;			// bitwise shift left... x2
+	}
+	$a = 3;					//variable given value
+	doubler($a);			//deployed by reference to $value var
+	echo $a;				//consoledout
+?>
+result is 6
+
+Default parameters 
+these can act as a kind of fixed parameter that can be deployed as a default in the case that a more particular parameter is not called upon runtime execution. However, there is a requirement that the parameter is scalar as a value - meaning it must have a singular value, not a more complex expression.
+This default parameter will automatically run at execution if a custom parameter is not supplied. 
+
+function functionName($variableDefault = 'defaultVarValue') {
+
+}
+
+Variable parameters 
+we achieve this type of function block by simply leaving out the (para) brackets.
+This is kind of like the overloaded methods in C++ 
+we can use three types of inbuilt overloaded/variable parameter function queries in PHP:
+1. func_get_args();  //returns an array with all args 
+2. func_num_args();  //returns the number of args included in funct
+3. func_get_arg(argArrayNumber); //returns specific arg picked out
+ 
+Missing parameters:
+Because PHP is so flexible in style, it allows us to create functions with multiple arguments that may have a missing call, they may thus be "skipped over", allowing us to be flexible with the type of parameters that we want to "feed" in the function. Usefully, PHP also provides the runtime executor with a non-fatal warning, letting them know that one of the parameters has not been fed. 
+
+We can use PHP to throw us single values using the return keyword in the function:
+
+<?php 
+	function returnOne() {
+	return 50;
+	}
+	function returnTwo() {
+	return array('var1', 'var2', 5);
+	}
+?>
+
+If no value is passed to the function, then the automatically returned value is NULL
+
+we can do return value functions in the above manner, which uses a direct link to the values themselves or we can pass by reference, as mentioned earlier. If we pass by reference, we will need to use the ampersand when calling/feeding the placeholder passByReferenceFunction (&$VALUE){  }
+
+
+VARIABLE FUNCTIONS:
+
+we can overload the functions themselves by creating variable functions. These will be functions that contain a variety of potential function parameters/args that are switched depending on the case selector:
+
+<?php
+	switch variableFunction($paraChoice) {
+		case 'option1':
+			option1(para1, para2);
+			break;
+    	case 'option2':
+			option2(para1, para2);
+			break;
+	etc...
+	}
+?>
+
+NOTE that the switch approach limits the option for inbuilt functions such as isset();
+
+//////////////////////////// STRIGS\\\\\\\\\\\\\\\\\\\\\\\\ 
+
+PHP has the #NOWDOC and #HEREDOC positioning locators. 
+
+Strings are subject to VARIABLE INTERPOLATION- this is the process by which a variables actual value, as opposed to its placeholder "face" value is printed into a string. Interpolation is useful especially because it allows us to deploy a range of different variables within a fixed string and then cycle through them on the basis of whichevre placeholder var is called:
+
+NOTE AN IMPORTANT SLIGHT DISTINCTION- single quotes will NOT reproduce the full var values... only a string in DOUBLE quotes will do so. For instance:
+
+<?php>
+	$firstName = array('John','Amy','Becky','Muhammad','Igor',);
+	$surname = array('Smith','Gold','Chaser','Ahmed','Kora') ;
+	string1 = "Hello {firstName[0]} {surname[0]}, welcome back!"; 
+/*note the double quotes here, otherwise no values reproduced*/
+echo(string1)
+<?php>
+
+//consoles out: Hello John Smith, welcome back!
+BUT NOTE THAT WITH SINGLE STRINGS WE GET THE FACE VALUES:
+Hello {firstName[0]} {surname[0]}, welcome back!
+
+The usual escape string rules apply: use \ backslash to escape a string. Following are the typical escape string chars:
+\" = quote
+\n = new line
+\r = return / "enter"
+\t = tab
+\\ = actual backslash
+\$ = dollar sign (otherwise it will be considered as a var value)
+\{ braces etc.
+\}
+\[
+\]
+\various hex/ octa character combinations.
+
+
+Remember that the heredoc notation is activated using the <<< + custom identifier name
+For example:
+
+$var1 <<< heredocCustomName
+whatever we want
+to write follows
+heredocCustomName;
+
+NOTE THAT unlike the standard passing of vars in a string, with HEREDOC, both the single and double quotes successfully pass through.
+
+ALSO NOTE that the heredoc structure can be first deployed and then have corresponding vars annexed to the end of the expression:
+
+//now we builtin method printf our expression (in brackets) and have the statement we wish in the heredoc format followed by the annexed values we choose to deploy.
+
+printf(<<< heredocExpression 'This is our heredoc expression the follows. we will print the name of %s and say their age is %d. heredocExpression, 'John Smith', 19);
+NOTE remember to close the heredoc expression with the further heredocExpression closing tag.
+
+NOTE that the heredoc maintains whitespaces etc
+NOTE also that heredoc allows for newline escape strings.
+NOTE also that there are two types of print expressions. The printf() and print_r() . The latter prints in a human readable format.
+
+The difference between the print() and echo() functions is that the echo function is not a "true" method/function, it is only as the name suggests, an "echo" or "consoleout" method. Thus, echo cannot be embedded and deployed within another function.
+
+
+printf() allows for short constructs that can take a set of different keyword chars prefixed with the % char. These will auto interpret whatever the type of the char is and also can be given basic instructions relating to the parameters to be applied, for example with relation to the number of decimal points. Following are the variety of %keyword chars that can be deployed following a printf() expression.
+
+%% = displays %
+%b = bool
+%c = char
+%e = simple double
+%E = scientific notation
+%f = float with locale formatting i.e. in spain it will be 93,33
+			in uk or us its 93.33
+%F = float without formatting
+%g = double in scientific notation
+%G = double with scientific notation
+%o = integer as an octal 
+%s = string
+%u = unsigned integer  
+%x = hex integer in lowercase 
+%X = hex integer in uppercase 
+
+So when we deploy the % style markings, we also can add certain instructions as to how long we would like, for instance, the decimal points to be: 
+
+printf('%2f', 23,9845);   //the f notes the number of decimal points we want
+so this prints to 23.99
+if we wanted to make this a percentage, then we would add double percentage symbol
+printf('%%2f', 23,9845);
+consolesout as 23.99%
+
+and so on, we can also pad the floats/doubles as required.
+
+The print_r() and var_dump() inbuilt functions allow for similar ops but with different results. A useful element of printr() is that it will print out in a human readable format that allows for consoling out as types and categories thus allowing for better bug detection/testing. For example: 
+
+$array1 = array('first'=>'one','second'=>'two','third'=>'three');
+print_r($array1);
+
+consolesout as:
+
+array
+(
+[first] => one  
+[second] => two
+[third] => three)
+
+
+var_dump() is always preferred for debugging over print_r(). This is because var_dump provides more acknowledgement of the types being dumped as opposed to print_r. in particular var_dump will declare the type before dumping...
+
+
+strleng() = inbuilt function for calculating the length of a string in terms of an array index
+
+trim(string[,optionalCharList]) // array charlist is optional
+ltrim(string), rtrim(string) or simply trim(string) will get rid of the whitespaces on the left, right, or both sides. The optional charList will specify further special chars such a newline /n or 
+/r carriage return.
+
+converting string cases:
+strtolower() is the inbuilt method for converting to lower case
+strtoup() is the opposite.
+ucfirst() upper cases the first char of the string
+ucwords() upper cases the first char of each element in the string
+
+htmlentities() will allow all of the arg content provided as a string to be parse in HTML-standard consoleout. That allows for several special chars to be deployed without having to use escape sequences.  
+
+the template is: $output = htmlentities(input, quote_style, charset); 
+
+NOTE that the optional charset arg identifies the character set in use while quote_style sets the double or single quote marks 
+
+htmlentities() has a range of built in functions including htmlspecialchars()
+
+we can also strip html tags using strip_tags()
+strip_tags() has an extra arg that can be optionally called in order to place a limit on how many tags we want to strip (i.e. making an exclusion). This is achieved by noting the element notation that is to be preserved with tags ie, if it is a bold part of the text, we pass the first arg on strip tags as the string to be stripped and the second arg is the element to not be stripped as demarcated by its tags: for instance strip_tags(string1, <b>) will avoid stripping the first bold element in the string found.
+
+
+get_meta_tags() is another inbuilt functions that spits out the meta tags of the html page as passed in arg1 as either a local doc or a uri
+
+unlike the usual set of encoding done for uri paths, query strings and cookies are encoded with a special set which, instead of coding / as %20, instead encodes it using + symbol
+
+We can introduce SQL queries but we need to rememebr to deploy a \ backslash and we can use the inbuilt php function addslashes() to force add a backslash as an escape string every time the general string has an existing backslash.
+
+
+PHP allows us to compare strings even though they have different values (i.e. they don't have an int value). we have two types of comparators: 
+
+==   for "weak" comparison which will pick up non-strings as strings so long as they are written in number or wording that fits the number. ie:
+
+3 == "3" == "three";
+
+=== "strong" comparator which compares without casting, and thus will give a FALSE if the comparators are not EXACT.
+
+
+PHP is smart enough to allows us to compare strings and chars by order of appearance and thereby translating that into an int equivalent. ie:
+
+<?php
+// vars to be sorted
+	$a = John;
+	$b = Mark;
+//string			
+	$string1 = "This is a string which will print out first names by 
+	alphabetic order: {$a}, {$b}";
+
+	$string2 = "This is a string which will print out first names by 
+	alphabetic order: {$b}, {$a}";	
+//loop conditional
+	if($a<$b) {
+		echo $string1;
+	}
+	else {
+	 	echo $string2;
+	}
+?>
+
+Another string comparator function is the strcmp(string1, string2);
+this returns three potential outputs when run:
+- a result of 0 means the strings are the same  
+- a result lower that 0 means that string1 sorts before string2 (meaning string1 is the longer and more complex one
+- a result above 0 means the opposite, stringb is longer.
+
+strcasecmp(string1, string2) will undertake the comparison on the case status of the two strings.
+
+PHP makes use of certain algorithms to compare the values of the string in terms of their pronounciation, there are four algos available, the first three can compare all strings to one another while the soundex and metaphone algos can only compare to string values called under their functions:
+
+1.soundex  template soundex($string);
+
+2.metaphone template metaphone($string);
+
+3.similar_text template similar_text($string1, $string2); 
+
+4.Levenshtein template levenshtein($string1,$string2); 
+
+NOTE that the metaphone algo is more accurate than soundex in determining pronounciation similarity
+
+The similar_text function prints out a percentage of the number of shared characters in the two compared strings, thus it is more useful from a quantiative view rather than a semantic view.
+
+Levenshtein simply compares the number of characters taht are different in the two passed strings. Thus it can be useful to detect very proximate strings. It simply prints out the number of chars found to be dissimilar.
+
+////////////////////////////////Arrays   \\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
+
+PHP deploys two types of arrays, either the indexed or the associative arrays. The keys for indexed arrays as integers starting at base 0. 
+
+The associative arrays are strings, which are linked to values as though they were a two column table. First column is the string key, the second column is the related value.
+
+NOTE however, that the PHP engine stores all arrays as associative arrays. The only difference is how the key is written out (for the human interface)- for PHP all arrays are simply a column of key-to-value.
+
+Because PHP is loosely typed, NOTE that a string value which is written as an integer will be considered by the engine to be the same as the equivalent base-0 integer value; for example ['3'] string array key will refer to the same array's [3] int key (if one has been created as either a string or int keyed array).
+NOTE that, importantly and unlike Perl, negative number int keys can exist and they will not be considered to refer to a "backtrack" count from the end of the array- they will instead be new key values with a negative int array key position.
+Generally string-keyed array positions need to be created and refered to using ['quotes']
+
+We can initialise arrays either the longDrawn or the shortcut way:
+
+LongDrawn we call that $arrayName followed by either int-key or string-key and assign it a value:
+//indexed
+	$array1[0] = 120;
+	$array1[1] = 130;
+	$array1[2] = 140;
+
+//associative
+	$array2['John Marks'] = '04-06-1987';
+	$array2['Michael Johnson'] = '06-02-1967';
+	$array2['Lucy Pinder'] = '09-01-1955';
+			
+or the shorthand:
+
+//indexed
+	$array3 = array('value1', 'value2', 'value3');
+
+print_r($array3);
+
+$array3 is array (
+	[0]=> value1,
+	[1]=> value2,
+	[2]=> value3,
+)
+ 
+//associative 
+	$array4 = array(
+		'value1' => 32;
+		'value2' => 30;
+		'value3' => 24;	
+	);
+a shorter syntax for asosciative construction is:
+$array5 = array('value1' => 32, 'value2' => 30, 'value3' => 24);
+we can initialise an empty array:
+$array6 = array();
+we can populate an array from a specified index key position thus avoiding starting at the 0 position:
+$array7 = array(4=>"fourth", 5=>"fifth", 6=>"sixth");
+
+NOTE that if we start the array with a non-numeric string 
+$array8 = array('string'=> 'first'; 'second', 'third');
+then PHP will accept it but it will then assign 'second' an indexed key of [0] and 'third' will be the value for [1]. Not optimal.
+
+We can adjoin an INDEXED array with an ultimate key by using a simple empty [] :
+$array1[] = 150; 
+
+NOTE that this fast method cannot be used for an associative array, even if PHP does accept it and adds the newly adjoined associative array key value an indexed array key instead (starting at the usual 0).
+
+
++++ range of values assignment
+
+PHP's array engine will allow us to assign a range of values to a declared array:
+
+$rangedIntArray = range(1,5);
+// rangedArray has 5 values [0] => 1, [1] => 2 etc.
+//NOTE this can work in reverse i.e. range (5,1);
+the same can apply for alphabetical ranges:
+$rangedAlphaArray = range(a, m);
+
+if we pass more than one char to the range(args) then only the first char will be considered.
+
+the count() function will return the size of the array on the basis of how many value-filled keys the array contains.
+
+array_pad($arrayName, numberOfTotalElementsExpectedInArray, valueOfPaddedElements) is a function that allows us to pad out any empty elements/keys with a fixed value, without affected the already set array keys/elements. Exmple:
+
+$unpaddedArray = array(4, 42, 56);
+$paddedArray = array_pad($unpaddedArray, 5, 10);
+
+// paddedArray is now: 4, 42, 56, 10, 10
+//NOTE, if we wanted padding to PRECEDE the fixed array values, then we put  a negative number for the arg2 value in array_pad function.
+
+
+
+++++ MULTIDIMENSIONAL ARRAYS++++
+
+we can create arrays within arrays, or mutlidimensional arrays/nested arrays:
+To do this, we create a set of "inner" arrays, then bind them using the "outer" array:
+$inner1 = array(1, 2, 3);
+$inner2 = array(4, 5, 6);
+$inner3 = array(7, 8, 9);
+$outer = array($inner1, $inner2, $inner3);
+
+if we wish to point to a specific key-value within an inner array, we double the [] blocks to pick out the inner array within $outer and then whichever of the keys in the relevant inner array:
+'three' = $outer[0][2];
+'four' = $outer[1][0];
+
+If we wanted to deploy this inner-array key-value lookup within a string we need to do so within a curly braces signifier:
+
+echo("The value three is written {$outer[0][2]}\n"); 
+
+if we wanted to extract multiple key values from an array we use the list() function; this will take the array key-values and absorb them into a set of variables generated as a list. This can be useful for simple, "one-line" database queries that are not looking for a long set of values stored in an array or multidimensional array, but rather looking for a simple set of linear values stored in one array:
+
+$teams = array('Arsenal', 'Tottenham'); 
+list($home, $away) = $teams;
+//we see that the Arsenal [0] key value has now been absorbed into list key variable name of $away team.
+list() is commonly used in basic SQL queries looking to absorb a range of potential data key-values held by the SQL database into a list of PHP variable key-values -in a similar way to what is above.
+
+If there are more key-values in the array than in the listed variable-keys in list(args) then those extras are discarded by PHP.
+If on the other hand, the list has too many variable-keys for the number of array key-values, then the extra variable-keys are given a NULL default value.
+
+array_slice allows us to extract a particular set of an array's key-values with a simple template of array_slice($arrayName, offsetStartingIndexPosition, numbrOfIndexPositionsToSlice);
+Evidently this only works with indexed-array, not associative ones.
+NOTE we can combine array_slice with list() to slice out the relevant array key-values that we want to convert into list variable-keys:
+
+list($firstVarKey, $secondVarKey) = array_slice($array, 4, 2);
+
+We can use array_chunk($arrayName, numberOfChunks, optPreserve_keysArg)
+
+This function allows us to break up an indexed or associative array's key-value structure into an arg2 passed number of chunks- thus making it a MULTIDIMENSIONAL ARRAY. The optional arg3 section allows us to preserve_keys, which will allow us to keep the same name keys (for an associative) and the same index-position count (for an indexed) as the original array before it was chunked up. 
+
+$wholesomeArray = array("firstName" => "John", "lastName" => "Marks", "email" => "j.marks@gmail.com", "firstName" => "Jack", "lastName" => "Paulson", "email" => "j.pauls@gmail.com", "firstName" => "Junior", "lastName" => "Jacks", "email" => "j.jJack@gmail.com");
+
+$chunkedUpArray = array_chunk($wholesomeArray, 3, preserve_keys);
+
+print_r($chunkedUpArray);
+
+Array (
+	[0] => Array (
+		["firstName"] => "John",
+		["lastName"] => "Marks",
+		["email"] => "j.marks@gmail.com",
+	)
+	[1] Array (
+		["firstName"] => "Jack",
+		["lastName"] => "Paulson",
+		["email"] => "j.pauls@gmail.com",
+	)
+	[2] Array (
+		["firstName"] => "Junior",
+		["lastName"] => "Jacks",
+		["email"] => "j.jJack@gmail.com",
+	)
+)
+
+array_keys($arrayName); will extract only the keys and return them in indexed order.
+
+array_values() does the same with the assigned values.
+
+array_key_exists(keyName, $arrayName) will return a boolean TRUE 1 or FALSE 0 as to whether the passed array contains a key of the given name/index-position value.
+
+One issue with this, however, is if the array is padded out, or has several null values or empty strings, then we will get a logical boolean TRUE to the fact that the key exists but the problem is that key's value is meaningless.
+
+we can instead use isset() which will tell us if the array key value exists ONLY if it isn't a NULL value. 
+
+
+array_splice($arrayName, indexStartPosition, optIndexPostionCount, newExtractedArray);
+
+allows us to remove or insert new key-values with an option to create a new array with the removed key-values.
+
+$baseArray = array("one","two","three","four");
+
+//To simply delete
+
+array_splice($baseArray, 1, 2);
+outputs: "one", "four"
+if we omit the optional arg3 for length, array_splice deletes all remaining key-values after the one passed in arg2.
+
+if we use the optional arg4, we can either use it to create a new array from the deleted spliced keys by passing a fresh arrayName ; OR we can pass to arg4 the name of a newly defined fresh array, which will then be inserted into the spliced array:
+
+array_splice($baseArray, 1,2, $forkedArray);
+// $forkedArray now containes [0] => "two", [1] => "three" while baseArray has [0] => "one", [1] => "four".
+$newArray = array("five", "six");
+$newerArray = array("zero");
+array_splice($baseArray, 1, 2, $newArray);
+//baseArray is now: "one", "four", "five", "six"
+array_splice($baseArray, 0, 0, $newerArray);
+//NOTE how now we have inserted "zero" to the first position before "one" and the rest of the keys have been pushed down the array stack.
+
+
+NOTE that array_splice() is not limited to the indexed array style above, it can equally be applied to an associative array which is, anyway counted on the base 0 index position for the purpose of PHP's internal associative stack.
+
+We can convert an array as  whole into a variable, and vice-versa using extract($arrayName) and compact($variableName); 
+extract will turn the array keys into variable names, and values will be the var key values. Vice versa, compact will turn a variable's name into an array key and value into key-value.
+
+
++++++TRAVERSING ARRAYS
+
+we can go through an array with several methods:
+the foreach construct allows us to simply loop through every elemetn of the passed array:
+
+$anotherArray = array("address1", "address2", "address3", etc);
+	foreach($anotherArray as $value) {
+		echo "The address is {$value}\n";
+	} 
+
+If we which to specify both KEY AND VALUE in our printout, as would be needed for an associative array, then we can just pass foreach ($yetAnotherArray as $key => $value) eg:
+	
+$yetAnotherArray = array("firstName" => "John", "lastName" => "Marks", "address" => "33 Hampden Road, London");
+	foreach($anotherArray as $key => $value) {
+		echo "{$firstName} {$lastName}'s address is {$address}.\n";
+	} 
+	// John Marks's address is 33 Hampden Road, London.
+
+NOTE THAT foreach does not work DIRECTLY on the ARRAY, but rather makes a copy of it to then parse through. Although this is useful for being able to manipulate the array's values within the foreach block without affecting the original, it USES MUCH MORE MEMORY.
+++++Iterators
+
+Another manner to navigate an array is to use the builtin iterator functions. These are:
+current() -returns the currently indicated element on stack 
+reset() -moves stack pointer back to the top/start
+next() -moves down the stack one
+prev() - moves up the stack one
+end()  -  moves point to end of stack/bottom
+each() -cycles through the array stack one element at a time.
+key()  -returns the pointer's current element KEY - not Value.
+
+each() is therefore useful for cycling through the array elements one-by-one, for example, by passing the name of the array into the each() construct and then converting every array element encountered by the each() method into a list of variable with a key and value. Then printing this out: 
+
+$array = array("one", "two", "three");
+
+while(list($key, $value) = each($array)){
+	echo "{$value} is at array stack position {$key}<br />\n";
+}
+
+one is at array stack position 0
+two is at array stack position 1
+three is at array stack position 2
+
+NOTE, unlike foreach, each() and other iterators WORK ON THE ORIGINAL ARRAY VERSION, AND THUS USE LESS MEMORY TO PARSE.
+
+one utility of each() is that we can use it to treat the first element of an array, or the first cycle of a first set of the array's values, differently to the remaining ones. By not using each() in parsing the first element to printed/variable outputbut then cycling through the remaining elements, we can create two sets of rules. A basic example would be creating an HTML table. 
+The first, non-eached() part could, for example, be the header of the table which would be printed out as a table row <tr> or <b> bold but then followed by a table header <th> HTML marker. But then, every subsequent element in the array stack would be cycled using the while(list($key, $value) = each($arrayName)) loop with standard <tr> formating that would distinguish it from the header.
+
+++++FOr Loop
+Another way to cycle thorugh array elements would be the use of a for loop. This ONLY APPLIES to an INDEXED ARRAY:
+
+we use the standard template : for($i = 0, $i < $arrayCount, $i++):
+
+$array = array(1, 3, 4, 5, 6, 8);
+$arrayCount = count($array);
+
+for($i = 0, $i < $arrayCount, $i++) {
+	$value = $array[$i];
+	echo "{$value}\n";
+}
+
++++++Array_Walk()
+
+PHP has a function that will cycle through an array's elements and call a function on the key-value of each element:
+template is: 
+array_walk($arrayName, callableFunction, optThirdArgValue);
+
+example: 
+
+$callableFunction = function nameOfFunction($value, $key){
+	print("<tr>whatver we need {$key} including formatting on HTML {value}
+	</tr>\n"); 
+}
+$arrayName = array("one" => "first, "two" => "second" etc);
+$arrayWalk($arrayName, $callableFunction);
+
+array_walk allows an optionalk third arg which can be an extra value not related to the array's element values being cycled through into the arg2 function. This can be useful, for example, when we need a third value from an external - non-PHP engine- interlocutor, for example if we were to use array_walk to cycle through key and value from an array in order to go through the values but adding different html elements such as different colors as required (passed in arg3 of the array_walk function)
+
+
+++++++array_reduce
+is the cousin function to array_walk . template is:
+
+array_reduce($arrayName, $callableFunction, optDefaultValue);
+
+basically it seeks to reduce the entire array's values to a singular value, based on a given function that progresses the reduction to that singulr value. 
+Evidently, this only works on INDEXED arrays with int values since a mathematical operation will not work on a string (except strings made up of an int since PHP is loosely-typed it will pick up on the int value).
+
+An example would be to have the array of ints, followed by a callable function that adds up the squares of each value of the array, producing a final value.
+
+The arg3 default value can be provided as a seed value, this will change the base starting count value for example, from a zero to a whatver is passed as the arg3 default- the algorithm in arg2 function will then add up the square values of each element being parsed in arg1 array via array_reduce function.
+
+
+++++Searching for values:
+
+the inArray() function allows us to check for the element passed in Arg1 is also found in an array passed in Arg2 - giving a boolean true/false as to whether it is found.
+
+template is: 
+if inArray($elementToBeFound, $arrayToBeParsed, optStrictModeSearchesForMatchOfContentANDType){
+	consequential parameters...
+	}
+NOTE that we can use a negative !inArray() if we want to check that every element being passed through arg1 is indeed in arg2 (because if any of the elements is NOT found, it will give us a boolean FALSE.
+NOTE also and relatedly that the element doesn't have to be unitary, we can pass a stream of elements by simple previously using the foreach construct:
+foreach($arrayToBeSplit as $distinctElements){
+	if !inArray($distinctElements, $comparativeArray) {
+		return false
+		para2 do this this etc
+	}
+}
+[else] return true
+do this this
+
+
+PHP also deploys array_search() which only differs from in_array because it returns not a boolean true/false but rather returns the key of the element being sought in the passed array. So with this one the template is:
+array_search(valueToBeMatched, $arrayToBeParsed, optThirdArgStrictMode);
+and it will return the valueToBeMatched's key in the arrayToBeParsed(if found and if found to be of the same types if deploying opt arg3)
+
+
++++++++Sorting 
+Sorting changes an array's internal order and can optionally rewrite keys to reflect these changes.
+
+PHP has three inbuilt sort orders which are done either by ascending, descending or custom-defined priorities. Note that the default is ascending:
+
+									ASCENDING DESCENDING	CUSTOM
+_________________________________________________
+Sort By Value		|	sort()  |	rsort()	  |	usort()
+(Reassigns Keys |					|						|								INTENDED FOR INDEXED ARRAYS
+From Base 0)		|					|						|								SORTS ALPHA OR NUMERIC
+_________________________________________________
+Sort by Values	|	asort()	|	arsort()	|	uasort()
+(No Reassign)		|
+_________________________________________________				CAN BE USED BY EITHER INDEXED OR
+Sort by Keys		|	ksort()	|	krsort()	|	uksort()				ASSOCIATIVE BUT IF INDEXED THEN 
+_________________________________________________				SORT ORDER CHANGES AND THUS ORDER
+																												SEARCH MUST BE DONE BY FOREACH OR NEXT
+
+Examples:
+
+1. indexed array alphabetical ascending:
+
+$names = array("Lily","Beth","Sefania","Cynthia");
+sort($names); // now in alphabetical
+rsort($names); // descending order
+
+2. associative array where we want to sort but without losing the association. Here is an example from a log of user's time on a pc:
+
+$logTime = array(
+	'Jack' => 241,
+	'Jen' => 41,
+	'Lucy' => 341,
+	'Meg' => 121,
+	'Rohan' => 538,
+);
+
+arsort($logTime);  //arsort will maintain key-value association NOTE we want a reverse because we want highest number first to see who's been longest on pc
+
+$topThree =  0;  //create a top three of the users - base the count on zero to be incremented
+
+echo '<table>\n';
+
+foreach($logTime as $user => $time){
+	echo('<tr><td>{$user}</td><td>{$time}</td></tr>\n');
+		if (++$topThree == 3){
+		break;
+		}
+}  
+//pumps out a table parsing out arsorted array as user and time . once topThree var is //
+//equivalent to number 3 then break the foreach loop
+
+echo '</table>'; 
+
+
+There can be an issue with the inbuilt sorting to the extent that there can be mistakes by the engine. For example the following files, ex10.php ex5.php and ex1.php will be sorted as ex1.php, ex10.php and ex5.php
+
+Using the natsort($arrayName); will avoid this using an intelligent (but slower) sort    
+natcasesort() will do so while taking into account case status.
+
+
+array_multisort(arrayName1, optArray2, optArray3 etc) will sort multiple arrays at once 
+After each named array, we have the option of passing further optional args which offer either sorting in ascending or descending order. 
+
+array_multisort($array1, SORT_ASC, $array2, SORT_DESC);
+
+similar to a join operation on a database.
+Example:
+
+$names = array('John', 'Lucy', 'Meghan', 'Jack', 'Indit', 'Muhammad');
+$ages = array(34, 35, 12, 24, 34, 28);
+$zips = array(12473, 24922, 24312, 24242, 24332, 21487)
+
+NOTE - the join or multisort will maintain key-value integrity and will sort with the priority from the first array passed in the multisort() method. THe second array will have subsequent property and its sort style will then sort any of the equivalent hits of the first array on the basis of the second array sort... and so on.
+
+continuing the example:
+
+array_multisort($ages, SORT_ASC, $zips, SORT_DESC, $names, SORT_ASC); 
+// note that $ages gets sorted first in the 
+//multisort
+
+for ($i = 0; $i < count($names); $i++){
+	echo "{$names[$i]}, {$ages[$i]}, {$zips[$i]}
+	\n";
+}
+// the count checks how many array elements are present in names, and then we print them out with the new order which prioritises ages, then zips then names.
+
+
+array_reverse() reverses the internal order of an array's elements. NOTE that numeric keys are reversed startign from a 0 BUT associative string keys are not affected at all.
+
+array_flip() will switch the key-values positions in the array
+
+shuffle() will randomise the order of an indexed or associative array. all keys, whether string or numeric, will  be given a new random order starting from base 0.
+
+
++++whole array ops
+
+array_sum() will sum up the values of an indexed or associative array but it won't work with strings other than simple numstrings i.e. "33.4" or "56"
+
+array_merge()
+merges two or more arrays that are listed one after the other.
+
+$mergedArray = array_merge(array1, array2 etc);
+
+If two or more arrays have index/numeric keys that clash, then the merged array will simply reorganise them with the earlier array taking priority in the new indexed key, followed by subsequent passed arrays.
+NOTE that this can work with indexed or string arrays, BUT if two string key values from the two varying arrays are repeatedly used, then the preceding array's string key will take priority.   
+ 
+array_diff() will calculate the difference between two arrays passed as arg1 and 2 and optionally further arrays.
+It uses the first passed array as the blueprint, and then compares that to the contents of subsequently passed arrays:
+
+$array1 = array('Jack', 'John', 'Jill');
+$array2 = array('Harvey', 'Jill', 'Ben');
+$array3 = array('Jack', 'Max', 'Ben');
+
+$diff = array_diff($array1, $array2, $array3);
+
+print_r($diff);
+>>>>>
+Array(
+	[1] => 'John';
+);
+// note that the difference between array2 and 3 is not noted
+//Note also that array_diff() will compare values based on the strict === operator - equivalent in content AND type.
+
+$filteredArray = array_filter($array, $callbackFunction); acts as a filter parsing arg1 array for subset patterns outlined in the arg2 callback.
+For example, if we wanted to filter an array for only those elements whose numbers are odd, and thus % by 2:
+//define filter callback first:
+
+$callbackFunc = function isOdd ($element){
+	return($element % d);
+};
+
+$numbersArray = array(3,4,5,9,18,12,91);
+$oddNumbersArray = array_filter($numbersArray, callbackFunc);
+>>> returns: 
+$oddNumbersArray is an array(1=> 4, 4=>18, 5=>12)
+//NOTE how the index keys are preserved here. So this filter function is particularly useful with associative arrays whose string keys must be preserved.
+
+++++Arrays and sets:
+
+arrays allow us to implement the basic aspects of set theory: union, intersection, difference:
+
+array_merge() already seen above, is an example of union, as is array_unique() which will find and remove any strict (content and type) duplicates from the passed array. So this can be used in conjunction by creating a function the deploys both, and then passign that function the arrays that need 1) merging - which rememebr will include any duplicates that are not identicatal in type ===, and 2) getting rid of those type duplicates by deploying the array_unique() method within the broader function holding both merge and unique methods.
+
+array_intersect($array1, $array2 etc); will return an array that show the elements that the arrays have in common. NOTE that, like merge, any elements that are held under key-values that are the same (in both key AND value terms) across the compared arrays, the first array's key-value element will take precedence. Any further iterations will be lost, and the consol'd out intersect array will just like that first instance of the key-value found in the first array.
+
+++++Arrays and stack methods.
+Some core stack methods like push and pop can be deployed on arrays, alongside shift/unshift which, instead of entering/exiting an element into to the array from the first/last position on the stack (base 0), instead treats the array stack like a queue and moves one down or up the entire stack of elements without popping/pushing any out/into stack.
+
+++++iterators:
+Using the aforementioned foreach loop, we can iterate through the arrays elements but this requires three tricks: 1)first we must use (IMPLEMENT in PHP) the built-in ITERATOR interface class. Second we must create a class of our own, in which each of the iterators imported from Iterator and deployed on the passed array will be outlined. Because the iterator needs a count, we will need that class to begin with a count 0 variable and then pass the named array (either precedingly filled out or its elements being filled out inside the class). 3)Third, we need to deploy ALL FIVE of Iterator's iterator methods which are:  
+
+current() - returns element currently pointed at
+key() -returns the key of the current element
+next() -points to next element down stack
+rewind() - returns to initial (0) element 
+valid() - returns TRUE if current element's value is valid - FALSE if it is empty or not valid.
+
+NOTE importantly that, when we deploy the Iterator into our class, we can now ONLY traverse any array referenced in that class using the iterators, and we can no longer use array-based methods to traverse the array's elements.
+
+
+class BasicArray implements Iterator{
+	private $initialPosition = 0;
+	private $passedArray = 
+  ['first','second','third','fourth'];
+		public function __construct(){
+			$this->position = 0;
+		}
+		public function rewind(){
+			$this->position = 0;
+		}
+		public function current(){
+			$this->array[$this->position];
+		}
+		public function key(){
+			return $this->position;
+		}
+		public function next(){
+			$this->position += 1;
+		}
+		public function valid(){
+			return isset($this->array[$this-
+			>position]);
+		}
+}
+
+$basicArray1 = new BasicArray;
+
+foreach ($basicArray as $key=> $value){
+	echo '{$key} => {$value}\n';
+}
+
+///////////////////////OOP\\\\\\\\\\\\\\\\\\\
+
+OOP principles as usual... class-inheritance.
+Objects - properties (data), functions(methods)
+
+Encapsulation - when a class has certain functions/methods that feed into objects thus limiting those methods' "spread" to that INTERFACE class - while allowing multiple objects to use them.
+Polymorphism is when the samename method can have multiple different applications by varying objects.
+
+to declare an object:
+
+$object = new ObjectClass;
+
+NOTE- some classes allow for instantiating methods to not only instance the object but also fill out some of its properties defined in the class:
+
+$object = new ObjectClass('nameProperty', 12, 'otherValue');
+
+NOTE because PHP is loose, we can actually supply a classname via a variable:
+
+$variableName = 'ClassName';
+
+$object = new $variableName;
+
+//php reads that as if it were class call.
+
+
+The -> notation allows us to access an object's linked variables or methods :
+
+$object->propertyName $object->methodName(args)
+
+echo 'his name is {$person->name}. He is {$person-age} years old. that means he was born in {$person->calcAgeGap(todaysDate, age)}';
+
+
+static methods are called on the class scope, not affecting the object- they cannot access properties.
+in PHP these have a special notation when being deployed:
+ClassName::staticMethodName(args);
+for example:
+HTML::p('Hello World'); // calls on inbuilt HTML class and refers to the write to paragraph method in HTML- the output is arg1.
+
+NOTe that with static properties we also access them via same notation:
+
+ClassName::PropertyName;
+
+we declare static methods and properties with STATIC
+
+NOTE rememeber that PHP saves time and effort by keeping objects in a associative pointer-based memory stack. The same applies to objects. Any new object that refers to an original object, as acopy of the object, is not actually newly created obejct in memory, but simplye a further referent to the pointer's original mem space.
+
+We can override this default situation to create a hard copy by using CLONE:
+$a = 'a';
+$b = clone $a;
+echo $b;
+>>> a
+
+Class declaration template: 
+
+class ClassName [opt] extends BaseClassName [opt] implements InterfaceClassName{
+
+	[opt]use Trait1Name, Trait2Name ;
+
+	[opt] visibilityModifier static property1 = 
+	value;
+	
+		function functionName(args){
+			paras
+		}
+}
+
+we declare methods within the class structure we have now created an abstracted version of the method that any object instance of that class that calls on that method will be able to refer to the method as $this->methodName() or similarly $this->property since it is self-referential.
+
+methods can also be static, just like properties. We declare using STATIC
+
+declaring anything using STATIC will limit the scope of that property/method to the CLASS scope. It is useful if we want a class to be doing an abstract thing but do not want the object instances to have access to that method. 
+NOTE that declaring a method/property to be static will not allow us to use the $this referent... since objects will be excluded from the scope.
+
+Another interest class delimiter is the FINAL keyword.
+This will stop any further changes to a method/property from the object's scope.
+
+access mods will limit as usual. PUBLIC | PRIVATE | PROTECTED NOTE -> DEFAULT IS PUBLIC
+
+
+NOTE that two special methods can defined within a class to read and write data: 
+__get() and __set()
+
+these are specifically useful when used to refer to self on the object instance of the class and especially useful when querying a source or seeking to write-to a source i.e. networking and database work.
+
+CONST will declare a constant within or outside a class. consts are IMMUTABLE. Good form is to declare consts using the following UPPER_CASE_FORMAT.
+
+
+Inheritance works as usual. Same usual rules and the EXTENDS keyword will refere a subclass to a superclass.
+
+NOTE when two sameName methods have been deployed in the superclass as well as the subclass, PHP defaults to the subclass instantiation of that method. 
+NOTE If we wish to override this default preference order - when  referring to a method() held in the superclass use the PARENT::methodName()designation 
+
+
+What if we have multiple levels of inheritance and the class we are operating from is both Inheritor AND inheriting?
+	In this case we can overide lower inheriting 
+	subclass using the self::methodName() 
+	designation (because remember that the lower 
+	class will have preference to our middle rank 
+	class)
+
+$objectName instanceof ClassName / $ClassName instanceof ClassName will check if any particular class/object is inheriting from another.     
+
++++ interfaces template is:
+
+interface InterfaceName {
+
+	function functionName(){
+	
+	}
+}
+
+declaring an interface's interaction into a class, we use the IMPLEMENTS keyword
+
+
+++++++Traits are a special construct that allow for code reuse outside of the class hierarchy. In other words, traits allow us share functionality between classes without having to link these classes through inheritance. 
+
+with traits, we declare them using USE.
+
+Example use:
+
+trait Logger{
+	public Log($logString){
+		$className = __CLASS__; //refers to 
+		//whichever class is using Logger
+		echo date("Y-m-d h:i:s",  //method to output time())."[{$className}]{$logString}";
+	}
+}
+// creates a LOGGER trait that can be USEd by two noninheriting classes separately.
+
+class User{
+	use Logger;
+	public $name;
+		function __construct($name = ''){
+			$this->name = $name;
+			$this->log('Created user "{$this->name}"');
+		}
+		function __toString(){
+			return $this->name;
+		}
+
+class UserGroup {
+		use Logger;
+		public $user = $array();
+		public addUser(User $user){
+			if(!$this->includesUser($user)){
+				$this->users[] = $user;
+				$this->log('Added user "{$user}" to the group');
+			}
+		}		
+	}
+
+$group = new UserGroup;
+$group->addUser(new User('John'));
+
+2022-03-09 07:12:58: [User] Created user 'John'
+2022-03-09 07:12:58: [UserGroup] Added user 'John' to group
+
+>>>See example in book for explanation:
+
+
+Traits can reference one another without inheritance, i.e. horizontally.
+
+The USE keyword can actually be applied by one trait to another:
+
+trait FirstTrait {
+	public doFirstThing(){
+		echo 'First thing done!'\n;
+	}
+}
+trait SecondTrait {
+	public doSecondThing(){
+		echo 'Second thing done!'\n;
+	}
+}
+trait BothTraits {
+	use FirstTrait, SecondTrait;
+		public bothThings(){
+			$this->doFirstThing();
+			$this->doSecondThing();
+		}
+}
+
+trait allTrait {
+	use FirstTrait, SecondTrait, BothTraits
+		public doAllThings(){
+			$this->doFirstThing();
+			$this->doSecondThing();
+			$this->doBothThings();
+	}
+}
+
+++++Trait ethod Overloading
+
+traits can declare abstract methods, methods which serve only the purpose of being placeholders that are outside of the control/purview of the object instances of the classes using those traits... Somewhat similar to static methods in a class.
+However, one issue can be method overloading... what if we have a same-name abstract method that performs different duties when declared in two or more different trait blocks taht are BOTH used by the class?
+In this case, we can use the  INSTEADOF keyword, when implementing this samename abstract method in the class, so that whatever instance of that class is calling on that used abstract method, it will always know which of the samename methods used by its class it should be deploying:
+
+
+trait TraitOne {
+	abstractMethodSameName(){
+		echo 'doing one thing';	
+	}
+}
+
+trait TraitTwo {
+	abstractMethodSameName(){
+		echo 'doing a totally different thing';	
+	}
+}
+
+class ClassOne{
+	use TraitOne, TraitTwo{
+		TraitTwo::abstractMethodSameName() insteadof 
+		TraitOne;
+	}
+//NOTE we add block to OVERRIDE which of the samename methods we want to use.
+	Function1(args){
+		paras
+	}
+	etc..
+}
+
+ObjectOne = new ClassOne;
+ObjectOne->abstractMethodSameName;
+
+//An alternative to this is to name one of these samename abstract methods as new ALIAS name via the AS keyword:
+
+trait TraitThree {
+	abstractMethodSameName(){
+		echo 'doing one thing';	
+	}
+}
+
+trait TraitFour {
+	abstractMethodSameName(){
+		echo 'doing a totally different thing';	
+	}
+}
+
+class ClassTwo{
+	use TraitThree, TraitFour{
+		TraitThree::abstractMethodSameName() as 
+		abstract MethodForTraitThree;
+//ALIAS created.		
+		TraitFour::abstractMethodSameName() 
+		insteadof TraitThree;
+	}
+} 
+
+etc...
+
+++++++++++ Abstract methods and Classes 
+
+Abstract methods can be used in PHP for the purpose of, as OPPOSED TO STATIC METHODS, forcing instead the object instance of the class to deploy the method, rather than being defined at its 'owning' normal class block.
+Again, this is useful for reusability and extendability. 
+ 
+In the case of declaring an abstract method, then we must ALWAYS declare them in an abstract class (i.e. one which will not have any active role in deployment aside from defining its abstract methods) . Example :
+
+
+abstract class AbstractClassOne{
+
+	abstract function abstractMethod1(){
+		paras;...
+	}
+	
+	class NormalClass extends AbstractClassOne{
+		
+		function normalFunction1(){
+			....
+		}
+		function abstractMethod1(){
+			pass abstract functions paras here;
+		}
+	}
+}
+// as noted, asbtract classes are there just to serve the purpose of feeding further functions into the classes that extend them, which are then instantiated... abstract classes can never be instantiated into objects...
+
+NOTE, traits can equally declare abstract methods - since they are fundamentally also abstract elements themselves.
+
+++++++Constructors and destructors
+
+constructors are special built-in functions that allow us to "fill out" the properties/parameters of an object instance of the class via a shorthand object = new className(para1Value, para2Value);
+
+The way to achieve this is to include the following in the class:
+
+class className{
+	function __construct($p1,$p2){
+		$this->para1 = $p1;
+		$this->para2 = $p2;
+		}
+}
+
+NOTE - class inheritance doesn't affect the __construct(){} method....if the method is not present in the called class' function block, seeking a shorthand way to call on that class's parameters when instancing an object will not work. Thus, if we have a superclass in which the ___construct method IS present, and a sub-class in which we want to call on BOTH the super-class and sub-class' parameters, then we MUST also include the __construct() function into the sub-class block, BUT this time we deploy more than jsut short-hand association to the paras of the super-class, we also not include sub-class paras... thus fully extending the super class (including the shorthand version)
+
+
+Destructors are inherent in PHP and often do their work automatically (garbage collection)
+
+
++++++++++ INTROSPECTION
+
+this refers to the use of inbuilt functions that allow for examining an object's characteristics without recourse to the internal methods/properties of its owning class(es) 
+
+to check on a class' proprietary status we can use:
+
+$booleanReturn = class_exists(nameOfQueriedClass);
+//NOTE this returns TRUE/FALSE boolean.
+
+$declaredClassesArray = get_declared_classes();
+//returns an array with declared class names
+
+$classMethodsArray = get_class_methods(queriedClassName);
+$propertiesArray = get_class_vars(queriedClassName);
+
+//Note that due to PHP's looseness, the class name can be a quoted string with class name, the name itself or $ClassName
+//Note also that while th array returned for methods is simply a list of method names held by that class, the properties array returned will put out an associative array that includes both the names AND the values held for each para/variable. It will also include ANY inherited paras/vars and concomitant values from (a) super-class(es)
+
+get_parent_class(ClassName) will return a class' parent's name.
+
+For OBJECTS:
+
+$query = is_object(variableName/$var); //will  determine if the var is an object...
+$className = get_class($obeject); will return the name of the object's class.
+
+objectVarsAssociativeArray = get_object_vars($object); // like class above.
+NOTE that for both class and object vars fetching, ONLY THE SET vars will be returned with value... non-set ones give a NULL .
+
+Note that get_parent_class() works with objects also. If there is no parent class, it gives a FALSE, otherwise it gives name out.
+
+getLineage($object/className); //  will produce the super-classes above the object/class in a simple index-nameValue array
+
+// THESE METHODS ARE particularly useful for DEBUGGING.
+
+
+
+++++ SERIALIZATION
+
+Serialization is converting an object to a bytestream representation that can be stored in persistent storage...
+PHP does this mostly automatically, so long as we use the $encoded = serialize($object) and decoded = unserialize($object); methods.
+
+-commonly used for sessions and this mechanism actually serializes automatically (without need for explicit method).
+
+NOTE that an object must have a defined class to be serialized (otherwise remember the object will de facto fall into the stdClass).
+
+Note that if we want to (un)serialize an object smoothly, it is good practice to "let the object know" of the process by deploying two hook methods calls __sleep() and __wakeup(). 
+We cal the __sleep() hook just before serialization of an object into bytestream because it will cleanup the object's state, making sure any database connections are closed and writing off any unsaved persistent data associated to the object. Helpfully for us, this hook will also return an array of the names of data blocks that need to be written to bytestream; if no data is needed to be written it tells us this also.
+
+The __wake() hook does the opposite: opens connections and initialises the object's writing.
+
+/////////ApplicationTechniques\\\\\\\\\\\\\\\
+
+PHP comes inbuilt with a range of package-based extension libraries inbuilt. But we can also create our own libraries. To do this:
+1. create a bunch of inter-related functions and save them as a php file.
+2. use the require_once() method in your source code to include this new library into the code.
+
+NOTE however, that, whenever we include a library in the php source code, then running that source code will be slightly slower since it has to parse all of the linked PHP function libraries. However, NOTE also that the PHP parser is faster than opening each file and reading its content, so splitting the functions across multiple libraries is probably slower than holding them in a few core libraries.
+
+Templating systems are ways for php and JS coders to create core templates that split the programming side from the design side and give web designers some ability to control the aesthetics while not touching the programming elements.
+
+
+++++ output buffering and handling
+
+By default, PHP sents the results of an echo() and other methods to the browser console after execution. But we may want to force this through PHP's inbuilt output buffering functions, for example in order to throttle the data buffer and send it later, or even to kill the data buffer entirely.
+
+To turn on data bufferring, we  use the ob_start(optCallbackFunction) method.
+The optionalCallback post-processes the output if passed, this function will collect the entire buffered output and will send a string of the entire data output to the browser. It could be used to re-direct a copy of the buffered data from one https adresss, for example, to a second https address.
+
+When output bufferring is turned on, then we have two functions to check the value of the buffered data collected... 
+$buffedLength = ob_get_length(); 
+returns to the variable the len of the buffered data so far.
+$contentsStringBuffer = ob_get_contents();
+returns the actual data in string format.
+
+ob_clean() erases existing buffer data WITHOUT TURNING OFF THE BUFFER OUTPUT FUNCTION
+
+ob_end_clean() DELETES AND TURNS OFF THE BUFFOUT
+
+FLUSHING the buffer - which sends the collected buffed output to the browser, can be done in three ways:
+
+ob_flush() will clear the buffer, sending what it has so far to browser, and KEEP THE BUFFOUT ON
+
+flush() - sends buffed data, clears the buffer, and tries to now tell the server to send further data without buffer - immediately.
+
+ob_end_flush() sends, clears and then KILLS the BUFFOUT
+
+If the source code script ends wihtout having clearly killed the buff out via some method above, PHP will do so automatically.
+
+Essentially, thes buffer technique is especially useful if you need to run a check on some data, or characteristic of the browser, or user's os or installation or environment, or even a file's data  (for example using the strpos() method to parse it). We open the buffer, we bring in the data/file/characteristic whatever we need. We use either get contents or length on this file, then we close the buffer.
+
+Now, in the remaining source code, we do some function/action on the basis of parsing through the data that has been brought in. example checking whether user had GD Graphics module for php installed:
+
+ob_start();
+	phpinfo();
+	$phpSpecs = ob_get_contents();
+ob_end_clean();	 
+ 
+if (strpos($phpSpecs, 'module_gd') === false){
+	echo 'Sorry, something went wrong with the GD 
+	installation. Try again!';
+}
+	else {
+		echo 'GD installed successfully!';	
+	}
+
+Compression of output can also be achieved using ob_gzhandler() function. If the webpage sends an Accept-Encoding header, then this function compresses the content. It takes as arg three different compressions: gzip, deflate, OR none.
+
+To run this, we include it as an arg to the ob_start at the beginning of our source code when startign up the output buffer:
+ob_start('ob_gzhandler');
+
+if we can't be bother to include this into every sourcecode of every one of our compressed page, we can change the php.ini configuration setting named output_handler and change the default callback function it handlesto the ob_gzhandler function that we define, thus auto-calling this callable function with every ob_start()
+
++++ Error handling
+
+PHP  will output an exception and if it is fatal, will kill the script.
+Three levels of conditions for exceptions:
+
+notices - php engine unsure if its an error, but its syntax presents some possible semantic fault.
+
+warning -  a non fatal error for example calling a method with invalid args. Script exectuion continues.
+
+errors - fatal exception cannot recover. A parse error is an example of this - when there is a fundamentally syntactic issue with compiling. Other than a parse error, every other fatal error will be a runtime exec error of some sort (semantically related).
+
+By default, all php errors are shown. But you can change that in php.ini config (not recommended).
+
+
+reporting values of errors:
+
+E_ERROR						- runtime error
+E_WARNING					- runtime warning
+E_PARSE						- compilation error
+E_NOTICE					- runtime notice
+E_CORE_ERROR			- internally generated error
+E_CORE_WARNING		- interllally gen. warning	
+E_COMPILE_ERROR		-internally gen. err_ by Zend 
+E_COMPILE_WARNING	-internally gen. warn by Zend
+E_USER_ERROR      -triggered runtime error
+E_USER_WARNING		-triggered runtime warning
+E_USER_NOTICE			-triggered runtime notice
+E_ALL							-all above options
+
+NOTE that inside the source code we have the option to partially disable error reporting for any segmenent/statement by deploying the @ symbol:
+
+$a = @(43/44);  // disables err_ report for $a
+
+NOTE that this only applies to RUNTIME errs_ not parsing..
+
+We may want to trigger an error by throwing them in the source code:
+trigger_error(messageOut, typeCategory);
+
+rememebr of the types for thrown errs_ :
+
+E_USER_ERROR      -triggered runtime error
+E_USER_WARNING		-triggered runtime warning
+E_USER_NOTICE			-triggered runtime notice
+
+We may want to trigger custom errors because of our own internal error reporting at a compilation level or because we want to block certain parameters from being supplied in the course of the runtime exec.
+
+we can set up our custom error handler using the set_error_handler() inbuilt function.
+the custom error handler will provide a wider range of outputs than the default error handlers. 
+Basically this is a "shell" function that allows us to customise it to our needs. Usefully,when we have finished using it for one custom error-reporting reason, we can then "reset" it to a previous state. this is done by either calling set_error_handler() with the previous arg1(which is the error handling fucntion) OR by using restore_error_handler().
+
+the error handler takes up to five args:
+$errrorCode|$errorString|$fileName|$lineNumberOfErrorEncounter|$copyOfActiveSymbolTable
+
+function displayError($errCode, $errMsg, $fileName, $line, $symbol){
+	echo '<p>There was an <b>{$errMsg}</> issue.
+	< br/>';
+	echo 'In the file: ' <i>{$fileName}</i>./p>;	
+
+	set_error_handler('error1);
+//note all five args are passed and the string is contained in the para.
+}
+
+Another custom error reporting function is error_log()
+
+this will send a log of the error to a specified destination (useful for net admins, sysadmin,  webmaster).
+
+error_log($messageString, $typeCode $optDestination, $optExtraHeaders
+
+for typeCode, a value of 0 means PHP internal reporting. a value of 1 will instead send an email of the error log to the passed arg3 destination. a code 3 will append the error to the destination file (i.e. if arg3 isn't an email to send via email but instead a local directory location)  
+arg4 headers adds any extra headers required to the email.
+
+When a site is live, it is best to configure php.ini with the following settings:
+
+display_errors = off
+log_errors = on
+error_log = directory\destination.log
+
+one useful tool is to combine output buffering with error reporting, in so doing we block the buffering of the web content until the error reporting does its job, and then we can proceed with either the error rpeort or loading the pag. For example, connecting to a database:
+
+<html>
+<head> 
+	<title>DB Connector</>
+</head>
+<body>
+		<?php
+			function err_handler($errCode,
+			$errMsg, $fileName, $line){
+					ob_end_clean();
+		  	echo '<b>{$errCode}M</b> in line {$line}
+		  	<br /> ';
+		  	echo 'of file <i>{$fileName}</i>.</body> 
+		 	  </html>';
+					exit;		
+			}
+			set_error_handler('error_handler');	
+			ob_start();
+		?>
+	<h1>Query results</>
+		<p>Here are the results of your database 
+		search:</p>
+			<table border = "1">
+				<?php
+					require_once('DB.php');
+						$dataBase = DB::connect('mysql://
+						databaseName:directory1@host/
+						fileName');				
+							if (db::iserror($dataBase)){
+								die($dataBase->getMessage());
+							}
+				?>
+			</table>	
+</body>
+</html>
+
+
++++ optimization
+
+generally optimization takes two forms: 
+1 shortening runtime exec
+2 lessining memory requirements
+
+usually only required in cases where there is some laggy loading.
+
+if deciding to optimize, then search for the elements in the sourcecode that are using up the most resources time wise.
+
+Benchmarking is possible with the Apache ab ApacheBench tool which makes 1000 requests to php.ini
+
+PHP doesn't have an inbuilt profiler but we can get around  this problem by deploying the microtime() inbuilt method to check on how long an output buffer took to download php.info like apache does: 
+
+ob_start();
+	$startProfiling = microtime();
+		phpinfo();
+	$endProfiling = microtime();
+ob_end_clean();
+
+echo 'PHP took ' . {$endProfiling}-{$startProfiling} . 'to load php.info';	
+
+Although optimization can be done from the softwar side, there is an often much greater impact made by hardware via: 
+1. reverseproxies
+2. load balancing
+3. sql replicators
+
+				web caching duane wessels
+///////////// Debugging  \\\\\\\\\\\\\\\\\\
+
+
++++Production environment
+this phrase refers to the notion of a "safespace" for coding open to commentary, failure etc. 
+Thus error reporting and logging needs to be verbose 
+Ideally, there should be a separate and dedicated server for this environment else, if we don't have resources for this, we can use a localhost on a pc setup which can be created via Apache, Microsoft IIS, Zend etc
+
+The staging environment is a next stage that should  mimi the production environment (i.e. front stage) but also allowing for ongoing failures and commentary  and this can also be a middle groud for beta testing and client testing. Ideally, there should be two separate sections to the staging environment - 1 for clients and 1 for coders.
+
+production environment is front facing. 
+tightly controlled error reporting.
+control what the user sees code syntax and sql faisl should never be seen
+
++++php.ini settings
+
+the following php environment wide settings
+
+display_errors
+ on-off toggle controlling the displaying of the errors reported by the PHP engine.
+
+error_reporting
+constants held in the php engine - 16 of them - whcih are all related to didfferent types of exception associated with each constant: for example E_All. 
+
+error_log
+
+the directory path of the error log (depends on the server type)
+
+variables_order
+this sets the order of precedence on the way that superglobal arrays(the self-referencing $_SERVER) is managed: the default order is EGPCS standing for :  $ENV-$GET-$POST-$COOKIE-$SERVER 
+
+request_order
+the order with which PHP registers the GET, POST and COOKIE variables into the $_REQUEST array.
+
+
++++manual debugging
+using IDEs helps, as does frameworks like Zend.
+
+the var_dump($variable/arrayName) method will pump out the values contained in a variable and will also usefully give their type.
+
+checking the logs is also useful for verifying the cause of a bug.
+
+
+////////////////Web Techniques\\\\\\\\\\\\\\\\\ 
+
+++++++ 
+Usual HTTP concepts: PUT|DELETE|GET|POST
+
+For example GET method with a few optional paramenters relating to the user agent info and which types of data is to be accepted when being recieved from the server:
+
+GET http://www.anysite.com/index.html HTTP/1.1
+User-Agent: Mozilla/90.2 (Windows 10:UTF8)
+Accept: image/gif, image/png, image/jp, text/* */*  
+note the usual * wildcard for ALL
+Remembr a security flaw with GET is that any queries it processes are displayed IN PLAIN TEXT ON THE BROWSER URI BAR- in contrast POST obfuscates this from the browser bar.
+
+the server side response will have a status code: 
+remember status codes: 200+ = OK, 400+ = CLIENT SIDE ISSUE, 500+ = SERVER SIDE ISSUE
+
+and can also confirm type and other parameters about the HTTP request and the server itself:
+
+Date: Thu, 22 June 2001  14:07:12 GMT
+Server: Apache/5.4.2 (Ubuntu)
+content-type: text/html
+content-length: 1234 
+
+VIA PHP there are 6 global arrays that can access this client-server networking tranfer and state information (collectively summarised with the moniker of EGPCS- Environment(browser), GET, POST, Cookies, Server):
+
+$_COOKIE
+$_GET
+$_POST
+$_FILES // referring to uploaded files
+$_SERVER
+$_ENV
+
+There is also the $_REQUEST array, which itself contains the _GET _POST and _COOKIE arrays and this request array is automatically dispatched
+
++++++the $_SERVER array's elements:
+
+the following are the keyNames mapped out to the $_SERVER array in PHP:
+
+PHP_SELF
+this is a recursive reference to the currently deployed sourcecode PHP script - used to reference itself- for example in telling server via which avenue to fetch info for communication
+
+SERVER_SOFTWARE
+identifies server version and name
+SERVER_NAME
+identifies server HOSTNAME i.e. DNS ALIAS(www.blablac... ... or IP ADDRESS 1.258.239.43)
+GATEWAY_INTERFACE
+version of CGI standard being implemented (CGI 1/1 for example)
+SERVER_PROTOCOL
+protocol implemented: http , https ftp etc
+SERVER_PORT
+port - 80, 1000, 8000
+REQUEST_METHOD
+meth: GET, POST, PUT, DELETE
+PATH_INFO
+extra path directory information from the client
+PATH_TRANSLATED
+value of path_info translated into a filename
+SCRIPT_NAME
+URL path of current page /directory/subdirectory/index.php
+QUERY_STRING
+anything that comes after ? in URL
+REMOTE_HOST
+hostname of the client machine usualy a 192.162. whatver since it's relevant to local home switch subnet addressing - if no name, then blank
+REMOTE_ADDR
+the internal ip address of the client's machine on their switch subnet network 192.168.1.182
+AUTH_TYPE
+if page is password protected, this is the authentication type
+REMOTE_USER
+if password protected page, then this is  the username- passwords are hidden and not communicated to the server- they go straight to database.
+REMOTE_IDENT
+relates to RFC 931 remote identd service
+CONTENT_TYPE
+content type attached to queries in relation to a PUT or POST request x-url-encoded for example
+CONTENT_LENGTH
+length of such above queries in characters 2,978 chars
+
+Different servers can also create their own entries into the PHP $_SERVER array. For example apache servers add two further array elements:
+
+HTTP_USER_AGENT
+identify of the browser/OS used Chrome/92.3(Windows 10 etc
+HTTP_REFERRER
+URL of page that the browser came from last
+
+++++++ FORMS
+
+it is good practice to write the method (POST, PUT etc) in all caps for browser compatability
+
+a GET request encodes the html form parameters into a QUERY STRING, i.e. anything after ? 
+
+POST occults this string, passing the parameters into the HTTP "envelope"'s content body, leaving URL untouched
+
+Althoguh this is the msot obvious difference between a POST and GET encoding, the MOST IMPORTANT HAS TO DO WITH CACHING.
+
+GET is what is nicknamed as IDEMPOTENT- A GET request to a server is fundamentally the same blueprint- meaning multiple GET requests can 'piggyback' one on top of another since they are based on the same query string. This allows for caching of a single GET request that can save resources and time. The response page sent by the server in relation to a GET request is uniform, it doesn't change with each iteration. that means GEt is also useful for undertaking actions that have to do with maintaining a persistence of data in the form while undertaking various actions that are predictable and unchanging; like for example undertaking mathematical calculations on a form data that is submitted by the client. But it is not appropriate for secure OR for changeable DATA.
+
+In such a case, the POST request is best- not only because of its security in occulting the query but also because it's request to the server ALWAYS RETURNS A DIFFERENT RESPONSE and these requests cannot be piggybacked/cached by the client browser. Any reloading of a POST requesting form will prompt an inbuilt browser warning about loss of data for this reason.
+This encoding is best for shopping carts, for example, since the data is in a changing state and should be in a secure environment; or for a message being written (in order to avoid loss of what has already been written by the user in the form textarea field)
+
+GET should not be used for any actions that should change persistent data stored on the server, but only for transitory, cachable and locally(cookie) stored data-related pages.
+
+++++++ Parameters
+
+PHP allows us to access HTML forms via the $_POST, $_GET and $_FILE arrays.
+
+for example, the following code is one php and one html creating a basic form that offers the option to chunkify text submitted by a user:
+
+chunkify.hmtl:
+<html>
+	<head>
+		<title>Chop up your word</title>
+	</head>
+	<body>
+		<form action='chunkify.php' method='POST'>
+		Enter a word: <input type='text' 
+		name='entry'/><br />
+		How many chunks should we chop up your 
+		word by?
+		<input type='text' name='size' /><br />
+		<input type='submit' value='chunkify'>
+		<br />
+	</body>
+</html>
+
+chunkify.php:
+$submission = $_POST['entry'];
+$chunkSize = $_POST['size'];
+
+$allChunks = ceil(strlen($submission) / $chunkSize); // ceil() rounds fractions upward 
+						 //strlen of word / given num
+echo 'The {$chunkSize}-letter chunks of your word, {$submission}, are: <br />\n';
+
+	for ($i = 0; $i < $allChunks; $i++){
+		$eachChunk = substr($submission, $i * 
+		$chunkSize, $chunkSize);
+//substr meth (arg1LongString, arg2OffsetStart, arg3OptLengthOutputStringLimitFromOffsetStart)
+		printf('%d: %s<br />\n', $i + 1, 
+		$eachChunk);
+	}
+
+++++++ Self-Processing pages
+
+NOTE, instead of the above example where an HTML page containing the form is separate from the php page that scripts it, we can actually create two php if blocks which each deal with a page either with a GET or a POST format. Depending on which format, then, it serves up different html. With the GET method, it presents an HTML form for the use to interact with. With the POST method it calculates it immediately.
+
+<html>
+	<head>
+		<title>Varying Temp</title>
+	</head>
+	<body>
+		<?php if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+		?>
+		<form action='<?php echo $_SERVER['PHP_SELF'] ?>' method='POST'>
+			Fahrenheit temperature:
+			<input type='text' name='fahrenheit' ><br />
+			<input type='submit' value='Convert To Celsius' ><br />
+		<?php
+		}
+			else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+				$fahrenheit = $_POST['fahrenheit'];
+				$celsius = ($fahrenheit - 32) * 5/9;
+				
+				printf('%.2fF is %.2fC', $fahrentheit, $celsius);
+			}
+			else {
+				die('Sorry this site only accepts GET or POST requests.');
+			}
+		?>	
+		
+		>
+	</body>
+</html>
+
+
+++++++ STICKY FORMS
+
+Sticky forms are those where the previously entered form data is held and reintroduced upon presentation of the form response page (like google search):
+
+<html>
+	<head>
+		<title>Temp Convert</title>
+	</head>
+	<body>
+		<?php $fahrenheit =$_GET['fahrentheit']; ?>
+		<form action='<?php echo $_SERVER['PHP_SELF']; ?>' method='GET'>
+				Fahrenheit temperature:
+				<input type='text' name='fahrenheit' value='<?php echo $fahrenheit; ?>'/><br />
+// here we have the shift in value, whatever value was last entered into the fahrenheit var
+				<input type='submit' value='Convert To Celsius' ><br />
+		</form>
+			<?php if (!is_null($fahrenheit)) {
+					$celsius = ($fahrenheit - 32) * 5/9;
+  					printf('%.2fF is %.2fC', $fahrentheit, $celsius);
+					}
+			?>	
+	</body>
+</html>
+
+++++++ Multi-Value Parameters
+
+Selection list, using the SELECT tag in HTML, allow a drop-down menu of multiple selections which can have multiple options selected. With PHP, we must remember to convert whatever input the user has selected in HTML into an ARRAY using [] :
+
+<html>
+	<head>	
+		<title> Personality Multiple Choice</title>
+	</head>
+	<body>
+		<form action='<?php echo $_SERVER['PHP_SELF']; ?>' method='GET'>
+			Select (as many as you wish) of these traits to describe your personality: <br />
+				<select name='attributeChoices[]' multiple>
+//here array is deployed. REMEMEBER THE MULTIPLE KEYWORD TO ALLOW FOR MULTI SELECT
+					<option value=>'chill'>chill</option>
+					<option value=>'lazy'>lazy</option>
+					<option value=>'active'>active</option>
+					<option value=>'enraged'>enraged</option>
+					<option value=>'jealous'>jealous</option>
+					<option value=>'happy'>happy</option>
+				</select><br />  
+			<input type='submit' name='sub' value='Submit My Choices'/>
+		</form>	
+<?php
+	if (array_key_exists('sub', $_GET)) {
+		$personalityAttributes = join(' ', $_GET['attributeChoices']);
+			echo 'You have the following traits: {$personalityAttributes}';
+	}
+?>		
+	</body> 
+<html>
+
+NOTE we can technically create a multiple choice submission that also retains the last entered info- a sticky multivalued checkbox... but this is somewhat construed.
+
+++++++ FILE UPLOADS
+
+With file uploads, we deployt the $_FILES 
+
+<form enctype='multipart/form-data' action='<?php echo $_SERVER['PHP_SELF'];?>' method='POST'>
+	<input type='hidden' name='MAX_FILE_SIZE' value='10240'/>
+  File Name: <input name='fileUploaded' type='file'/>
+  <input type='submit' value='Upload File' />
+</form>
+
+//NOTE the enctype tag on the form  which defines content type of a form when a POST method is used
+
+The $_FILES array has the following inbuilt elements:
+
+name
+the name of the file of the name being uploaded
+
+type
+the MIME type (multipurpose Internet Mail Extensions Type)
+
+size
+file size of attempted upload. If the file is too big it defaults to 0bytes
+tmp_name 
+temporary name of the file as it is held on the server, if too large it gets a name of NONE
+
+Uploaded files are stored on the server under the temporary name assigned. If we wish to move the file we deploy PHP's move_uploaded_file($_FILES['toProcess']['tmp_name'],'path/directory/whatever/file1/{$file}'); 
+++++++ FORM VALIDATION
+
+when asking for user input, we should validate that the file or form uploaded is in the correct form etc. 
+We can do this with Javascript OR with PHP. The benefit of PHP is that is more secure
+With the PHP, we create a self-processing page which throws out exceptions if any faults are found. For example, the following  code will validate a form before submission to the server:
+
+file: dataFormValidate.php
+
+<?php 
+	$name = $_POST['name'];
+	$type = $_POST['media_type'];
+	$fileName = $_POST['file_name'];
+	$caption = $_POST['caption'];
+	$status = $_POST['err_status'];
+
+	$tried = $_POST['try_status'] == 'yes';
+// Vars created with their POST server sending equivalent
+		if ($tried){
+			$validated = (!empty($name) && !
+			empty($mediatype) && !empty($filename));
+// if block checks if the user has fyilled in the form correctly and uploaded the file 
+				if (!$validated){  
+//if NOT validated correctly THEN:
+?>
+	<p>
+		The files were unsuccessfully validated and 
+		uploaded. Please make sure that you have 
+		filled in the form's fields and uploaded the 
+		file correctly.
+	</p>
+<?php
+				}
+
+		}
+//ELSE if correctly validated THEN :
+		if ($tried && $validated){
+			echo '<p>Success , the fields validated 
+			and file uploaded!</p>';				
+		}
+//FUNCTION HERE TELLS THE SERVER WHICH FILE TYPE IS UPLOADED FOR VALIDATION (RECURSION WITH EARLIER IF CHECKS)
+	function mediaTypeUploaded($mediaType) {	
+	global $mediaType;
+		if ($mediaType == $type){
+		echo('Selected');
+		}
+	}
+?>
+<html>
+	<form action='<?php echo 	
+	$_SERVER['PHP_SELF'];?>' method='POST'>
+		Name: <input type='checkbox' name='status' 
+		value='selected' <?php /> Selected <br />
+		
+		Media: <select name='media_type'>
+			<option value=' '>
+					Choose A Media Type:  
+			</option>
+			<option value='picture' 
+				<?php mediaTypeUploaded('picture') ?>/>
+					Picture
+			</option>
+			<option value='video'
+				<?php mediaTypeUploaded('video') ?>/>
+					Video
+			</option>
+			<option value='audio' 
+				<?php mediaTypeUploaded('audio') ?>/>
+					Audio
+			</option>
+		</select>
+
+		File: <input type='text' name='file_name'
+		value='<?php= fileName; ?>' ><br />
+		
+		Caption: <textarea name='caption'><?php= 
+		$caption ?></textarea><br />
+			
+		<input type='hidden' name='try_status' 
+		value='yes'/>
+		<input type='submit' value='<?php echo 
+		$tried ? 'Finish' : 'Submit'; ?>' />	
+<!-- HTML is self-explanatory except this last part which basically is a ternary choice operation in which the user's current file uploading/validating status is checked. If any of the uploads are missing then this is reflected in the SUBMIT button whose text changes according to the current status
+-->
+	</form >
+</html>
+
+++++++ Response Headers 
+This refers to the html/DOM <header> element injection via PHP
+we can use this, for instance, to inject a page redirect or to set the page type, or to located a cookie before the HTML head/body has even begun.
+
+redirection for instance will be undertaken with the php header() method and the page load must be exited exited() also,
+
+header('Location: https://www.newwbsite.com/directory/newpage.html');
+exit();
+
+another header technique is expiration which sets an expirate date and time for a document - again using the header() meth and the Expires tag:
+
+header('Expires: Fri, 12 Jan 2022 04:32:00 GMT');   
+
+we can use a simple arithmetic op to ensure a document expires within a certain period from now 
+
+$currentTime =  time();
+$expiryTime = gmstrftime('%a, %d, %b, %Y, %H:%M:%S GMT', $currentTime +60*60*3); 
+//here set for 3 hours from now expiration
+header('Expires: {$expiryTime}');
+
+we can also set expiration to never we can use the following hack  (setting the expiry time as being perpetual one year from the current time) 
+
+$currentTime =  time();
+$expiryTime = gmstrftime('%a, %d, %b, %Y, %H:%M:%S GMT', $currentTime +365*86440);
+
+header('Expires: {$expiryTime}');
+
+if we want to mark a document as having previously or currently expired:
+
+$expiredTime = gmstrftime('%a, %d, %b, %Y, %H:
+						   %M);
+header('Expired: {$expiryTime}');
+
+we can control the caching of a document by deploying Cache-Control 
+
+header('Expires: Fri, 12 Jan 2022 04:32:00 GMT');
+header('Last-Modified:' gmdate.('D, d M Y H:i:s').' GMT');
+header('Cache-Control: ');
+header('Cache-Control: ');
+header('Pragma: no-cache');
+
+++++++ AUTHENTICATION
+
+auth works via headers and response status.
+
+the php verifies the data is submitted for the username and password and then checks if the password is correct (presumably the username becomes a key and password is the value on the server-side database.
+We must also include an http header with the WWW-authenticate: challenge response header along with an error page - in case the authentication fails:
+
+<?php 
+	$authSuccess = false; 
+//set the boolean starting condition
+	$user = $_SERVER['PHP_AUTH_USER'];
+	$psswd = $_SERVER['PHP_AUTH_PW'];
+//set vars in relation to PHP names for server comms	
+		if (isset($user) && isset($psswd) && $user 	
+		=== strrev($psswd)) {
+// note here we do a simple password check - it checks if username has been reversed to be the password		
+			$authSuccess = true;
+		}
+//boolean changes
+		if (!$authSuccess){
+//if authentication failed
+			header('WWW-Authenticate: Basic 
+			realm="name Of This Protected Document"');
+			header('HTTP/1.1 401 Unauthorized');
+//challenge response header and err_message
+		}
+//ELSE - the hidden page is shown:
+
+<html>
+	LESS INSECURE STUFF HERE
+</html>
+?> 
+
+++++++ COOKIES
+
+Generally http is a stateless protocol. In order to get around the loss of persistent state status, we have multiple options, the most common of which being cookies.
+A basic option is to give each user who logs on via their IP address as unique ID that is tied to the IP address:
+http://www.example.com/shopping.php?userid=219348
+
+
+cookies are more common because they contain more persistence and depth of data about the user.
+
+a cookie is a string that contains multiple fields of data relating to the user in an encoded string.
+
+with PHP the setcookie() method allows a cookie to be sent to the browser from the server and stored in the browser's local storage.
+Template is :
+
+setcookie(arg1UniqueCookieName, optArg2CookieStringValue optArg3ExpiryInSecsFrom1Jan1970, optArg4SpecificDirectoryPathForBrowserToInvokeCookie, optArg5URLDomainAddress, optArg6BOOLEANSecureHTTPSOnlyTransmission);
+
+cookies are actually stored via the $_COOKIE array. The keyName on that array for each cookie is its arg1UniqueCookieName, which is set via a dot notation: cookie.name
+When being decoded, for example in interaction with HTTP via PHP, the cookie name takes an underscore where it's dot ntations were:
+$_COOKIE['cookie_name']
+
+Note that there are limits on the number of cookies that can be stored per site and in total
+
++++++ SESSIONS
+
+PHP has a sessions construct that enables us to automate the deployment of cookies
+
+This works a bit like a combination of the userid concept and the cookie concept, The SESSION ID is granted to the user upon first interaction with a particular site and thereafter, on the basis of this session id, a PHPSESSID cookie is set to the browser which holds the relevant session info. A benefit of session ids is that, even if a user has turned off cookies, this mechanism defaults to a userid style URL-based ?query
+
+A particulary useful deploment of this is for shopping carts.
+to set up the session we deploy the session_start() method
+to end a session we use session_destroy()
+
+
+//////////////// XML\\\\\\\\\\\\\\\\\\\\\ 
+
+XML is a markup language like HTML. Easier to parse by programming languages than HTML (which is harder to parse, and instead needs JS)
+
+PHP has a parser bundled in with it
+
+XML uses tags somewhat similar to HTML BUT, with XML, EVERY OPENING TAG NEEDS A CLOSER- there is no equivalent to HTML's singluar <br> for example- instead, we use <br /> to indicate a closure.
+As with HTML, tags can be nested but cannot overlap:
+<book><title>Programming PHP</book></title> = ILLEGAL 
+BUT this is ok: 
+<book><title>Programming PHP</title></book> 
+
+NOTE, as with HTML and PHP, the first line of the document deploying xml should declare itself to be an xml doc:
+
+<?xml version='1.0' ?>
+
+and similar to the <body> tag, there should be one SUPER-LEVEL tag that encapsulates the rest of the xml markup:
+
+<?xml version='1.0' ?>
+<supertag>
+	<lesstags>
+	</lesstags>
+	<lesstags>
+	</lesstags>
+	<lesstags>
+	</lesstags>
+</supertag>
+
+++++++ PHP ANd XML
+
+PHP's builtin functions can generate dynamic xml, for example for RSS
+
+Generating xml via php is quite simple. We change the MIME type of the document using the header() function and we set it to 'text/xml'
+Example :
+
+<?php
+	header();
+	echo '<?xml version==\'1.0\' 		
+	encoding=\'ISO-8859-1\' ?>' 
+?>
+	<!DOCTYPE rss PUBLIC '-//Netscape 
+	Communications//DTD RSS 0.91/EN' 'http://
+	my.netscape.com/publish/formats/rss-0.91.dtd'>
+
+	<rss version='0.91'>	
+		<channel>
+<?php
+		$podcasts = array(
+			array(
+				'name' => 'SerialCast',
+				'url'			 => 'https://
+											www.podaddict.com/
+											podcasts/en/
+											serialcast.php',
+				'outline' => 'serial killer stories!'							
+			),
+			array(
+				'name' => 'PolitiCast',
+				'url'			 => 'https://
+											www.podaddict.com/
+											podcasts/en/
+											politicast.php',
+				'outline' => 'News and Views!'							
+			),
+		);
+	 
+	 		foreach ($podcasts as $podcast) {
+	 		echo '<podcast details>\n';
+	 			'<name>{$podcast['name']}</name>\n';
+	 			'<url>{$podcast['url']}</url>';	 			
+	 			'<outline>{$podcast['outline']}</
+	 			outline>\n';
+	 			'<lang>EN-US<lang/>'	 			
+	 		echo '</podcast details>\n\n';
+	 		}
+?>		
+	</channel>
+	</rss> 
+
+
+Just as we can echo to XML from PHP, we can also parse FROM XML to pick out relevant informatio via PHP. We can achieve this via libraries include the C-based event-based expat library, a DOM-based library and SimpleXML 
+
+The most common is the expat library, which deals with each of the XML elements it encounters as 'events'. When the parser encounters these events, it calls a method that handles the start and end of these element markers. The function is:
+xml_set_elements_handler(parserType, start_element, end_element);
+Within this function is the element handling meth:
+startElementHandler(parser, element, &attributes);
+
+endElementHandler(parser, element);
+
+
+Between these elements, there is all the information held, which is called CDATA in XML. With the event-driven parser in PHP, this is handled via xml_set_character_data_handler(parser, handler) function.
+the method within that function for handling the CDATA is:
+characterDataHandler(parser, cdata);
+
+++++ Processing instructions are those sections of XML markup that relate to embed scripts or other programmable code - like php code.
+these instructions take the following demarcators: <? ?>
+Again the ED parser uses a function and methods:
+
+xml_set_processing_instruction_handler(parser, handler);
+The method takes  3 args, the target arg2 passes the name of the target lang/script:
+
+processingInstructionHandler(parser, target, instructions);
+
+++++ Entity handling
+
+entities in XML are placeholders: &amp;, &gt; &lt; &quot; &apos; 
+
+The ED parse handles either external or unparsed entities.
+
+
+++++
+for any other events, the default handler can be called
+
+There are many more options for XML parsing...
+
+
+////////////////SECURITY \\\\\\\\\\\\\\\\\\\ 
+
+++++++ Filtering input
+
+any unwanted external info/data can be potentially insecure
+Best practices:
+- use a whitelist style vetting of all data
+- never correct invalid data, DUMP EET
+- Use naming conventions to filter and vet. i.e. clean(a ok) vs. sketchy(dump)
+
+In other words, we should avoid letting the client's side from being able to input any values outside of what we would expect. For example the following html code gives a choice between three marital statuses but the related php code limits the available choices into an array that is clean and a three case switch fills the array with whichever case has been inputted by the user on the client side:
+
+<html>
+	<form action='marital.php' method='POST'>
+		<p>
+			<select name='maritalStatus'>
+				<option name='single'>Single</option>
+				<option name='married'>Married</option>
+				<option name='divorced'>Divorced</option>
+			</select>
+			<input type='submit'/>
+		</p>
+	</form>
+</html>
+
+marital.php
+<?php 
+
+$cleanMaritalStatusArray = array();
+
+switch($_POST['maritalStatus']){
+	case 'single':
+	case 'married':
+	case 'divorced':
+		$cleanMaritalStatusArray['maritalStatus'] = $_POST['maritalStatus'];
+		break;
+	
+	default:
+		/*empty*/
+		break;	
+}
+?>
+
+
+generally, the more restrictive we can be with filter design, AND ESPECIALLY WITH DEFENCE IN DEPTH, the better it is.
+
+BUT the issue is that there can be REAL WORLD PRACTICAL limitations for security filtering. 
+For example, in the earlier example of a username input filter, we will quickly encounter a real world limitation to this due to the fact that people can have multiple usernames that varying significantly.
+Thus we can reach a MID-LEVEL COMPROMISE between the security and availability. We can allow free choice of usernames but WE TAKE THE INITIATIVE regarding the FORMATTING:
+
+<html>
+ <form action='secureUsrNmeReg.php' 
+       method='POST'>
+ 	<input type='textfeld' name='usrNmeIn'>
+ 			Please Enter Your Username (letters and 
+ 			numbers only): 
+  </input>
+  <input type='submit'>Submit</input>
+ </form>
+</html>
+
+scrUsrNmeReg.php >>
+
+<?php
+	$cleanUsrNmeArr = array();
+		if(ctype_alnum($_POST['usrNmeIn'])) {
+			$cleanUsrNmeArr['usrNmeIn'] = 
+			$_POST['usrNmeIn'];
+		}
+		else {
+		// error goes here
+		echo '<p>Sorry, this is not the right 
+		format, reload the page and try again.</
+		p><br />';
+		}	
+?>
+
+other inbuilt functiosn can also be used to place filtering limits on user inputs. For example mb_strlen() will place min/max on string inputs
+
+One utility of obfuscating the inputs/outputs is to avoid manipulation/access to such data on a client's browser - for example in the browser's cookie storage- which is one attack vector for most XSS attacks. Remember that XSS basically uses the URL bar's openness to manipulation since an attack can craft code into the url using various potential entry points (simple DOM elements, html tags allowing javascript execution, etc). Running the webpage with this url encoding therafter allows the attacker to 'hijack' that domain's already stored cookies in the user's browser. So it is jumping onto the back of the trust mechanisms that allow cookies to operate.
+
+Thus, FOR OUTPUT, it is better safe than sorry to obfuscate by filtering the information being pumped back out to the client from the server via PHP. For example, let's say this time we HAVE the username on our array in our database. Now we would like to send the username back OUT to the browser, perhaps as a reminder to the client. It would be dangerous to simple echo out the username via POST, regardless of the POST method, we are dumping the username variable unfiltered(i.e. not masked via an array element construct in PHP) and unescaped(i.e. with the output being properly intended for the right output medium - for example to html via php's htmlentities() meth if we want textOut on a browser). The post meth is of course the expected out for any personal info like a username since it obfuscates the URL encoding.
+
+echo $_POST['usrNme'] // dangerous - because we are sending out the username directly to our client browser from the server - this gives direct access to out usrNme variable.
+
+For best practices, we should deploy defence in depth(DiD) principles meaning BOTH escaping the  
+
+presumably a PHP-based XSS attack goes for the server-side rather than the browser side (as would be the case with Javascript)
+safer version is DiD. So we create a 'filtering' array and we escape to correct type of output, in this case via htmlentities() meth
+
+<?php
+$usrNmeEscArr = array(
+			usrNmeIn => htmlentities($_POST['usrNme'], 
+			optArg2BitmaskFlagForHandlingSpecCharsLike''Or""ThisIsNeededToAvoidEscapeStringManipulation, optArg3CharEncodingIEUTF-8);
+		 )
+?>
+
+++++++ SQL INJECTION
+
+unrestrained $_POST comms will lead to potential SQL injection vulns. This is the reverse of the CLIENT BROWSER-SIDE (cookie storage) XSS attacks, in this case we see the SERVER DATABASE-SIDE vuln which is INBUILT into how (my)-SQL parses through data:
+
+<?php
+	$hashedPass = hash($_POST['psswd']);
+// arg1 hash() basically encrypts an arg2 phrase
+	
+	$sqlQueryStr = '
+					SELECT count(*) 
+					FROM users
+					WHERE usrName = "{$_POST['usrNme']} 
+												AND password = {'hash'}" 
+				 						';
+	$resolved = mysqli_query($sqlQueryStr);
+?>
+
+
+//NOTE the unrestrained access to the PASSWORD $_POST request. If we dont VAR these then this can be abused because of the following flaw in SQL lookups. 
+
+Attacker inputs an injection of text to cause a default SQL query despite not having access to the password:
+
+username> chris' --
+
+NOTE the -- triggers SQL to internally launch a lookup since -- is reserved for comments. the database thus opts out of matching the password field and instead looks for any 'chris' result:
+
+
+
+now because of this little trick can be hacked:
+
+mysql-> SELECT count(*)
+				  FROM users
+				 WHERE usrnme = 'chris' --' 
+				   AND psswd '...'; //sql sees the end 
+				   									of username as part 
+				   									of a comment, so it
+				   									ignores it and 
+				   									proceeds to look for
+				   								  any chris username. 
+
+Now the issue comes back to the PHP side. SQL has fetched chris's server-side username key on the array there BUT this doesn't necessarily mean the password is invalid. IF the php variable that resolves the sql-side query allows a succcessful login when the variable has a NON-ZERO return, then the injection is successful.
+
+to DiD this, we again mask the variables by way of an array construct AND we use the hash meth() on the password to encrypt it. Finally we EXPLICITLY define the SQL query to be undertaken by the usrnme element when it is selected from the secured array - thus elminating the control that that browser user has over playing with the SQL string... i.e. we force the string onto the user/client:
+
+<?php
+
+	$secArr = array();
+	
+	$hshdPsswd = hash($_POST['psswd']);
+	
+	$secArr[$secUsrNme] = 
+	mysql_real_escape_string($cleanUsrNmeArr
+	['usrNmein']);
+
+	$filteredSqlQuery = '
+			   								SELECT count(*)
+											  	FROM users
+		  								 	 WHERE usrnme =
+		  									"{$secArr['secUsrNme']}"		  								 
+		  									   AND psswd =
+		  									   "{$hshdPsswd}"
+		  							  ';
+?>
+
+
+
+NOTE also that using php's bindParam() function to bind variables to carbon copy statement with the vars become its parameters. This achieved a blockage on any changes of the sql query.
+In this example, we use OracleDB:
+
+$secFormSub = $db->prepare('			   					
+													  SELECT count(*)
+													  FROM users
+													  WHERE usrnme = 
+													  :secUsrNme		  								 
+		  									    AND psswd = 
+		  									    :hshdPsswd
+		  									   ');
+$secFormSub->bindParam(':secUsrNme',
+						 $secArr['secUsrNme'], 
+						 PDO::PARAM_STRING, 32);
+$secFormSub->bindParam(':hshdPsswd', 
+						 hash($_POST['psswd']), 
+						 PDO::PARAM_STRING, 32);
+
+++++++ register_globals (deprecated threat)
+
+++++++ESCAPE SEQUENCES
+
+Alongside these common defence vector, there are certain 'essential practices' that should be followed to avoid opening up security holes.
+
+Among these are the persistent and full deployment of escape sequences. these sequences are required in any language or protocol to deal with SPECIAL BYTE characters that represente special chars (like &^£$ etc), or SEMANTICALLTY EMBEDDED chars like ('...'..'...'). But not locking them down i.e. escaping them, can, as we have seen in the case of a basic SQL injection attack, become a security hole.
+
+Escape sequences are vuln for BOTH the server side(SQL) and the browser side (javascript/DOM)
+
+We have already seen the htmlentities() meth that allows us to properly encode PHP-managed source code into the relevant HTML formatting:
+
+example: 
+<?php
+$usrNmeEscArr = array(
+			usrNmeIn => htmlentities($_POST['usrNme'], 
+			optArg2BitmaskFlagForHandlingSpecCharsLike''Or""ThisIsNeededToAvoidEscapeStringManipulation, optArg3CharEncodingIEUTF-8);
+		 )
+?>
+
+But there can be special cases where extra care is required. For example, what if one of our PHP-SIDE variables is a hyperlink to another webpage? This is particularly dangerous for the users because, with an XSS attack, the attacker can modify the URL string and force the user, without them knowing it, to another webpage.
+So we need a double escape (and the usual arrayification of everything to place an intermediary between direct access to php-managed vars)
+
+1.the first escape just simply cuts up the url address into two sections. The unfiltered first part is the standard url UP TO AND INCLUDING the query string ( ?var= ) BUT the second part is HIDDEN- FILTERED INTO A PHP ARRAY WHERE IT CAN'T be manipulated by an attacked. 
+
+2.from the string url itself as a variable using urlencode() wich will turn the human string into a URL-protocol-lang compatible format like: https://www.thisisencoded.com/%20these%20are%5cthe%8encodings-for-special%20chars/
+
+And as usual, the PHP-side var being turned into an array element and that element being subjected to the htmlentities() meth
+
+Example below:
+
+<html>
+	<header> bla bla... webpage data
+<?php 
+	$filteredUrlArr = array(
+							'' => urlencode($filteredVarVal),
+							);
+//filtered url array created that holds the urlencoded() filtered url variable. NOTE, we have to give this array element some value at some point earlier (we define what this variable's query string will be to take our client to wherever we want them)
+	$safeURL = 'https://
+	www.presentableurl.com/directory1/
+	subdirectory/escape.php?
+	var={$filteredUrlArray['filteredUrlVar']}';
+
+	$escapedHtmlArr = array(
+						  	'presentableHtmlUrl'=> 
+						  	htmlentities($safeURL,
+						  	ENT_QUOTES, 'UTF-8')
+							); 
+//note the ent_quotes and utf8 are just extra parameters about correct formatting
+//now the escaped html string array is created with the element of this array being the escaped (and thus intermediated) full string which formats via htmlentities the above presentable url that itself refers to the filtered url).
+?>   
+	</header>
+
+	<body>
+		<p> ... whatever content 
+		</p>
+		<p> ... whatever content 
+		</p>
+		<form>
+		</form>
+
+		<p> Thank you for your interest, please 		
+				click the link to join the subscription 
+				list: 
+<?php		
+		echo '<a href="{$escapedHtmlArr
+									 ['presentableHtmlUrl']">
+									 Join
+					</a>'
+		;
+?>
+		</p>
+		<p> ... whatever content 
+		</p>
+	</body>
+
+<footer> ..... </footer>
+<html>
+
+The idea of escaping sequences is good practice in general, and there  is a long list of relevant php, url and html correct format encodings that should format any output to html or otherwise
+
+++++++FILENAMES
+				   
+filenames are a stupid and easily preventable vuln. Because php is, like js, a scripting language (as well as a formal higher order one), if a variable has been given a filename as its formal php sourcecode name.
+
+A crafty actor can just decide to put their username as '/~/dir/subdir/' and potentially get access to unsecured directories on the server. 
+A typical example might put ../../../../etc/passwd as their username (.. jumping back to a parent directory in bash) . 80+% of servers in the world use some type of linux (red hat, fedora, ubuntu apache etc). The /etc/passwd is the directory where system passwords are stored. Although the passwords must still be cracked if obtained (and there are many operating-system side checks) there is still a possibility of security leak.
+
+This problem emerges due to the fact that when there are many different usernames, one typical way to keep ahold of them is to have the action-specific code (like a greeting or other interaction) saved as one file in a particular directory and then this is generated with the {$username} var that fetches username from the browser/client via $_POST.
+
+The danger is that, if we combine file names like this with a method that provide the malicious actor an entry into our source code (like include() for example) then this can spell trouble:
+
+include('usr/local/lib/directory/action/{$username}'); 
+ 
+// but it's quite unlikely to deploy include in relation to parsing submitted usernames
+
+More dangerous are the following two potential malicious requests (like one masked as a username, or perhaps if the website has a form that accepts some form of text).
+If the php sourcecode has vulns that relate variables within it to an EXTERNAL url resource, unfortunately php will automatically fetch that resource(by defualt setting it is 'blind' to whether the resource is local host or external):
+
+let's say, for example, we have a space for our users where they can access a document on the server. There could be a change directory function that moves them to the relevant directory in our server holding the file they need, and a file open function, allowing them read only access to a document. But if we somehow put arg1 of fopen() as their username var directly, then that may allow the malicious person to put in an http/s location as their username, and by default php will open that location - which may well contain malicious script:
+
+chdir('/usr/local/lib/myfiles');
+$fileOpen = fopen($username, 'r');
+//if someone puts in their username as: https://www.pwnd.com/serverisowned/ then php will by default open that file on the computer.
+
+An even worse scenario would be if we had an INCLUDE statement that somehow was attached to a file being requested from the client/host- maybe we need them to upload a document. with the include statement, the malicious actor can include their own CUSTOM MODULE(SOURCECODE) link hosted on another website/online resource. The malicious actor passes this as a parameter or the REQUEST method which thus becomes the variable we have on the PHP side for that document. 
+
+PHP will then execute the include() method which means it will parse through this radioactive module and the server will recieve over 9000 roetgen to the face:
+
+$submittedFile = $_REQUEST('whateverFileHTMLSide');
+include($submittedFile);
+
+Mitigations:
+1.Disabling remote file access 
+
+We can disable include(), require() and include_once(), we can turn off remote file acces:
+	allow_url_fopen
+
+to migitate against module-importing threats
+
+2.limit the file size that can be uploaded via POST
+in php.ini  change post_max_size= 3074304;  ... u.e. 3megabityte  
+
+
+3.use php.ini's open_basedir to restrict filesystem access outside of the /root directory
+
+This is achieved by setting open_basedir in php.ini limiting filesystem and I/O functions so they only operator on  the base directory i.e. the server's root / system
+
+NOTE , in httpd.conf we can configure this open_basedir setting to be relevant to a particular virtual Host on the server, or in relation to a particular  directory, or URL . NOTE to do this, we must use php_admin_value to set it.
+// by virtual host:
+<Virtual Host 123.121.224.44>
+	ServerName domainblabla.com
+	Document Root /web/sites/domainblabla
+	php_admin_value open_basedir /web/sites
+</Virtual Host>
+
+// by directory:
+<Directory>
+		php_admin_value open_basedir /home/httpd/html/app1
+</Directory>
+// by URL:
+<Location>
+	php_admin_value open_basedir /home/httpd/html/app2
+</Location>
+
+4.Conceal PHP Libraries
+
+a basic mitigation for stopping malicious access to our server via the website document root directory. SIMPLY put the library code and data in ANOTHER directory on the server, separate from the website root. NOTE this is a basic limit that prevents DOWNLOADING those files (since they are not in the relevant directory- but they won't necessarily prevent ACCESS.   
+
+NOTE, if we take this approach, we will have to SPELL OUT the specific directory location for the library and other PHP code that we need to be included in the executable php code held in the website document root directory
+
+A useful trick is to name all of those website doc root directory files as .php to avoid that they be downloaded. 
+
+
+5. Distrust browser-supplied filenames
+
+IMPORTANT, make a practice of distinguishing the absorbed filename (i.e. the one supplied by the client/host via the browser POST header) from the stored filename that you will store on the server side. This will avoid a client/host browser-supplied name that redirects PHP toward the server's filesystem for malicious purposes (like /etc/passwd or /home/directory/.forward).
+we can use the is_uploaded_file() meth to check on whether the file we have recieved is the same as the one that has been uploaded via the $_FILES POST file upload http mechanism.
+
+$browserUpFile = $_FILES['fileImage']['upFileName'];
+$jarVardFile = $_FILES['fileImage']['jarFileName'];
+
+echo 'Thank you, we are processing the file you have uploaded: {$browserUpFile}';
+
+$fileUpCount++; // this is a counter for the file upload times
+$finalFileName = 'uploaded_Image_Num_{$fileUpCount}'; 
+// the finalFileName var is holding the count of upload times, which it then settles as its name
+	if (is_uploaded_file($jarVardFile)) {
+		move_uploaded_file($jarVardFile, '/web/directory/images/{$finalFileName}');	
+	}
+		else {
+			die('Sorry, there was a problem with the file processing.'); 
+		}
+
+6. Change file permissions  ex-ante
+
+when we create a file, for example one that has been uploaded by the user to a variableJarVar, then placed in our server's database or directly in the web-root directory, the time between this file creation and setting out/modification of permissions can leave a dead-time - a 'race condition'   
+
+use the umask() function to get rid of unecessary permissions straight away at the same time as the file is generated:
+
+umask(077);
+$fileHandle = fopen('/tmp/myFileDirectory/', 'w');
+
+7. vet filenames with realpath() and basename()
+
+To vet, we  fetch the submitted file as usual via  a POST header but we create a separate 'jar' var in which the vetted version of the file is copied into- if it doesn't pass the vetting, then it is not accepted and we send the client/browser user a warning message explaining that the username isn't appropriate. The vetting process itself is done by running the realpath() function, which works out the absolute true direcotry path of the file being parsed and this is itself nested into a basename() function, which extracts ONLY the trailing final name of the file-i.e. discarding any further directories/subdirectories. Then we run a negative equivalent (!==) check to see if the vetted jar var is equivalent to the submitted file var. If it isn't, then the process dies and a warning is emitted:
+
+$subFileVar = $_POST['username'];
+
+$vetdJarVar = basename(realpath($subFileVar));
+
+	if ($subFileVar !== vetdJarVar){
+		die('{subFileVar}' is not an acceptable username);
+	}
+
+ONCE all the vetting is done, we now use the accptable subfile var and include this into our action BUT we still run an escape sequence, to create the intermediation distance- we do this by dictating the filepath directly in writing, followed by the now-vetted subb'd filename:
+
+include('usr/local/lib/relevantDirectory/{$subFileVar}');
+
+
+++++++ SESSIONS
+
+Session Files 
+
+By default, PHP stores files' session information under name of tmp/sess_id - where id is the name of the session and is owned by the web server's user ID which is usually left at default ('nobody')
+
+The issue is that the server 'owns' these session files stored by PHP on the server, and access to them via the server's identity ('nobody') can reach any of these sessions, regardless of which client/host. 
+If you are use a shared server hosted by an isp (like a VPS), php scripts owned and run by other server users will theoretically be able to access your variables storing session files.
+
+A more problematic issue is that all users on the server are able to access the [root]/tmp/ folder thus allowing modification of our own web's temp var/file content
+another server user could, if malicious, then add a session file with spoofing info that passes of as a genuine session file but which is in fact a fake session file.
+
+- a basic mitigation of this threat is to ask the VPS provider/ISP to place session files in your own web root directory which will stop any access to them via the shared /tmp directory
+
+A popular and simple attack relating to session files is the session fixation attack.
+Session fixation is parallel to a session hijack, but isntead of the direct injection of a session token to the user, with the fixation attack, we instead see the initial attack on teh SERVER's session issuing process.
+
+By gaining an anonymous session token from the server, we get a 'leg-up' on the unsuspecting client. We then serve them the session token we have, which they are not aware is actually going through us, instead of through the server. 
+
+Their client/host browser can't tell the difference of this spoofing attack because the session token is legit, it's just the holder of the token who isn't legit. 
+
+The attacker feeds the spoofing fixed session token and the unsuspecting host/client puts in their login details/passwds. 
+
+Now, although this doesn't affect these login details directly, from the point of view of the hacker, this isn't an issue, because they are now holding a previously anonymous session token that has been granted them legit from the website being logged into- but now they illegit hold it and can use to to get into the client/user's account - so log as the client/host doesn't end the session (for example with an explicit logging out).
+
+From the web/server admin point of view, there is a relatively simple and basic fix to this security hole which works on the same principle as randomised MAC addressing- we simply renew any session tokens- to avoid the fixation of sessions and thus disable any ability for a spoofer to 'piggyback' onto a legitimate host/client's loggin (which is fundamentally an escalation of access priviliges). On PHP:
+
+<?php
+	if (check_auth($_POST['username'], 
+	$_POST['username'])){
+		$_SESSION['auth'] = TRUE;
+		session_regenerate_id();
+// regenerate the id AS SOON AS THE CLIENT/HOST llogs in.	
+	}
+?>
+
+++++++ Not 7000 roetgen, 6million
+Eval() is EVIL-  it alows REMOTED EXECUTION OF CODE BECAUSE IT EVALUATES ANY SOURCECODE PASSED TO IT IN ARG1. AVOID LIKE THE PLAGUE.
+
+shell commands: exec() | system() | passthru() | popen() and ` [backtick char]
+
+Note that certain shell-related commands like system() can be disabled from being run in the server environment via the php.ini configuaration settings file : 
+	disable_functions = system;
+
+Generally, the danger of the bash shell is that it allows many special characters/functions like thos above to gain access to important directories, like the /etc/passwd folder. 
+
+This problem occurs especially is we 'jump' out of our php code on the server at some point in order to access the shell (via PHP but using, for example, the escapeshellarg() method).
+
+The simplest mitigation for this potential vuln is to avoid such jumps to the shell and to achieve as many actions as possible within the scope of PHP, not allowing code to 'jump out' to the shell because a crafty malicious actor may manipulate that to get something from the shell.
+ 
+//////////////WEB SERVICES \\\\\\\\\\\\\\\\\\\
+
+Generally we can use PHP as part of a deployment of a RESTful architecture. 
+
+There are several elements of this architecture that are a fundamental for putting the different interlocking parts together. 
+
+Among these are the HTTP protocol headers like $_POST $_GET $_PUT $_DELETE and the general practice of using JSON for inter-comms between front-end and back-end.
+
+We have already seen the coverage of the header requests, for JSON, PHP has an inbuilt coder and decoder: json_encode() [from PHP var -> to JSON object] and json_decode() [from JSON object -> to PHP Var]
+
+these two functions are themselves built on PHP interface class called JsonSerializable which defines a method called jsonSerialize() which is called by the json_encode() meth.
+
+COME BACK AFTER RESTful and SOAP COVERED
+++++++
+
+
+
+++++++
+
+
+
+++++++
+
+
+
+
+++++++
+
+////////////////DATABASES\\\\\\\\\\\\\\\\\\\ 
+
+Usual access is via database specific extension modules but there is also an older method called PHP Data Objects (PDO).
+
+Usual parameters for SQL/noSQl/postGresql/OracleDB internal langs. But with the PDO there is a different environment:
+- based on C
+- has various overlaps with SQL allowing integration
+- fundamentally an extension allow PHP-directed access/manipulation of database content
+-needs BOTH the generic PDO extension itself installed into php.ini config master file AND the PDO extension specific to a particular database (written into the php.ini file as:
+extension=php_pdo.dll
+extension=php_pdo_oracle.dll ) 
+
++++++ Connecting via PDO
+
+first in the source code is declaring a variable connecting to the database of choice using the PDO class constructor:
+template: 
+
+sqlDBConn = new PDO($arg1Dsn,$arg2usernme, $arg3Psswd );
+//arg1 dsn = data source name
+actual deploy: 
+
+$sqlDBConn = new PDO('mysql:host=localhost;dbname=mainDB', 'user1', 'password');
+
+Once the conn_ is established, then we just use a query() method that takes a parameter of the usual SQL/post/oracle/whatever DB language.
+
+$sqlDBConn->query(
+						 'UPDATE whatever 
+						 		 SET etc further commands 
+						 	 WHERE etc'
+						);
+
+As with standard source code, we can 'prepare' DB-related actions to be deployed later in the source code. This is done using the prepare() method, where the arg is like the query() in that there is a sequence of db instruction statemetns but in this case they will not be executed upon being parsed by the PHP parser on runtime exec. Instead they are retained in main memory as associated with that particular var.
+That means that, later on in the source code, we can then execute or specify particular elements of the SQL statements that we want to 'dig out' of the associated var and execute at the appropriate moment. Example:
+
+$DBselectorStatement = $sqlDBConn->prepare(
+											'SELECT *
+												 FROM category1'
+											);
+
+//... source code stuff
+//execute it to do the selection of relevant rows
+
+//...and now, via PHP we can isolate and 'pump out' one row at a time- SAVING RESOURCES AND GIVING US CLARITY + BUFFERING THE DATA. NOTE that we define a new var for each row in arg1 and then use fetch() to grab them one at a time 
+
+while($particularDBRow = $DBSelectorStatement-> 	
+			fetch()){
+//fetch method is simply communicating fetch to the database side which usually has a FETCH command which will pop out the next row of data fthe stack 			
+	doStuff($particularDBRow);
+}
+
+//now we are done with the database, we can 'cut it' for security purposes by making the DB holding var NULL:
+
+$DBselectorStatement = NULL;
+
+We can also make alterations to the DB populace itself via PHP using prepare and insert. The utility of prepare() here is that we can use it as a kind of 'class' function block that lays out which database and which columns/keys what records/rows should be inserted. Then, when the time comes in the sourcecode, we can then deploy the 'instance' of this class using the execute() meth block:
+
+$DBmodStatement = $sqlDB->prepare(
+  						 'INSERT INTO tableName(col1Nme, 
+  						 	col2Nme, col3Nme)'.
+  						 	    'VALUES 
+  						 	(:col1Nme, :col2Nme, :col3Nme)'
+  						);
+// note a shorthand of this works where instead of :colNme notation we just us 'VALUES?,?,?'
+
+//...later in the code we can execute our prepared DB statement
+
+$DBmodeStatement->execute( array(
+									'col1Nme' => 'valuecol1';	
+									'col2Nme' =>  123;
+									'col3Nme' =>  'other val';
+									)
+							  );
+//again there is a short hand here if we use the ? placeholder in the prepare() block earlier:
+
+$DBmodeStatement->execute( array(
+									'valuecol1';	
+									123;
+									'other val';
+									)
+							  );
+
++++++ transactions are those RDBMS actions that require concurrency - for example, when data needs to be entered and withdrawn simultaneously. A famous real-world example concerns bank transfers where a transfer in and out of one account and another should leave no time in between for security and compliance reasons. PHP's PDO structure allows for this if we make use of a try-catch block structure in conjugation with the database-native(mySQL, postGresql, OracleDB etc) COMMIT and ROLLBACK commands which, in php-PDO become commit() and rollback():
+
+try {
+	 		$bankDB = new PDO(
+	 			'mysql:host= 
+	 			localhost; dbName = bankDB'; 
+	 			'myUserName', 'passwrosd70*!"YDE"J:'
+	 		);
+//first catch block for network fail when connection to database
+	catch (Exception $netErr){
+		die(
+	  		'Err_net_failed'.$netErr->getMessage()
+		); 
+	} 
+}
+// first block pinpoints BANK CLIENT A's name and A/C detail and sets out an exception situation in case theres a network error. this is presumably the SENDING CLIENT _sending the money
+
+try {
+
+$bankDB-> setAttribute(PDO::ATTR_ERRMODE, 
+												PDO::ERRMODE_EXCEPTION);
+//setAttribute goes to the database attribute VIA PDO and makes a change to it. Attributes are the way that the DB PRESENTS particular statements - among them including changing caps_status. Here we are modifying the ERRMODE attribute, and in this case we are selecting the EXCEPTION mode of the ERRMODE
+$bankDB->startTransaction();
+
+//now fetch client a money to client b by acount number:
+$bankDB->execTransaction(
+								'INSERT INTO account (acc_id, 
+																			amount)
+									    				values (22324, 
+									    							  '70000')'
+					); 
+$bankDB->execTransaction(
+								'INSERT INTO account (acc_id, 
+																			amount)
+									    				values (32854, 
+									    							  '-70000')'
+					); 
+// move money from one client to the other
+$bankDB->commit();
+//simultaneous execution
+//close try block
+}
+//open second catch for transaction itself 
+catch (Exception $transfErr){
+	$bankDB->rollback()
+	echo 'Sorry, there was an error with the 
+	transfer'.$transfErr->getMessage();
+}
+
+There are multiple interfaces for varying DBs with the PHP PDO extension, one OOP-oriented one for mySQL the most pop DB around is called mysqli. Basically the same.
+
++++++ Fetching from a DB
+
+is essentially the same as modifying the DB contents, except this time we use the DB's SELECT command. As with standard DB work, we can use WHERE to filter certain keys/cols:
+
+$libDB = new PDO ('localhost',
+										'myUserName', 
+					  	 			'passwrosd70*!"YDE"J',
+					  	 			'libDB'
+	 		);
+//note the slight different syntax with mysqli 
+
+//this is equvalent to prepare() meth but now in MySqli we can just create the PHP var and then dump it into the next var which is the execute() equivalent:
+			$dbQuery = '
+								SELECT tb1.whatever
+											 tb2.whateverElse
+								  FROM tbleNme tb1 tbleNme tb2 
+								 WHERE tb1.condition1 = condVal
+								 '; 
+			$queryOut = $libDB->query($dbQuery);
+//this is executing the prepared query using a built in PHP-intermediated query() meth that runs whatever is passed as arg1 as the MySQL-side query.
+			
+//buffer the database data one rendered row at a time:
+	while($rendrdRow =$queryOut->fetch_assoc()){
+		echo '{$rendrdRow['whatever']} is whatever I want from: {$rendrdRow['whateverElse']}.<br />'
+	}
+// fetch_assoc() is inbuilt into mysqli - it fetches the next row of the database rendered as associate array key-value pairings in PHP
+
+// rememeber to CLOSE THE QUERY AND AND AND THE DATABASE LIKE A NETWORK BUFFER FLUSH() FOR SECURITY.
+$dbQuery->close();
+$libDB->close();
+	
+
+++++++ sqlite 
+
+Sqlite is also supported via PHP PDO 
+
+also supports OOP class-based object instantiation  
+one benefit of SQLite is that it's a lightweight DB alternative to Mongo and (my)SQL
+
+launching it is simple: sqlite() meth with arg1 being file location of the sqlite database:
+
+The rest of the syntax is basically the same as the other SQL flavs
+
+One quirk with it is that, in order to be 'lite' t has limited types of data. For example numbers can be either real or int; text is either NULL, Text or blob etc..
+
+++++++MongoDB
+
+Mongo implements a NOSQL type relational DB which are more lightweight and less clunky in terms of commands than the SQL types.
+Mongo thus has quite a different structure to mySql. For example tables are known as Collections in Mongo world and rows/records are known as documents (and in fact documents are not really like rows in the SQL sense, but rather they are more like multi-dimensional arrays with the collection keyname acting almost like a container name and then each of the 24-hex identier tags then holding their own sub-arrays with the separate 'record' values).
+
+because of this array-like structure, it works quite natively with php since we can 'feed' the Mongo-side collections/documents via array constructs where a php var that 'references/points to' the collection's keyname is then itself 'fed' by way of a related array placeholder var which holds each 'document' which is essentially an iteration of an entry into the collection. The same array is repeatedly rewritten but the data outlined in the array is no lost, since the data is being written into MongoDB.
+Every time we want to place this array 'document' into the relevant placeholder var 'collection' then we using either save() or insert(). The only difference between the two meths is that save() will insert a new value but also, if encountering an already existing value, update the pre-existing one.
+
+$mgBooksDB = new Mongo();
+$fullDB = $mgBooksDB->publisher_cat;
+$authColl = $fullDB->authors;
+// the authors collection PHP var points at authors collection within the library of the Mongo DB.
+
+$indAuth = array('
+	         'auth_id' => 1381,
+					 'fullName' => 'John Tavistock'				
+				 '); 
+$authColl->insert($indAuth);
+
+$indAuth = array('
+	         'auth_id' => 1211,
+					 'fullName' => 'Mary J. Keane'				
+				 '); 
+$authColl->save($indAuth);
+//save is same as insert except updaes existing doc val.
+
+Alopngside setting data, we can get/fetch data:
+
+$mgBooksDB = new Mongo();
+$fullDB = $mgBooksDB->publisher_cat;
+$authColl = fullDB->authors;
+
+$retrievedRecord = $authColl->
+								findone(array('auth_id'=>1381));
+echo 'Generated Primary Key: {$retrievedRecord['_id']}<br />';
+echo 'Author: {$retrievedRecord['fullName']}<br />';
+
+We can also create more complex multi-array constructs, in order, for example, to set up multiple books related to that author.
+
+
+++++++ file manip
+
+In fact, PHP is quite flexible and fluid so it actually can, within certain limit size requirements, act as a kind of 'overlay database' itself, create directories on the server and fetching/setting data to them. This can be a cheaper alternative (albeit somewhat less secure and definitely less scalable) than a database management system.
+
+++++++
+Note that PHP is very cross-platform but for almost everything it works better on unix.
+One exception is with interfacing with windows-native apps like WORD or POWERPOINT. PHP has an integration with the Windows COM REMOTE PROCEDURE CALL. If we are running this call on a COM Server/Object - i.e. a programme like WORD- on a local machine its a COM, if we are connect via a remote connection then its a DCOM (Distributed COM)
+
+COM Servers/Objects can either be inproc (in-process) meaning they are running via a DLL file on a shared OS process or it can be  out-of-process , running on its own process space and is thus considered to be a COM LOCAL SERVER APPLICATION
+
+From PHP, we can use the COM interface/architecture to interact with a word doc for example:
+
+$msWordApp = new COM('word.application') or 
+					die('Couldn\'t open Word');
+	echo 'Opened Word, version {$msWordApp-
+				>Version}\n';
+$msWordApp->Documents->add();
+//opens empty word doc
+
+$msWordApp->Selection->typeText('Whatevers');
+$msWordApp->Documents[1]->saveAs(c:/home/
+									 Documents/'php_test.doc');
+//NOTE THE NON-base0 indexPos
+$msWordApp->quit();
+//exit word
+$msWordApp = null;
+clears memory of this COM-linked MS Word var
+
+
+
+
+++++++
+
+
+////////////   \\\\\\\\\\\\\\\ 
+
+
+
+++++++
+
+++++++
+
+++++++
+++++++
+++++++
+
+++++++
+++++++
+++++++
+
+++++++
+
+
+///////////////   \\\\\\\\\\\\\\\\\\\\\ 
+
+
+++++++
+
+++++++
+
+++++++
+++++++
+++++++
+
+++++++
+++++++
+++++++
+
+++++++
+
+
+
+///////////////   \\\\\\\\\\\\\\\\\\\\\ 
+
+
+++++++
+
+++++++
+
+++++++
+++++++
+++++++
+
+++++++
+++++++
+++++++
+
+++++++
+
+
+
+v
+
+
+///////////////   \\\\\\\\\\\\\\\\\\\\\ 
+
+
+++++++
+
+++++++
+
+++++++
+++++++
+++++++
+
+++++++
+++++++
+++++++
+
+++++++
+
+
+
+///////////////   \\\\\\\\\\\\\\\\\\\\\ 
+
+
+++++++
+
+++++++
+
+++++++
+++++++
+++++++
+
+++++++
+++++++
+++++++
+
+++++++
+
+
+
+

@@ -1,0 +1,649 @@
+/********************CompTIA+ Notes*******************************************/
+
+            ////////////CHAPTER 1\\\\\\\\\\\\\\\\\
+
+GLOSSARY
+
+-PII = Personally Identifiable Information
+-PKI = Public Key Infrastructure
+
+++++++
+
+CIA Triad: Confidentiality ||   Integrity  ||  Availability ||
+
+Confidentiality:
+
+- Encryption
+Data  is encrypted through cryptographic hashes (ISAAC and Mersenne Twister for
+instance) as well as an algorithm that encrypts the hashed password several times
+(cycles). These include AES and others.
+
+- Access Controls
+Control over user access is a brute but efficient manner to avoid data breaches.
+This can be done via tripartite verification method of the correct identiy and
+access level of the user. This is: 1) Identification - using a login or id, 2)
+authentication (using a password or biometric data), 3) Authorization (granting or
+withdrawing the access of certain data or directories/files to the relevant user)
+
+
+- Integrity
+Integrity ensures that data has not been altered or modified/corrupted. Only
+authorized users should be able to access and modify data.
+This is done via 1) Hashing - for instance in using an MD5, SHA-1 or HMAC Hash to
+ensure the data's integrity.
+2) Another option is the use of digital signatures or certificates.
+   - Digital signatures provide authentication but also conveniently provide non-
+   repudiation meaning that the sender and reciever are obliged to acknowledge the
+   sending of the data as well as validating its confidentiality.
+      - blockchain technology is a type of digital signing.
+   - Digital signatures can require the use of a certificate and can use a Public
+   Key Infrastructure which can allow for the exchange and verification of private
+   keys via a public key middleman.
+
+- Availability
+  This element is required to ensure that data is available as and when required
+  It covers aspects relating to the potential for data loss, data transfer faults
+  or interruptions and also making sure that data is not made impossible to access
+  by the first two letters of the CIA triad - confidentiality and integrity.
+    - Data loss can be protected against via backups, multi-site physical or virtualised
+    redundancies (on-site or online servers, backup servers) and in the most critical
+    cases, using backup power supplies, cooling systems to ensure devices are maintained
+    optimally.
+    -Ensuring data transfer - This is done via both positive and negative elements.
+    Positive elements would ensure a lack of slow down in network traffic via such
+    approaches as load balancing, torrenting or mesh networking- this allows for
+    redundancies and spreading out the data load over multiple servers and networks.
+    In terms of negative approaches, this is done by pre-empting and defending against
+    potential Malware or DDOS attacks that seek to affect the network and servers'
+    capacities.
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+One issue that arises is how to ensure the identity verification process in the
+initial stage. There are several ways to ensure this:
+
+1. The easiest way to do this is via a proof of id request - done either physical
+as is the case with new hires introduced to an IT worker by HR, or via a Digital
+upload of an ID document (passport, driving license etc).
+
+2.Another mechanism for proof of ID is the use of a set of personalised questions
+which can serve to reinforce method 1. For instance questions regarding the users
+personal past the answers for which are stored.
+
+3. Another, more subtle mechanism, is the use of specific network and device
+ifnormation relating to the user- this can be used to ensure the user is logging
+from their habitual or authorised host, as opposed to unauthorised or unfamiliar
+access points.
+
+
+THe issue with these Confidentiality methods is that they may cause some issues
+with ensuring Availability due to human failures (such as forgetting a password).
+Thus organisations often deploye a self-service mechanisms for resetting passwords
+or special personalised information.
+In order to get past the further problem of ensuring the security of the resetting
+process a set of further validating information is dpeloyed. For instance,the use
+of a physical or memorised pin number (personal identification number).
+
+Authentication processes can take on various approaches. They can be based on:
+- Something you know  eg:  password, PIN, login questions
+-Something you are: eye scan biometric, location
+-Something you have: keycard, usb token
+-Something you do: gestures/pattern
+
+
+SOMETHING YOU KNOW
+Basic Password strengthening - long multicharacter 8 plus chars.
+- verify user's identity before allowing setting and resetting of a password
+
+-change defaults (this can be forced by setting an initial use policy for the user
+enforcing a change of password upon initial use)
+- using an overly complex password is ironically insecure because it leads to a
+tendency to write down the password and then this can be lost relatively easily.
+
+ALongside such preventative measures, there can be further measures taken that
+ensure maintaining authentication security:
+- lockout policy if too many failed attempts
+-regul changes perhaps every 45 days or 2 months.
+-no sharing (although human failure is to be expected)
+-no reuse (this can be avoided by using a password history database tool-
+this can be set to rememebr a certain cycle of a number of passwords)
+-deploying a previous login information (including geolocation) notification
+
+SOMETHING YOU HAVE
+
+This can include smart cards (id keycards) which have an rfid microchip or NFC
+microchip. Usually these would be encrypted in an embedded manner with an
+embedded certificate that holds a private key issued to the user and tied to the
+card. This is then matched to a shared public key.  A card can also have a range
+of further means of authentication beyond the simply cryptographic and radio
+communication means. For instance, it may hold personally identifiable Information
+such as a picture of the holder thus allowing for physical identification. Or it
+may also hold biometric data that can be matched with the user's facial features.
+
+A simpler version of the id keycard is the USB or token key. This is used in sync
+with a server that holds a particule PIN that is used every 30 seconds or 60 seconds
+the pin is then recycled into another pin. The holder of the token has the correct
+pin when they turn on their token item but this only lasts 1 minute, allowing them
+to use the pin for a two factor authentication but reducing the chances of someone
+being able to access the pin.
+
+HMAC One Time Paasword (HOTP) is an algorithm providing a randomised pin. Used in
+conjunction with a password.
+Time-based One Time Password (TOTP) is also a similar process although in this case
+the pin/password created expires within 30 or 60secs of its formation.
+
+SOMETHING YOU ARE
+
+-Biometrics: prints, eyballs etc.
+-One issue with biometrics is that they can have significant error rates. This can
+include false acceptances/verifications or false rejections. The first is more
+problematic than the second since the first can be a potential security breach while
+the second can be a nuissance.
+
+SOMEWHERE YOU ARE
+
+-This can be done on the itnernet using IP addressing, although evidently there
+can be failures due to IP spoofing.
+-On an intranet, the same can be done using a MAC address (although again there is
+a, albeit lesser, threat of MAC spoofing.)
+
+SOMETHING YOU DO
+
+-Weak overall.
+
++++ Note that a combiantion of any of these TYPES of authentications is considered
+multifactor authentication.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+AUTHENTICATION SERVICES
+
+Several authentication services are available. These include:
+
+KERBEROS
+-The widely used Kerberos service deployed using Docker or other deployment
+environments.
+    This was developped by MIT under the concept of creating a mutually authenticating
+    environment:
+        Achieved via a Key Distribution Centre which deploys a complex process to
+        grant tickets that grant further tickets (TGTs) .The server (KDC) packages
+        encrypted user credentials within a ticket. These tickets provide authentication
+        for users as they interact with the centrally issued tickets.
+
+        Kerberos also introduced a time element after version 5. This requires all
+        hosts interacting with the central server to be synchronized within 5 minutes
+        of the server's time. This is done to avoid a so-called replay attack in which a
+        third-party may impersonate a previously issued ticket (for example by compromising
+        one of the host machines). Using a time-element limits the chances of repeating
+        access to the central server with its secured files and directories by changing
+        the tickets every day, every few hours, or every week.
+
+        Another tool to limit abuses of ticket use can be ensured by building a database
+        of hosts interacting correctly with the kerberos KDC server.
+LDAP
+- Another authentication mechanism is the LDAP and Secure LDAP option:
+    - LDAP (Lightweight Directory Access Protocol)
+        - Basically a compartmentalised directory to allow access to a URI from
+        authenticated users.
+        - THe basic LDAP is not encrypted and instead works by assigning a Specific
+        address to a user withing a specified domain (which can be internal intranet)
+        - SLDAP (Secure LDAP) does encrypt. It uses TLS to the session before data
+        transmission.
+        -SLDAP v2 uses Secure Sockets Layer (SSL) encryption but SDLAP v3 reverts to
+        TLS encryption.
+
+-Yet another option, and a much more popular one, is the SSO (Single Sign-On session)
+
+SSO
+SSO can be used in combination with other practices or methods in order to increase the
+confidentiality (c) or accessibility (s):
+
+One of these methods is the use of federation on wide area networks and especially interacting
+networks such as two alternating but linked infrastructure. This basically ensures that the SSO login is done
+from within a group of assigned federated identities that cna then be recognised as a "whole" by the
+other network instution.
+
+Another method is SAML (Secure Assertion Markup Language) which is derivative from XML
+markup language a cousing of HTML. This markup language allows for protocol that ensures
+the single sign-on process is ensured so long as the user stays within the portal pages
+which are marked up with SAML. This is done by verifying the identity of the :
+1. Principal (the user)
+2. Identity provider - protocol
+3. Service provider - backend server
+
+VPN/ Remote Access Service (RAS)
+
+At the core, this is a virtual dial up to a remote server which will "tunnel" the
+connection through the server. The authentication of the VPN connection can be done via:
+
+1. Password Authentication Protocol (PAP)- NOTE This is problematic because it sends the
+passwords in plaintext (unencrypted). Deprecated tech used in dial up in the old days.
+
+2.Challenge Handshake Authentication Protocol (CHAP)
+  Essentially uses a secret information to challenge the user connect to a server- the
+  server has the challenge answer. But in this case, unlike the PAP password, the
+  challenge answer is communicated by the host to the server via  a hash which is based on
+  a nonce (number used once) sent to host by server upon communcation.
+
+3. Microsoft Challenge Handshake Authentication Protocol (MS-CHAP)
+   Same as ChAP but the MS implementation= also quite Deprecated.
+
+4. Remote Authentication Dial-In User Service (RADIUS)
+  Essentially this is a centralised server that interacts with a range of "sub" servers
+  nthat provide initial authentication for the hosts. The hosts first authenticate with
+  the sub-servers and then this authen request is passed on to the central server which
+  holds the central database (or is coonnected to further servers) with the list of
+  authenticated users.
+5. DIAMETER
+  This is simply an extension of RADIUS which implmenents Extensible Authentication Protocol (EAP)
+6. XTACACS (Extended TACACS)
+  This is the Cisco proprietary  authentication protocol.
+7. Terminal Access Controller  Access-Control System + (TACACS+)
+  This is the Cisco alternative to the Radius/Diameter service.
+  It has two benefits: unlike radius it encrypts the entire authentication processes
+  (whereas radius only encrypts the password)
+  Second TACACS+ uses multiple secret challenges when authenticating.
+  TACACS+ can interact with Kerberos and Microsoft Active Directory, despite being
+  a proprietary Cisco service. This allows for interaction with large scale networks.
+  One potential use of TACACS+ is to authenticate the hosts seeking to connect to a
+  network ahead of connection to the LAN via router or switch. The TACACS+ service
+  can present the host with a configuration page in which they need to authetnticate
+  their identity before thereafter connecting to the LAN.
+
+
+                        ////////////CHAPTER 2\\\\\\\\\\\\\\\\\
+Risk Reduction Control Methods:
+-Risk Assessments:
+  -Qualify and Quantify Risks in organization
+  - Risk and impact assessments with both monetary as well as technical impacts.
+-Vulnerability Assessments:
+  -Check for current network weaknesses and vulns. Similar to bug bounties in
+  software development.
+  -security audits can check for any vulns/comprised systems.
+  -log checking by a network security member of staff can check if the systems
+  have been compromised or entered without authorisation. It can also check for
+  attempts to access info from within without authorization.this is more a
+detective measure.
+  - network and systems monitoring - especially trend analysis of the type provided
+  by Intruder Detection Systems (IDS') can act as a more preventative measure.
+- PenTesting:
+  A kind of active attack on a network to check for vulns. There can a varying range
+  of level of attack- include a full scale red-team excercise.
+
+-Operational (staff) Level:
+  -Awareness and Training of the staff and protocols. Reducing risks of data or
+  authentication information loss. (clean desk policy- use of physical security
+  measures)
+     -awareness of social engineering tricks. Awareness of need to patch and update.
+     maintaining confidentiality especially of authentication. good security practices
+
+  -hardware/software config management - basically can "harden" the OS, Software or
+  physical limits on hardware access/modification.
+    -Reducing functionality and disabling unecessary services of the OS, software
+    and hardware in order to ensure security physical means to protect passwords
+    and other authentication. Forcing users to change their passwords every 60 or
+    90 days etc...
+  - media protection - limiting access and use of media (hard disk, usb etc)
+  -contingencies - planning for worst case scenarios, system outages, breach protocols
+    -backups of data, redundancy of servers, system recovery procedure.
+  -physical and environmental = cameras, locks, security guards, heating/cooling, shutdown
+   ventilation.
+      - Security guards can deter many attacks - especially the social engineering ones
+      (except the best ones) because they can lock down the premises physically.
+      -cable locks can be implemented on hardware- ensuring that interfering with hosts
+      is a difficult and time-costly effort.
+      -use of cameras can be both detective and preventative since it can be used to identify
+      breaches, insider threats etc. motiondetectors and even heat signature detection in
+      most paranoid cases..
+      -doors can be locked using a range of potential security measures- from the simplest
+      ones that could use a simply keylock to the more complex to crack biometric locks.
+      -secure rooms/areas/perimeters
+      -server and network rooms secured or even entirely apart in a separate compound
+      -general perimeters with potentially high level guarding (dogs, traps, electric fence, patrols)
+      -
+
+
+
+
+                        ////////////CHAPTER 3\\\\\\\\\\\\\\\\\
+
+
+
+                        ////////////CHAPTER 4\\\\\\\\\\\\\\\\\
+
+
+                        ////////////CHAPTER 5\\\\\\\\\\\\\\\\\
+
+
+                        ////////////CHAPTER 6\\\\\\\\\\\\\\\\\
+
+
+                        ////////////CHAPTER 7\\\\\\\\\\\\\\\\\
+
+
+
+                        ////////////CHAPTER 8\\\\\\\\\\\\\\\\\
+
+
+
+                        ////////////CHAPTER 9\\\\\\\\\\\\\\\\\
+
+
+
+
+
+
+
+////////////****FROM THE IP SPECIALISTS BOOK***********\\\\\\
+
+
+Lesser known vulns that stand out :
+- Weak cypher suites (deprecated encryption algos)
+-Buffer vulns (memory or buffer overflow (also known as buffer overrun- caused by code error or
+excess mem use in the buffer, can crash system or provide entrance for hacker),
+buffer injection, memleak (when mem is opened up by
+software but is not closed thereafter, allowing for crashing the system based on
+using up all available mem on the machine via this loophole)
+- DLL injection (Dynamic Link Library , used in Windows systems) injects libraries via a
+program (either airdropped program or exploiting code vulns) - creates an entry point for
+mal_actors
+-pointer de-reference = mal_actors can exploit code to derefer a particular memory allocation
+in an os or program in order to crash it or cause denial of service.
+
+
+PREVENTION METHODS:
+
+- Firewalls
+    - Can be stateless or statefull:
+          - Stateless doesn't have smart capacities and is more brunt. It simply blocks or allows
+            certain addresses or ports.it is static.
+          -The statefull firewall instead blocks but also learns to recognise certain ip addresses or ports
+          under the current "state" or "session" it will deploy a "basket" of session ids that are to be
+          accepted and allowed. It is therefore dynamic.
+
+    -modern firewalls deploy several further instruments to pick out behavioral patterns of attackers:
+        -This includes the deep-packet inspection software, or application layer gateways which inspect
+        traffic application by application.
+        -Access control lists can be generated from the firewall's activities via an access control list.
+        -logical path queries can get the firewall to undertake a checklist from one higher priority to a
+        lower priority or via other logics of inspection.
+            - Rules can be given to the firewall to tell it to either:
+                -specific or general rules based on the applciation , port or concept.
+                -implicit deny rules : if the firewall goes through these pre-written rules and still finds apps
+                or ports open then it can be told to automatically "clean up" or shut any remaining apps/ports.
+            - A DMZ can be deployed to place connections to unknown or untrusted entities which can include
+            certain ports that are more insecure. one benefit off the DMZ is that it slows down and complicates
+            their attempts to map out the network and its devices because they will stuck for a while in the DMZ.
+            -Deep packet inspection can be deployed. This can include traffic inspection on certain ports
+            and even limiting access to all TCP-UDP connections inbound and outbound as a kind of "throttle" on traffic
+            which can limit the potential for DoS attack.
+            -At the end-user level, the hosts can deploy antivirus software which acts as an IPS/IDS (intrusion prevention
+            and detection system).
+
+NETWORK INTRUSION DETECTION AND prevention
+    -NIDS
+        -filters IP addresses
+        -can force a TCP connection to close immediately by forging a FIN packet
+        -sends entries to a log file
+        -launches a separate program to handle events
+
+        Unlike NIDS NIPS will have both detection and prevention embedded. It is therefore more useful
+        in "frontline" deployments on end-user hosts. NIDS, on the other hand, focusses on detection and
+        logging. This means it is best deployed in a central server that gives the network admin a "bird's eye
+        view of the events and connections inccluding malicious ones. some further deployment differences:
+
+          -THe NIDS will be deployed only in the central server location and will only recieve reports of
+          each packet as a copy of them. In contrast NIPS will be deployed on the network connections downstream
+          from each server and host.
+          -Thus, the NIPS has an in/line or "wiretapping" approach to inspection whilst the NIDS has a
+          Promiscuous one (presumably meaning it takes in reports/packet copies from all directions)
+          -Because the NIPS taps the line, it can cause delays and can even cause a point of failure due to
+          its inspection of the incoming packets. It can make a mistake or be delayed by malicious traffic
+          and thereby create a logjam, In contrast, the IDS only recieves copies and therefer cannot cause delays
+          and it cannot be considered a point of failure.
+          -The NIPS can immediately stop traffic and drop packets if it recognises an attack (in real time). In
+          contrast the NIDS cannot immediately put an end to an attack but it can "learn" and analyze the packets
+          and reports and thereby instruct NIPS to avoid any future malicious packets.
+          -NIPS can perform packet manipulation and redirect traffic (for example to DMZ) but NIPS cannot manipulate
+          since it only has copies of packets.
+
+
+    -NIPS can use four approaches:
+        -Patterns,
+        -Stateful ,
+        -Protocol,
+        -Statistical/heuristic
+        -traffic anomaly
+
+
+ROUTERS AND SWITCHES
+
+Certain standard techniques can help secure routers:
+
+  - disabling unused rourter interfaces (i.e. UPnP)
+  -Disable unused services such as CDP, FTP
+  - disable management protocols that are not being used: telnet, SMTP
+  -Disable redirecting techniques like ICMP redirects and IP Source routing
+  - Disable tools that can be exploited for probing and wifi scanning  like Finger, ICMP unreachables
+  and ICMP mask reply.
+  - Ensure deployment of secure measures such as IP identification and TCP KeepAlive messages
+  -disable gratuitous ARP and proxy ARP
+  -disable IP-directed broadcasts
+  -Enable SSH for access to the router
+  -Enable Unicast RPF on outside interfaces
+  -set users
+  -enable logging
+  -set enable secret password (admin password)
+  -disable IP source route
+  -enable password encryption service
+  -use secure protocols
+
+  For Switches:
+
+  - change default passwords
+  -enable logging
+  -use secure protocols
+  -configure AAA
+  -configure management VLAN
+  - network segmentation
+  -Enable SSH
+  -configure management IP addresses
+  -configure port security
+
+
+Proxies can be deployed to act as a URL filterer, for extra
+layer of security:
+-explicit proxy will need to be configured on each user host
+-transparent proxy -  doesn't require configuration, on the user host since
+it works in the background.
+
+  Proxy types:
+  -Application proxies: NEtwork Address Translator- Work with one or more applications to proxy that app's traffic
+  -forward proxy - inside the network and can help users more securely navigate the internet from within their host machine
+  using the URL filters.
+  - reverse proxy - controls what traffic comes from the other side of the network connection- filters URLs as they arrive
+  toward the host.
+  - open proxy  : third party proxy, not controlled by the owner or host. Can pose a security issue since you have to trust them-
+  it is most commonly used to proxy the existing security controls, blocklists or even to circumvent the company proxies themselves.
+
+
+Load Balancing :  basically distribubtes traffic between servers - allows for network data balancing, avoids single point of failure,
+mitigates DDOS attacks.
+      Scheduling is done from the central "load balancer" server using the following methods:
+          - Affinity: basically "whitelists" some users, hosts, ips in order to create a certain "fast track" or multitracks of traffic
+          between the sub-servers and hosts.
+          -Round Robin: Cycle or rotation between servers- equally distributing traffic from one sub-server to another based on whichever
+          algos are deployed. More complex algos will take into account the data load on each server
+          - Active-Passive  : active-passive load balances- two load balancers, one actively balancing, the other is monitoring the data
+          and takes over if ative balancer is overwhelmed.
+          -Active active - two balancers, both sharing balancing duties- avoids single point of failure.
+          -Virtual IP - The load balancer server does not actually need to be assigned a physical IP. It can reflect the IPs of each of the
+          sub-servers and adopt them whenever it is in connection with them and external traffic via a virtual IP.
+Access POints
+    -SSID  -identified - disabling or hidng doesnt actually hide it.
+    -MAC filters - filtering based on physical address. Easy to spoof and circumvent.
+    -Signal strength - reduces power of the signal, useful for proximity attacks.
+    -Bands - 2.4Ghz or 5Ghz : doesn't make much different. 5Ghz is less strong and distant.
+    -Antennas = Omnidirectional or directional (focused beam) Yagi antenna also can find long distance speccific focus beam between 1 to even 5 miles.
+    -Fat vs. Thin thick are more smart, recognising and adapting to connections. Thin are less smart.
+    -Controlled vs standalone  - thick or fat access point is standalone. Includes encryptoin, authentication and channel/degree managemend.
+    The controlled one has all the above but also provides load balancing and easy patching .
+    -WAP
+        - SIEM (security information and event management)
+                Examples of such software includes:
+                -ArcSight express
+                -McAfee ESM
+                -IBM Security QRadar
+                -Splunk Enterprise
+                -LogRythm
+            -Logging: This software allows more in-depth logging.
+                  - provides a centralized database that brigns data from all acccess points and hosts to a single device.
+                  - provides monitoring and security alerts.
+                  -stores logs
+                  -provides some statistical or heuristic analysis allowing for data correlation.
+              -challenges
+                  - one challenge with synchronizing all of these servers, hosts and network points is the need for time synchronization between
+                  devices.  This can be done using a "NTP" Network Time Protocol. NOTE detecting synchronization is actually telling hackers That
+                  servers are load balanced.
+              -transfer
+                  -SIEM software allows for transferring logs. Particular sensitive organizations will use single use recording hardware; for instance
+                  instead of deploying a USB, it will deployed a DVD-R.
+            -DLP (Data Loss Prevention)
+                -USB blocking  = can block removable mass storage (USB-Universal Serial Bus) in order to avoid worms/trojans .
+                -Cloud-based DLP   - can avoid data loss by uploading and downloading with servers. Howver, can be insecure.
+                -Email DLP = monitoring email ingoing outgoing based on ips and even content analysis (especially on attachements)
+    -NAC (Network Access Controls)
+         - Dissolvable = deployed upon demand and then removed as hoc
+         -Permanent = Permanent Network access controls allow for more fixed blocks and are pre-deployed to endpoing users (hosts)
+         -health check = check the host before providing access to the network- for isntance deploying an antivirus scan ahead of authenticating network access
+         -Agent status = Agent-based NAC means a host has access to the network via an authentication process that is stored on the host and runs when the host
+         connects to the network . Agentless network access works with a central server that identifies user-per-user basis authentication on a host and thereby
+         grants network access. Checks are performed parallel to the user login into the host machine and when they log off the access is cut off- it is not
+         permanently locally stored on the host and cannot be scheduled (for instance, providing a certain time-period for network authentication password to be
+         valid) - an example of this is through Windows Active Directory .
+    -Mail
+        -Gateways
+            -Spam detection  based on IPs and the following :
+            -whitelist - trusted users, locations, ip /
+            -SMTP standards -blocks anything that doesn't follow RFC standards .
+            -Reverse DNS - rDNS -checks domain name from which the emergent mail is coming.
+            -Tarpitting = slows down the connection to specific habitual offenders in order to dissuade .
+            - Recipient filtering - blocks emails that are not from a valid recipient (eg within organization or specific domains)
+    -Bridges = Network segregation device- working at OSI Layer 2 (data layer)
+        -SSL/TLS = SSL accelerator can help when there is a wide area network including hundreds of servers. It can ensure that data encryption is done efficiently
+        accross all of the sub-networks.
+        -SSL decryption = decrypts the data reaching a site from a browser, inspects the data and then re-encrypts it in transit.
+    -Media Gatway = connects from PSTN then converts to VOIP (Voice over Internet Protocol) to be used with internal company VOIP lines. (secure phoning in)
+    -Hardware Security = A secure module that stores crypto keys and security backups for a range of servers and internal certificates (ensures physical security behind net sec)
+
+
+
+            ///////////CH2\\\\\\\\\\
+
+
+-Protocol analyzer  (i.e. wireshark)
+  - captures packets
+  -solves application issues (connecting)
+  - allows to see traffic patterns
+
+-Network Scanner - (Nmap, also Netcat)
+  -detects which services are running
+  -notes the OS
+  -notes non usual (rogue) hosts
+  -visuals of the networks
+
+-vuln scanner (notes network vulns as updated)
+-config scanner  (notes correct configs on the host/server)
+-data sanitization (overwrites etc )
+
+-passive tools (work passively in background- for example TripWire which notifies admin of changes to hashes on files)
+-wireless scanners (like aircrack-ng)
+
+CMD sec tools:
+- pinging tool
+-netstat  -a all connections -b show  binaries - n don't resolve names
+-traceroute  -determines packet route In windows CMD it is: tracert
+-IPconfig (linux) - Ifconfig (windows)
+
+ARP -A show all arp table conns.
+
+tcp dump = dump packets on cmd (to vi)
+
+
+IDS/IPS are usually packaged in endpoint sec via antivirus/firealls on hosts.
+Can work in four domains:
+-File System Monitoring - hashing checks, examining file changes
+-Log Files analysis - generating warnings for net and sys admins about unexpected events
+-Connection Analysis - checking networks, open ports, devices connected on the (W)LAN.
+-Kernel level- analysing any changes in kernel binaries as a result of rootkit attacks
+
+
+Secure protocols
+-SRTP = Secure Real-Time Transport Protocol (Secure RTP)
+    -VOIP but with AES encryption
+    -Uses HMAC-SHA1 meaning that authentication integrity is verify and protection deployed
+    against replay attacks.
+    -Thus avoids a MiTM attack.
+
+
+NETWORK BEST PRACTICES/ARCHITECTURE:
+
+Questions about OS being deployed, Defense in Depth or layered security, diversity of vendors
+and control mechanisms, to avoid being overwhelmed by a single point of failure in terms of one
+brand failing or being penetrated.
+Admin policies and access controls/procedurs and technical controls.
+Training.
+
+Deploying a DMZ is one technique to create a kind of grey zpone in which malicious traffic can be
+guided toward and dealt with/recognised.
+    -A private version of the DMZ can be created, otherwise known as an extranet.
+
+An intranet is, evidently, an internal network for authenticated hosts only- sometimes coonnected
+to using a VPN.
+
+An Ad-Hoc network is a much less secure system which allows easy network between devices, without
+an intermediary access point.
+
+A honey net is a type of DMZ that is specifically intended for attracting and capturing malicious
+actors- it is a vitrualised network (fake network).
+
+Netwrok Address Translation (NAT) is basically the system of IPv4 or IPv6 network addressing on an IP
+level.
+
+VPNs allow for encrypted comms between hosts and networks, or between hosts directly via host to host
+on-device encryption.
+
+Sensors and collectors collect information at critical parts of the network to monitor trafic,
+connections, the state of physical devices and whetehr they are on or off.
+
+
+Proxy servers allow a filtering of IPs and websites - for worker safety. Some workers may decide
+to deploy non-internal third party proxies to circumvent these blocks- which can cause potential
+infection risks.
+
+SSL/ TLS etc - encryption protocols.
+
+Load Balancers mitigated DDoS risks and balance out network loads.
+
+DDoS mitigator can be deployed can filter high data flows to avoid denial of service.
+
+A Test Access Point (TAP) and Port Mirror can be dpeloyed at key network nodes to make copies of
+activity on one or multiple ports as a means of making analytical copies of traffic for future understan
+A SPAN (Switch Port Analyzer) allows for copying of port traffic also, as with TAP, but there are some
+differences:
+TAP                                             SPAN
+Test Access POint                             Switch Port Analyzer
+Can't monitor intra-switch traffic            can't handle full duplex links without dropping packets
+costly                                        low cost
+Doesn't drop packets                          remotely configurable from any system connected
+Full visibility of the networks               filters out physical layer errors
+
+
+HOST SECURITY
+
+-FDE (Full Disk Encryption) -
+-TPM (Trusted Platform Module)-on the hardware level - becomes a trust point of storage for all encryption keys
+-HSM (Hardware Security Module) - usually an external key like USB which provides a place for backing up
+the main cryptographic keys of the server/host. It usually also has its own inbuilt tamper protection mechanism,
+to avoid attempts at accessing the backups stored on the USB.

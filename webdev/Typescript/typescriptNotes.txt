@@ -1,0 +1,530 @@
+///////////////// TYPESCRIPT NOTES \\\\\\\\\\\\\\\
+
+usual JS rules on assignment, binding etc.
+as name suggests, primary difference is the TYPE DECLARATIONS.... typescript is a java-like strict type-checking overlay on the looser JS.
+
+declaring a number type and then defining it with string chars will throw an exception:
+
+var myNum: number = 4;
+// this is find but...
+var myNum: number = 'Cool'; 
+// throws an error.
+
+TypeScript types are:
+
+NUMBER - ints and floats
+STRING
+BOOLEAN 
+ARRAY<string> - this one will be an array of whatever 
+				type is signalled by the <generics> 
+				flag
+ARRAY[] -  this is assumed to be a NUMBER ARRAY
+TUPLE[boolean, string] - this is a logical tuple with 
+						 boolean true/false as key, 
+						 string as value
+TUPLE[number, number, number] - tuples always need 
+								three nums if num-
+								only
+{} - object declaration, the object can thereafter have it's characteristics defined -  this is the loosest of the types. examples:
+ - {stringKey: firstname, stringKey: lastName, 
+    numKey: 34, numKey: 23, stringKey: Darling Road, 
+   	stringKey: Winchester}
+ - in dictionary form: 
+ 	{[key1:value1],[key2:value1] etc..}
+
+enum {firstStrValueEnumD: 1, secndValNotNumD, thirdValueNotNumD, fourthValEnumD: 2};
+
+function declarations done in shorthand and weird way because the objects AND the meths need to have a type declaration. More later below.
+
+NOTE that TYPE BINDING ASSIGNMENT IN TYPESCRIPT IS DONE USING COLON : NOT THE = .
+STANDARD VALUE ASSIGNMENT STILL DEPLOYS THE =
+ 
+
+
+//////////////////CORE TYPES \\\\\\\\\\\\\\\\\\\ 
+
++++++++ STRINGS
+
+strings can have custom template literals imposed on them using the declaration format  (i.e. colon :)
+NOTE that once set, they cannot be overriden - any attempt at trying to assign a different type-value to the custom literal will throw an exception.
+
+let stringLiteralVal: 'custom type string';
+stringLiteralVal = 'custom type string'; // ok
+
+stringLiteralVal = 'different value'; //NO BUENO
+									// throws error
+
+NOTE we can assign multiple values in this way, similar to ENUM bindings by prefacing our custom string binding with the TYPE keyword, telling TS that we are creating our own custom type: 
+
+type stringLiteralCustomSet =  'firstCustom' | 'secnd 
+								Custom' | 'another 
+								custom now set'
+
+The utility of TS shines through here- the creation of FULLY custom types means that we have even more SEMANTIC FLEXIBILITY while simultaneously having SYNTACTIC RIGIDITY in contrast to vanilla JS.
+
+For example, an META-OBJECT TYPE can be designed and syntactically we can impose strict controls on its TYPE and the values that are acceptable to it when we create it as a class. Then, we can deploy the usual methods which can, as ususal, be POLYMORPHICALLY INHERITED by SUB-OBJECT TYPES. NOTE THAT THROUGHOUT THIS PROCESS, WE ARE BEING BOTH STRICT AND LOOSE.
+We are STRICT with regard to SYNTAX and acceptable values of the Meta and sub-objects. BUT  we are LOOSE with regard to the flexible SEMANTIC definition and deployment of these objects.
+Example:
+
+// DEFINE HARD CODED SYNTACTICALLY LIMITED TYPES 
+   FIRST
+
+let faveItem: 'book';//colon fixing hard-code typ 
+faveItem = 'book'; //set var's value- var can only 
+					 accept the 'book' value. any 
+					 other like 'DVD' will throw err_
+
+//custom type declarator now: 
+type Objects: 'Book' | 'DVD' | 'PC'; 
+
+//  OBJECT META-CLASS
+
+interface LibItems {
+		object : Objects
+		checkOut();
+		return();
+}
+//   SUB OBJECT SUB-CLASS1 
+	interface Book extends LibItems {
+		object: 'Book';
+		read();
+	}
+//   SUB OBJECT SUB-CLASS2
+	interface DVD extends LibItems {
+		object: 'DVD';
+		play();
+	}
+//   SUB OBJECT SUB-CLASS3
+	interface PC extends LibItems {
+		object: 'PC';
+		use();
+	}
+// BINDING FUNCTIONS:
+
+function itemIsBook(theItem: LibItems): theItem is 
+										Book{
+	return theItem.Objects === 'Book';
+}
+
+function itemIsDVD(theItem: LibItems): theItem is 
+										DVD{
+	return theItem.Objects === 'DVD';
+}
+
+function itemIsPC(theItem: LibItems): theItem is 
+										PC{
+	return theItem.Objects === 'PC';
+}
+
+//   INTERFACE RUNTIME EXEC FUNCT
+
+function action(theItem: LibItems){
+	if(itemIsBook(theItem)){
+		theItem.checkOut();
+		theItem.return();
+		theItem.read();
+	}
+	else if(itemIsDVD(theItem)){
+		theItem.checkOut();
+		theItem.return();
+		theItem.play();
+	}
+	else if(itemIsPC(theItem)){
+		theItem.use();
+	} 
+	else (error err){
+		return error;
+		console.log('Sorry no such item available');
+	}
+}
+
+NOTE just as we can fix the CUSTOM TYPE (as above with type Objects: 'Book' | 'DVD' | 'PC'; ) we can also do the same within a function block with either a number or a string type. We can force the type for BOTH THE INPUT/VARIABLE AND FOR OUTPUT PARAMETERS:
+
+function chooseObject(object: string): string{
+	return `You chose a {$object}.`;
+}
+>> input string 'book' >> You chose a book.
+>> input a number 2 >> throws error.
+
+++++++++ TUPLE
+
+tuples allow for type mixing BUT the order and type declared in the tuple declaration MUST be matched or an error is thrown.
+
+let details = [string, string, number];
+	details = [John, Marks, 25]; // this is fine
+
+function returnDetails(){
+	console.log('First Name: ', details[0]);	
+	console.log('Last Name: ', details[1])
+	console.log('Age: ', details[2]);
+}
+
+>> First Name: John
+   Last Name: Marks
+   Age: 25
+
+++++++++ BOOLEAN
+
+booleans have usual true/false values:
+
+let isTrue: boolean = True;
+let isFalse: boolean = False;
+
+BUT
+
+two interesting Type Script features:
+1. we can set an undefined bool value if we simply don't pass a value to the boolean. 
+
+let nothing: boolean;
+
+2. we can also set a null value:
+
+let isNull: boolean = null;
+
++++++ DEALING WITH NULL 
+NOTE that by default ANY TYPE in TS will allow a null value.
+
+We can impose more SYNTACTIC STRICTNESS by changing the --strictNullChecks config flag to TRUE in our tsconfig.json file.
+In that case, all null values will need to be EXPLICITLY DECLARED forcing us to MAKE NULL AN OPTION, FOR INSTANCE IN THE ABOVE EXAMPLE OF LIBRARY OBJECTS, WE WOULD HAVE TO ADD A 'NULL' OPTION ALONGSIDE THE OBJECTS AVAILABLE to get a null response that we code as final else block function.
+
+
+++++++ NUMS
+
+nums are generically defaulted to floating point, as with vanillaJS
+
+let pi: number = 3.14;
+let one: number = 1;
+
+since ES6 we can give binary and octal values by declaring them and then defining the number: 
+
+let binary: number = 0b10; //0010 in binary
+
+NOTE as with strings, TS is strict about mixing up types when doing calculations. So   function giving tow clearly type cast numbers to be summed up will ONLY ACCEPT NUMBER INPUTS:
+
+function addingUp(a, b){ 
+	sum(a: number, b: number): number{
+		return a + b;	
+	}
+}
+addingUp(1, 2)  >>>  3 
+BUT: 
+addingUp('one', 2) >>> error
+
+++++++++ QUIRKY TYPES:
+
+any is a type that will accept anything, kind of a throwback to the looseness of vanillaJS:
+let anything: any = 'whatever';
+
+void is another type useful for storing a NONE value:
+
+function returnNothing(): void{
+	 console.log('Found Nothing');
+}
+
+++++++++ INTERSECTING TYPES
+
+these are certain types that can be 'forced' or 'constructed' by creating classes that defined the types and then using the custom type declarator to deploy them but this type using & to POLYMORPHICALLY ASSIGN MULTIPLE TYPES TO ONE OVERALL TYPE:
+
+interface Heli {
+	rotate();
+}
+
+interface Jet {
+	spin();
+}
+
+interface Boat {
+	drive();
+}
+
+type Rotor = Heli & Jet & Boat;
+
+function move(means: Rotor){
+	console.log('Rotation is key to movement.');
+	means.rotate();
+	means.spin();
+	means.drive();
+}
+
+++++++++ ARRAYS
+
+arrays declared as usual BUT with typescript we have to declar the type:
+
+let array1: number[] = [1,2,3,4,4];
+let stringArr: Array<string> = ['one','two'...];
+
+to find an array element, we can use the .find()
+the easiest way to deploy is to build a custom function that sets a hard match (===) on the sought for element. then pass that function name into the find(arg):
+
+srchArr(numValue){
+	return numValue === 'one';
+}
+stringArr.find(srchArr);
+>> 'one'
+
++++++++ ENUMS
+
+All enums are default evaluated as numbers. Enums are basically like number-based base0 indexed array:
+
+enum myEnumCollection{
+	First,		//myEnumCollect.0
+	Second,		//myEnumCollect.1
+	Third       //myEnumCollect.2
+}
+
+since TS 2.4, there is the possibility of declaring STRING ENUMS :
+
+enum mimeTypes{
+	JPEG = 'image/jpeg',
+	 PNG = 'image/png',
+	 PDF = 'application/pdf'
+}
+
+Note that we can also use generics when assigning, so we can declare an enum collection member to be part of the <any> type for example:
+
+enum anything{
+	anyFirstArr = <any>[1,3,4,5],
+	anyScndArr = <any>['string11, '90', ''wehat'] 
+}
+
+we can cycle through enum collections with a simple for loop. We create an empty array that will hold our enum values. Because underlying each enum collection value is a numbered base 0 value, the loop checks the existing enum collection for any strict existence === of a number value... then if this holds true, it fills up the array. After that, we loop and console out the array's values:
+
+enum myEnum {
+	one = 'first',
+	two = 'second'
+} 
+
+let placeholdArr: Array<strings> = [];
+
+for(let members in myEnum){
+	if(typeof myEnum[members] === 'number'){
+		placeholdArr.push(members)
+	}
+}
+placeholdArr.forEach(hit)=> console.log(hit))
+
+//////////////////FUNCTIONS   \\\\\\\\\\\\\\\\\\\ 
+
++++++++ VANILLA 
+
+looks like Vanilla JS but with some shortcut expressions AND ONE MAJOR DIFFERENCE- UNLIKE JS, TS EXPECTS EVERY ARG INCLUDED IN THE FUNCTION TO BE ACTIVE. IF WE WANT AN OPTIONAL ARG, WE HAVE TO DECLARD IT TO BE SO VIA ?
+
+default paras simply have their value states in arg parentheses segment: 
+
+function functName(arg1: typecase, defaultArg2 = 'value', optArg3?: typecase) {
+	paras...;
+}
+//note that the opt? args MUST COME AFTER STDRD args
+
+example:
+
+function myFunct(name: string, age?: number){
+	name = whateveters;
+	age = ...;
+}
+
+++++++ FUNCTION INSIDE OF FUNCTION
+
+We can embed one subFunction into a mainFunction, and  that subFunction can be invoked to a constructor meth() inside the main's parameters{} thus allowing us to refer to that constructor within the mainFunctions args segment(in parentheses). That will then 'fill' the value of the embedded sub-function's call to its constructor 
+
+// laid out standard :
+
+//sub function constructor defined as interface. para block defines the name and type of the value to be invoked in main function
+
+interface subFunctCnstrct(){ //2nd_constrInstance
+	new(theInvokedVal: string); //3rd_ValuInvoked
+}
+
+//main Function defined with sub-funct passed in args segment and constructor in para block:
+
+function mainFunct(subFunct: subFunctConstrct){//4out
+	new subFunct('value to be invoked'); //1st_InVal
+}
+
+<< mainFunct('my value out')
+>> <string>'my value out'
+
+
+regarding strictness of interpretation of type i.e. SYNTACTIC STRICTNESS, TS will enforce type checking on args. So if we want to mix types in the args of a function, we can do so but we must declare the different acceptable types using the | OR| PIPES:
+
+function diffTypesAccepted(someThing number|string, anotherThing string|boolean){
+	someThing does stuff; //number or string
+	anotherThing does more stuff; //string or boolean
+}
+
+
++++++++ CLASS AND INHERITANCE
+Inheritance works as usual with the EXTENDS keyword. 
+
+Abstract classes also work as usual, with abstract (static) methods defined but never used by the abstract class. We use the EXTENDS keyword to refer to the abstract class.
+
+abstract class food{
+	constructor(public nationality: string){
+	}
+// note, alongside the constructor meth, the abstract class can also be used to provide a summary of its own properties:
+	summary(): string{
+		return `${this.nationality} makes from from 	
+				this culture`;
+	}
+}
+class sushi extends food {
+	constructor(nationality: string, public type: 
+	string, protected orders:number, protected cost: 	
+	number)
+	cook(){
+		this.type * this.orders;
+	}
+	pay() {
+		return this.cost *= this.orders;
+	}
+}
+
+let ourFood = new sushi(Japanese, sushi, 3, 10);
+console.log(`We are eating ${ourFood.nationality} ${ourFood.type}. We ordered ${ourFood.orders} dishes at a cost of ${ourFood.cost} euros`);
+>> We are eating Japanese sushi. We ordered 3 dishes at a cost of 30 Euros.
+
+++++++++ CONSTRUCTORS and ACCESSORS
+
+note in the example above, that the constructor parameters were auto assigned as we built the constructor function. So we can skip the parameter declarations and immediately declare the in the constructor method.
+Note that when we call the parameters of a super-class, we must deploy the SUPER keyword: 
+
+class subClass extends superClass{
+	constructor (accessMod para1: valueType, 
+	accessMod para2: valueType){
+		super(suprPar1AssgndVal, suprPar2AssgndVal)
+	... do stuff using both sub and super paras...
+	}
+}
+
+++++++++ACCESSORS
+this is just a fancy name for getters and setters. It just requires definition as getter and setter methods that can get and set properties relating to the class instance. NOTE we define these meths inside the class structure, as usual- in order to be able to access them.
+
+class someClass{
+	public someProperty: typeDeclaration = valAssign;
+	protected _constProp: typeDclr = value;
+	
+	someMeth(){
+		this.someProperty do stuff....
+	}
+	
+	get constProp(): typeDeclr{
+		return this._constProp;
+	}
+	
+	set constProp(value: type){
+		this._constProp = calculate or dowhaterver 
+						  setting...;
+	}
+}
+
+++++++++ DECORATORS
+decorators are shorthand referents to functions that can be deployed in a class context when we want to create certain characteristics of a class characteristic. We use the decorator to define the fuction that we then deploy in the context of the class as a means of 'decorating' or better put 'informing' the class' characteristics.
+
+
++++++++ INTERFACE CLASSES
+
+
+
++++++++ GENERICS
+
+
+
+////////////////// TYPE SCRIPT QUIRKS\\\\\\\\\\\\ 
+
+
+
++++++++ TYPE GUARDING
+
+
+++++++ INSTALLING TYPESCRIPT on NODE AND WEBPACK
+
+ 
+
++++++++ TYPESCRIPT MODULES
+
+
+
+++++++++ CUSTOM MODULES?
+
+
+
+++++++++
+
+
+
+
+
+
+//////////////////   \\\\\\\\\\\\\\\\\\\ 
+
+
+
++++++++
+
+
+++++++
+
+
+
++++++++
+
+
+
+++++++++
+
+
+
+++++++++
+
+
+
+
+//////////////////   \\\\\\\\\\\\\\\\\\\ 
+
+
+
++++++++
+
+
+++++++
+
+
+
++++++++
+
+
+
+++++++++
+
+
+
+++++++++
+
+
+
+
+//////////////////   \\\\\\\\\\\\\\\\\\\ 
+
+
+
++++++++
+
+
+++++++
+
+
+
++++++++
+
+
+
+++++++++
+
+
+
+++++++++
+
+
+
+
+

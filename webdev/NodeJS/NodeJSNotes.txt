@@ -1,0 +1,125 @@
+///////////////// NODE NOTES \\\\\\\\\\\\\\\\
+
+//////////////////FUNCTIONALITY \\\\\\\\\\\\\\\\\\\ 
+
++++++++ CREATE MODULE
+
+to create module via npm, we first mkdir and cd into it. then (option with git fired up first) we launch npm via NPM INIT - this will lead to a prompt asking for npm version as well as test framework to be used and github repo, license type etc.
+
+All of this will create a packages.json file which will have the relevant details about this npm created node package
+
+
+With the packages.json file sorted inside of our node project directory, we can now install relevant modules such as the AXIOS library for instance, or REACT or ESLINT library etc. we install with NPM INSTALL. We can optionall add flags like the --save flag which tells NPM that this library is to be saved as a dependency in our packages.json file - the point of this is to let all other devs to see what packages have been install and are being used by you.
+
+NOTE that if we add another flag after --save the --dev flag, this will tell NPM that we are saving the dependency as a dev dependency ONLY- meaning that when moved to the production environment, these dependencis won't show (they are only there for development purposes).
+
+the -g flag will tell NPM to install the dependencies on a global scall (i.e. machine wide and not limited to one package directory).
+
+to uninstall a module use un ... module name
+audit...modul name will scan the module for sec vulns.
+
+
++++++++ PROCESSES AND CHILD PROCESSES
+
+creating a child process is part of multi-threading. In Node, we can achieve this by creatinga child process directory
+
+COME BACK 
+
+
+++++++ ASYNC CODE
+
+
+
+
+
+
+
++++++++ WRITE WEB SERVER
+
+NODE server can be served up in several file forms html/json/csv etc
+
+we need to mkdir a relevant directory that will contain the servers files including the index.html/php
+
+a core file of this dir will be the myServer.js file, which will tell NOde to do the listening on paritcular port and via http/s protocal for connection SYN requests. This can be written in HTML, JSON CSV etc. But in HTML: 
+
+/myDirectory/myHTMLServer.js
+
+const httpsConn = require('https');
+const theHost = 'localhost';
+const thePort = '8080';
+const statusCode = response;
+
+//create a TEMPLATE FUNCTION HERE>> TO BE USED IN THE RELEVANT JS SCRIPT THAT WILL SERVE UP THE INDEX ETC...
+
+const expectRequest = function(request, response){};
+
+
+//createServer is inbuiltFunction of server object.
+const myServer = https.createServer(expectRequest);
+
+
+//again listen is an inbuilt method of the SERVER OBJECT i.e. server.listen()
+myServer.listen(thePort, theHost, ()=>{
+		//note the callback funct for arg3 which 			
+		specifies CONNECTION STATUS/ERROR
+		if statusCode !== 200 {
+			connErr = new Error('Connection Failed' + 
+								statusCode);
+		else {
+			console.log('Connected Successfully.');
+		}
+	}
+);
+
+Once the server js file is set up, we can then set up the relevant index.html or other files to be served up to client in the SAME DIRECTORY
+the related JS scripting file will link our server config js file to the html index file (which itself is linked to whatever other pages).
+
+NOTE, we have the option of deploying the template funct (namely const expectRequest = function(request, response){};) directly. But doing this means that EVERY REQUEST WILL INSTANTIATE A NEW OBJECT. THIS IS NOT EFFICIENT AND CAN'T HANDLE LARGE TRAFFIC. So it's best to refer to this one template by creating a CONST var that 'wraps' this template function, thus linking our scripting js file to the myServer.js file in the same directory: 
+
+/myDirectory/serveItUp.js
+
+const serverLink = https.createServer(expectRequest);
+
+//filestream reader now invoked to start up serving our index.html file to the client.
+
+//NOTE also the async chained  promise.THEN structure. if promised file reading is successful, then the contents of the file will be read
+//NOTE dirname is inbuilt NAMESPACE LOCATOR- basically just telling us where our directory is: 
+
+fs.readFile(__dirname + '/index.html')
+	.then(contents => {
+			indexFile = contents;
+			server.listen(thePort, theHost, ()=>{
+				console.log(`Success! Server is 
+				running on https://{$thehost}:
+				{$thePort}`);
+			});	
+	})
+	.catch(err => {
+			console.error(`Failed to read file due to 
+						  error: {$err}`);
+			process.exit(1);
+		}
+	);
+
+++++++++ HTTP CLIENT 
+
+
+++++++++ BUFFER
+
+
+++++++++ FILES
+
+
+++++++++ 
+
+
+
+//////////////////TESTING \\\\\\\\\\\\\\\\\\\ 
+
+++++++ MOCHA
+
+
+++++++ CHROME DEV TOOLS
+
+
+

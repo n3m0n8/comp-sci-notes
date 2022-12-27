@@ -1,0 +1,2647 @@
+++++++++++++++JAVA JAVA JAVA+++++++++++++++++
+by R. Morelli & R.Walde, 3rd Edition (online: No Publisher, 2012) 
+//////////////////BASICS RECAP\\\\\\\\\\\\\\\\\\\
+
+JAVA is a fully OOP language. OOP seeks to anthropomorphise the way computers deal with the world.
+
+UML(Universal Modelling Language) is one way of organising our perception of these objects as they fit together in the object-to-object models/structure.
+In UML, we use boxes that have the object's ID on the left and its type/purpose on the right id:type
+methods are written as methodName() . Flow chart arrows point to the direction of travel of data sent/recieved by a method 
+A class is organised as a table with the class Name at the top row followed by two further rows, the second row contains its attributes/parameters, and the third contains its methods
+
+instance vars/methods are those methods defined by a class but deployed by an object. Static or class vars/methods are those deployed only by a class itsel.
+
+General principles of OOP:
+
+1. division of labor = between objects/classes for efficiency and reducing chances of bugs/precision in debugging.
+2.Encapsulation= objects/classes need to focus on doing their job correctly and efficiently, not overlapping unless required
+3.Interfacing = Objects/classes should be carefully and precisely designed to interact
+4.compartmentalisation = information hiding/need to know is built into OOP
+5.Abstraction = OOP is supposed to be more  efficient but also translatable. Objects/classes should focus as much as possible on general concepts or "higher-order" levels in order to be deploying in various situations
+6.Extension = OOP needs to be flexible. Class/objects to allow for extension of the tasks across different cases but also to allow for extension and tinkering of their own data/functions.
+
+//////////////////CH2\\\\\\\\\\\\\\\\\\\\\
+
+Software engineering cycle seeks to maximised efficiency and creativity as well as reflexive evaluation:
+
+Broadly there are four elements:
+1. SPECIFICATION
+- specifying the issue/task to be resolved/achieved
+-How will programme be used
+-what will it achieve
+-Thinking about which objects need to be put together and how they might interact
+2.DESIGN
+				class:
+-what role for each object?
+	- what vars/attributes it needs?
+			DataDesign
+			-What type of instance vars to be used?
+			-public or private?
+	- what methods it needs?
+			MethodDesign
+			-what task does method need to achieve?
+			-What data needed?
+			-what result expected?
+			-what algo to use?
+				Algorithm Design:
+					-what data needed?
+					-waht data control structure?
+- what interfaces between objects
+- what information to be contained in each object?
+3.IMPLEMENTATION
+-Coding into Java
+		-step by step refinement
+		-fixing SYNTAX using IDE
+4.EVALUATION
+-debugging 
+-testing
+-fixing SEMANTICS
+
+
+Java uses the usual keywords, with a few differences.
+Data types are either custom (strings, PrintStream objects) or one of the 8 inbuilt primitive types(int, boolean, float, byte, double, long, short, const).
+
+Statements are all the elements that are declared within the source code. THey can be concerned with importing/extending data from another source, or they can define a variable, or implement a method.
+
+A decalaration statment instantiates a variable whehter without a value.
+
+An assignment statement will assign a value to the declared var.
+
+A compound or block statement will be a sequernce of statements given local scope via a pair of {} 
+
+expressions such as + / * and (boolean logical) operators such as = > == etc can manipulate the stated elements 
+
+Classes are objects themselves that can spawn subordinate objects which inherit methods and parameters. 
+
+Methods are a special type operators which are cutsom built by the coder and return either a void or a specified numerical or memory/consoldout outcome.
+Void methods will simply execute the statements given to them, an example is PSVM public static void main method needed in any executable java programme. 
+
+
+method args and parameters fill the two sets of () {} parentheses and curlies and will allow for inputs and outputs of data and other methods to produce the expected outcome.
+
+Java can be run either on a local or networked host via a direct- processor interacting java application OR it can be run within a web browser as a Java applet.
+For the first case, we deploy the JRE in the machine.. in the second case, the browser must have installed a Java runtime Environment pluginto it.
+
+NOTE java libraries are called packages and stored using the usual concatanted notation.
+
+All java classes belong to a package, wehther inbuilt or custom. We can assign a custom class to a package using: package java.packageLocation.
+
+if we do not assign a class to a package, java will automatically assign the class to  an unamed default package.
+
+Every class has a concataned directory: System classes have a location of: java.lang.System
+
+to import external packages/classes we use the import statement  import package.* //all classes
+or import package.ClassName 
+
+Using this concatanated form is called qualified naming. It is important to get the right concatanated naming in order to avoid confusion, especially when using custom packages/class names
+
+ 
+//////////////////Chap4\\\\\\\\\\\\\\\\\\\\
+
+input-output is generally handled by data streams which are fundamentally bits flowing into the maching and then translated into Java Bytecode by the Java Virtual Machine.
+
+data streams at the program level are handled in three ways:
+1. System.in - for input from a machine/host
+2. System.out - for output from a java program
+3. System.err - for error reporting to the console
+
+Alongside the System.OUT/IN/ERR classes there is a BufferedReader Class that acts as an intermediary between the raw data (Bytecode translation via JVM) input and its being read by the Java Runtime Engine (JRE).
+
+In contrast to the aforementioned System subclasses, the bufferedreader class, as it's name suggests, BUFFERS data until whichever conditions are met for full data transfer.
+
+In fact the BufferedRead class is itself a sub-class of READER superclass, which also includes InputStreamReader.
+
+SYSTEM is a MEGACLASS underneath the OBJECT UBERCLASS presumably:
+    
+    Java.OBJECT
+Java.SYSTEM			      Java.THROWABLE (excptions) 
+-System.Console				etc..
+-System.In
+-System.Out
+-System. etc...
+
+
+in the SYSTEM MEGACLASS we find the data input streamers i.e. System.In , out etc...
+	This data stream megaclass interacts with and-| 
+	sits ALONGSIDE THE : 													|						
+	  JAVA.IO.READER SUPERCLASS										|
+						+Defines Paras including various    |
+						objects to be reader from like:     |
+							-Keyboard												  |
+							-Camera                          \/ 
+							-Fingerprint Reader								|
+							-Microphone                       | 
+							-Scanner												  |
+							-etc														  |
+						+Holds subclasses                   |
+									//	\\                        |
+								//		 \\                       |
+Java.io.BufferedReader|Java.io.InputStreamReader|
+							 //      	\\										  |	
+			        //       |  \\                 |---
+has two core methods:  |+ includes the same-\/    
+ + the first is the  	 |titled static constructor constructor method     |meth:inputStreamReader();	
+ + bufferedReader();   | +inputStreamReader
+	 this takes an			 | takes an the System(in,
+   instance of some    | out/err) method from 
+   kind of object in   | SYSTEM MEGACLASS and  
+   READER paras.       | implements it into the 
+ + second is readLine()| the inputStreamReader() 
+   which reads a       | method. THUS the SYS 
+   sequence of chars   | megaclass and Reader 
+   inputted in the     | superclass COMBINE to 
+   keyboard.           | create the desired 
+   											 buffered input/output.
+
+Thus:
+
+BufferedReader buffyIn = new BufferedReader(new InputStreamReader (System.in)); 
+	 
+	 String keyboardInString = buffyIn.readLine();
+	 //note that the BufferedReader objet buffyIn is instantiating/inheriting a BufferedReader method readLine() and not that this new instance of the BufferedReader class (buffyIn) is also inheriting from the System Megaclass the System.In() method via the intermediary of the inputStreamReader superclass which is is invoking as an arg1 of the BufferedReader() method.
+	 
+//when the program sees the BufferedReader's readLine method, it will wait for the user to press the enter key after presumably having written a string.
+
+NOTE that when the user inputs data on the keyboard, Java automatically sees every input as a sequence of chars that it absorbs as a unified string. So what about numbers? 
+In such a case, we have the option of WRAPPER classes which are inbuilt classes designed to convert strings to ints or doubles. The two relevant classes are parseInt and parseDouble which each have the parseInt('InAsStringToBeConverted') and parseDouble('InAsStringToBeConverted') methods.
+
+Console is the typical output element for most basic Java programs. 
+The System.Console class handles the output to console via its static print() or println()
+
+Once we handle the input-output aspect within a designated class (for example within the a keyboardReader class), we can then create a class dedicated to prompting the user and putting out a message, which we could call an InteractApp class (app is a nickname for a runtime programme in Java that is hosted on local host / as opposed to applet which is networked and hosted on browser).
+
+Example below is of a keyboard input reader Input-Output class which is followed by another InteractApp class which gives a prompt, takes human input of a name and returns a message.
+
+FORMALLY, this INPUT-OUTPUT class is a USER INTERFACE
+
+import java.io.*;
+public class KeyboardReader{
+	private BufferedReader reader;
+	
+		public KeyboardReader(){
+			reader = new BufferedReader(new 
+			InputStreamReader(System.in));
+		}
+			public String getKeyboardInput(){
+				return readKeyboard();
+			}
+		  public in getKeyboardInt(){
+		  	return Integer.parseInt(readKeyboard());
+		  }
+		  public in getKeyboardDouble(){
+		  	return
+		  	Double.parseDouble(readKeyboard());
+	  	}
+		public void prompt(String s){
+			System.out.print(s);
+		}
+		public void prompt(String s){
+			System.out.print(s);
+		}
+	private String readKeyboard(){
+		String line =  "";
+			try{
+				line = reader.readLine();
+			}
+			catch(IOException e){
+				e.printStackTrace();
+			}
+	  return line;
+	}
+}
+
+// now the interaction app. Formally, the app is a COMPUTATIONAL OBJECT.
+
+public class InteractApp{
+	private KeyboardReader reader;
+		public InteractApp(){
+			reader = new KeyboardReader();
+		}
+		public void execute(){
+			String nameEntered = "";
+			reader.prompt("Please enter your name: ");
+			nameEntered = reader.getKeyboardInput();
+			reader.textOut(interact(nameEntered) + 
+			"\n");
+		}
+		public String interact(String name){
+			return "Hey" + nameEntered + "!";
+		}
+	public static void main(String args[]){
+		InteractApp app = new InteractApp();
+		app.exec();
+	}
+}
+
+
+Although the above programme is ok for a command-line interaction, there is also a possibility of a GUI graphical User Interface. GUI's are based on a concept of EVENT-DRIVEN programming, which refers to programmming that seeks out the user's initiation of an event to have a subsequent impact
+
+The Java library comes with a set of GUI packages including: the older java.awt and the newer javax.swing 
+most objects in the awt superclass have been superseded by objects in the swing superclass.
+Note that classes/objects in the javax.swing superclass take on a J prefix:
+java.awt.Button >>> javax.swing.JButton;
+
+swing uses Model-View-Controller architecture
+swing components are lightweight, and written fully in java, making them portable
+Among the components:
+	JFrame - container holding other GUI elements
+	JButton control element, allowing user action
+	JTextArea - output of several lines of text
+	JTextField - input for one line of text
+	JLabel - a string of text displayed on GUI
+
+inheritance as ususal. extends keyword provides inheritance
+
+abstract methods are methods that belong to abstract classes and, as such, do not have local implementation in the sub-classes/related methods that invoke them.
+
+
+The AWT components inherit from the Object MegaClass, held in the Java.Lang uberclass directory and its components inherit from each other. The swing components, on the other hand, are fewer and they inherit from a few select awt components:
+
+
+							java.lang.Object
+							  //
+					java.awt.Component
+					   //																  
+				java.awt.Container=====================||
+				//        \\ 													 ||
+java.awt.Panel   java.awt.Window							 ||
+		||							||            \\					 ||
+java.Applet 	 java.awt.Dialog  java.awt.Frame ||
+    ||							   ||            ||				 ||
+javax.swing.   javax.swing.     javax.swing.	 ||
+JApplet				 JDialog				  JFrame				 ||
+																							//	
+													javax.swing.JComponent
+
+The last of these javax.swing.JComponent has the following inheritance flow:
+
+				java.lang.Object
+							||
+				java.awt.Component
+							||
+				java.awt.Container
+							||
+				javax.swing.JComponent
+__________________||___________________________
+|						|		 |			 |			  |			|			|
+Abstract  JList	JOption JPopup JText   JMenu  |
+Button	 \			Pane    Menu  Component Bar  /|\
+|		\			\											|					  / | \
+|		 \		 \										|		 JScroll  /	|	
+|			\			\										|			   JLabel / 
+|			 \		 \									|		     	JPanel
+|       \     \								/	  \
+|        \     \				JTextArea	 JTextField			
+|         \     \												|
+JToggle  JButton JMenu             JPasswordField
+Button						Item
+
+
+If we were to implement this GUI for the aforementioned interactApp, it would be done in the follow way:
+
+1. code for the top-level window:
+
+
+import javax.swing.*;
+
+public class SimpleGUI extends JFrame{
+	public SimpleGUI(String title){
+		setSize(200,150); //px size
+		setLocation(100,150);//topleft cornerlocation
+		setTitle(title);
+		setVisible(true);
+	}
+	public static void main(String args[]){
+		new SimpleGUI('Basic Response GUI');
+	}
+}
+
+
+For this simple interactApp we will probably need hust a JButton(), JLabel(), JTextField() and JTextArea() constructors:
+
+private JLabel prompt;
+private JTextField textIn;
+private JTextArea textOut;
+private JButton execButton;
+
+prompt = new JLabel('Please Enter Your Name: ');
+textIn = new JTextField(10); //10 chars wide
+textOut = new JTextDisplay;(10,20)//10 rows 20col
+execButton = new JButton('Click For Reply!');
+
+
+
+NOTE these are ONLY CONSTRUCTORS. We also must not "add" them to our GUI window. To do so we can use the following component addition inbuilt functions:
+
+add(Component componentName);
+//auto adds compobnent to the end of the container(window) like adding an element to the end of a memory stack
+add(Component componentName int IndexPosNumber);
+// instead of option1, this time we pass an indexPos where the component will be placed on the container array in memory.
+add(String regionName, Component componentName);
+// This option allows us to pass the (string) regionName in a designated region (see below) as well 
+
+border layout is defaulted to:
+
+							NORTH
+				WEST  CENTER  EAST
+							SOUTH
+NOTE that in each region only one component can sit.
+
+
+NOTE however, that when we want to do any of the add....() methods above, we need to concatenate them to the container component that we are seeking to fill up with these (smaller) JComponents like JButton, JTextField etc.
+for example, to add a JTextArea from one of the constructors previously created (remember the object is named textIn) then we first construct a container component and then concatenate it using the string areaName to specify which region we'd like it to be in:
+
+Container contentPane =  getContentPane();
+contentPane.add('South', textOut);
+
+But what about the limitation of only one component object per region in the borderRegion scheme? What if we want multiple components bunched together in one area?
+
+We can get arround this, by making that one component object itself a subtype of JComponent, for example a JPanel obejct whcih will hold all of the components we need one after the other, then position in the desired container area:
+
+JPanel textInPanel =  new JPanel();
+textInPanel.add(prompt);//usingEarlier constructs
+textInPanel.add(textIn);
+textInPanel.add(execButton);
+contentPane.add('North', textInPanel);
+
+
+EVENTS:
+
+Aside from placing objects into the GUI framework, we can also examine how the GUI handles user actions on it. Events are interactions with the user and event listeners are those constructs (loops) that wait and listen for a user's interaction, following which a set of operations is executed.
+
+
+
+The AWT CLASS has a whole set of EVENT related components:
+
+				java.lang.Object
+							|
+				java.util.eventObject
+							|
+				java.awt.AWTEvent
+							|
+_______________________________________________
+|			      |         |           |	    	 |	
+Action   Adjustment  Component  Item      Text
+Event    Event       Event      Event     Event
+											 |
+				________________________________
+				|       |       |      |        |
+   Container  Focus		Input  Paint   Window
+   Event		  Event   Event  Event   Event
+													|
+  												/\
+									KeyEvent  MouseEvent
+
+Note that ActionEvent can be triggered, for example by a click of JButton. It will create an ActionEvent object which will hold metadata about the JButton event + whatever output sequence is required.
+
+such a sequence in our case might look like:
+
+String name = textIn.getText();
+textOut.append(interactApp.interact(name)+ '\n');
+
+NOTE the second line implements the passed textIn -i.e. the name- into the interactApp's interact() method and then appends it's outcome to the textOut JTextArea.  
+
+Now we need to fit this code into the relevant looped listener that the Java Runtime Environment can detect for any press of the JButton.
+In this case, the ActionListener object's abstract interface class has an inbuilt method/function called actionPerformed() and it is here that the sourcecode needs to be placed.
+
+Note thanks to this abstraction (and underlying polymorphism) then we simply need to implement the interface class(ActionListener{}) by deploying its actionPerformed method in situ (in our source code). It acts as a placeholder for the inbuilt ActionListener's actionPerformed method. 
+Two more things need to be done to ensure this parallel is established between the inbuilt abstract interface and the custom sourcecode
+
+					FIRST 
+out implementation of the actionPerformed function/method will need definition and an if loop that checks that the actual action being performed by the user is the one we want, namely a click of the button. To do this check we deploy the inbuilt getSource() method and use an equal and equivalent to (==) operand to check that the execButton is the one being source of the ActionEvent. Thus:
+	
+public void actionPerformed(ActionEvent usersAction){ //we initialise and define action
+							//performed as an AWT ActionEvent
+							//component given name usersAction
+	if (usersAction.getSource() == execButton){
+				//not use of getSource() inbuilt meth
+		String nameEntered = textIn.getText();
+		  textOut.append(interactApp.interact
+      (nameEntered) + '\n');
+      //we now implement the sourceCode calling
+      //interactApp's interact() method
+	}
+}
+	
+				SECOND
+
+The second thing is to ensure that the Java engine knows, when parsing our sourcecode, that it needs to call the actionPerformed method. To achieve this, what we will do is deploy the ActionListener abstract interface class's inbuilt abstract addActionListener() method within our source code to essentially "attach" this method to our sourcecode's class (in this case the InteractApp class, which is now going to be titled InteractGUI since we are moving the app away from console deployment toward GUI deployment). 
+What this means is that, alongside extending the JFrame superclass (and in that way allowing use to behave as a JFrame, the InteractGUI class will also be able to act as an ActionListener class and thereby add action listeners and perform action events).
+
+the best place to perform this "attach" deployment of the addActionListener is with the definition of our execution button (execButton).
+
+SO NOW WE ARE READY FOR THE FULL GUI CLASS version of the InteractApp:
+
+
+import javax.swing.*;
+import.java.awt.*;
+import.java.awt.event.*;
+
+public class InteractGUI extends JFrame
+											 implements ActionListener{
+//first instantiate but don't define the java.swing components. Remember encapsulation means we should keep instance variables PRIVATE to avoid a change in values being instituted from  outside instances of this InteractGUI class.
+
+private JTextArea textOut;
+private JTextField textIn;
+private JButton execButton;
+private InteractApp interactApp;
+// instance of the afore-designed InteractApp class is instantiated
+
+//first create a  method for instantiating instance of InteractGUI class object:
+
+	public InteractGUI(String title){
+	interactApp = new InteractApp();
+	//giving the instanced interactApp object 
+	//definition by using the InteractApp class' 
+	//InteractApp() constructor method.
+	buildInteractGUI();//custom method see below
+	setTitle(title);//inbuilt JFrame  method
+	pack();//inbuilt JFrame abstract method
+	setVisible(True); //inbuilt JFrame method
+	}
+
+//now flesh out the parameters of this InteractGUI object that will be created via the precedent InteractGUI constructor method. Note that it is here that the "attachment" of the InteractGUI class to the ActionListener abstract interface's inbuilt abstract addActionListener() method is done, and thereby making this InteractGUI not only a JFrame instance, but also implementing a listener for a given event source(a button click):
+	
+	private void buildInteractGUI(){
+//CORE FRAME
+	Container contentPane = getContentPane();
+	//inbuilt AWT Container method- getContentPane
+	contentPane.setLayout(new BorderLayout());
+	//inbuild  setLayout meth with BorderLayout 
+	//property
+//OUTPUT SETUP
+	textOut = new JTextArea(10,20);//(rows,cols)
+	//we instantiate the textOut display area 
+  //without any content yet (it will be prepared 
+	//for filling in next section)
+//INPUT SETUP
+	textIn = new JTextField(10);//10 chars wide
+	execButton = new JButton('Click for Reply!');
+	execButton.addActionListener(this);
+	//out infamous addActionListener(this -i.e. 
+	whatever this instance of InteractGUI class is)
+//PROMPT SETUP	
+	JPanel textInPanel = new JPanel();
+	textInPanel.add(new JLabel('Please Enter Your 
+	Name'));
+	//JPanel instanced via JPanel() constructor, 
+	//then JLabel component of JPanel class is 
+	//added with text out prompt
+	textInPanel.add(textIn);//add the textIn box 
+	//component
+	textInPanel.add(execButton);//+ the button
+//Arrange the components of the ContentPane Frame
+	contentPane.add('North', textIn);
+	contentPane.add('South', textOut);
+	}
+//finally we need to add that button click event source listener using inbuilt getSource() method and we need that recursive code that will fetch the text from the interactApp's interact() method to be injected into out textOut JTextArea upon click of the button (with the user having filled in textIn JTextField presumably).
+	public void actionPerformed(ActionEvent 
+	usersAction){ 
+	//we initialise and define action performed as 
+	//an AWT ActionEvent component (usersAction)
+		if (usersAction.getSource() == execButton){
+		//note use of getSource() inbuilt meth
+			String nameEntered = textIn.getText();
+			  textOut.append(interactApp.interact
+  	    (nameEntered) + '\n');
+  	    //we now implement the sourceCode calling
+  	    //interactApp's interact() method
+		}
+	}
+}
+
+
+++++
+Alongside the console and GUI interfaces, Java also allows for a file input-output interface.
+
+The Scanner class can be used for file input also.
+
+Java deals with two types of files: binary files and text files. 
+
+We create an instance of the java.io.File superclass  which then makes use of the java.util.Scanner class
+
+File fileToBeRead = new File('fileName.txt'); 
+//note, if the file is not one held in the same directory as our java programme, we will need to deploy the entire directory/network address in the string 'filename.txt'.
+If we want to check that the file has been found by the Java parser, we can deploy the exists() method.
+Note that with this scanner there is an extended and different set of scanner methods such as useDelimiter which sets a breakOff point for the parser to scan through the passed text.
+
+
+/////////////Java Data and Ops\\\\\\\\\\\\\\\\\\\
+
+boolean type is the usual true/false.
+Usefully combined with conditional:
+	if (boolean expression)
+			statementOfConsequence;
+
+a boolean Flag if when we create a variable for the purpose of keeping track on the status of whether a boolean condition holds and thus affecting the action we should or shouldn't execute.
+
+AND is signified by &&
+OR is ||
+EXCLUSIVE OR ^
+NOT is !
+
+AND is binary, requiring two subjects 
+if both subjects are true, then the && = true
+if one/both subjects is false then && = false
+
+OR is also binary.
+if both subjects are false, then || = false.
+if either one or the other subject is 
+false, then || = true
+if both subjects are true, then || is true
+
+with ExclusiveOR ^ 
+if both subjects false the ^ = false
+if one subject false the other true then ^=true
+if both subjects true then ^=false 
+
+the NOT ! operation is unary:
+it reverses truth value on the subject
+
+precedence order is:
+1. ( )
+2. !
+3. ^
+4. &&
+5. ||
+
+In the case of same booleans following each other, then the order of preference is always left to right:
+
+subject1 ^ subject2 ^ subject 3 is equivalent to:
+((subject1 ^ subject2) ^ subject 3)
+
+
++++ Numeric types:
+TYPE    BITS   
+byte		8
+short		16
+int			32
+long		64
+float		32
+double	64
+
++++ Operators:
+
++  - = / * % as usual
+
+
++++ promotion i.e. converting from type to type
+
+Generally, Java will undertake automatic promotion so long as there is no loss of information/data.
+So adding an int to a float and getting a float result will be automatically promoted by Java:
+2(int) + 3.4(float) = 5.4(first add then convert) 
+
+but the vice versa can't be done.  promoting a float to an int will lose the real-number value of the float so java won't allow it.
+fitting a long into a byte won't work either...
+
+numeric ops precendence:
+
+1. ()
+2. * / %
+3.  + - 
+
+
+++++ increments/decrements:
+PRE - increment/decrement will be used BEFORE any operations
+++n
+--i
+
+POST- increment/decrement will be used AFTER any operations.
+n++ increments,
+n-- decrements 
+
+When used alone, PRE and POST are interchangable and don't make a difference. But if used in the certain operational contexts they do make a difference:
+
+int i = 0, n = 0;
+i = ++n;
+
+// the result is that BOTH I and N are 1 because the INCREMENT PRECEDED the OP
+BUT:
+int i = 0, n = 0;
+i = n++;
+
+// here the result is n = 1 but i still = 0. Because increment is POST OP.
+
+note ** = squared   // = squareroot'd
+
++++assignment ops
++= combines the = and addition. addition is done first:
+
+n += 3 + 6 * 3;
+which is equivalent to:
+[final]n = [initial]n + 3 + (6*3);
+[final]n = [3+18]n + (3 + 18);
+[final]n = 21 + 21;
+[final]n = 42;
+
+other additionals:
+
+=  += -= *=  /=    %=
+
+
++++ relationals 
+
+ < > <= >=  ==  !=
+ 
+++++ java.lang.Math
+is a class containing special functions as static methods :
+abs()		- Math.Absolute num value
+ceil()  -Math.ceiling
+floor() -Math.floor
+log(x)   -natural logarithm of x
+pow(x, y)  - raise x to y power
+random()   -pseudorandom num generated between 0 
+						and 1
+round(double x)  -rounds x to nearest int
+sqrt(x)   - squaroot'd
+
+
+++++ Class constants
+
+named constant is a var that cannot be changed in situ once given an intial value. Useful for specifying general math constants (outside of Math.Pi or Math.E) or for example to give a specific int id like an id number.
+ 
+In java, we declare it using FINAL and STATIC keywords in the class scope so that this variable is associated with the class and cannot be changed from outside the class but we make it public so it can be access from outside of class/subclasss scope(NOTE TRADITION OF ALL_CAPS_CONSTS):
+
+public static final in PLAYER_ONE = 1;
+public static final in PLAYER_TWO = 2;
+public static final in PLAYER_THREE = 3;
+public static final in MAX_PLAYERS = 10;
+
++++ java.text.NumberFormat
+a class holding methods and paras for special num representations like dollars, percentages etc
+useful functiosn are:
+
+NOTE BECAUSE THIS IS AN ABSTRACT class then we cannot actually make IN SITU changes of the variables we are trying to format. So in fact the first function of NumberFormat is
+getInstanceOf()  - 
+which will make a carbon copy of the var we wish to play with. Then we can apply the following formatting functions
+getCurrencyInstanceOf()  - format to dollars
+getPercentInstanceOf()   - format  to %
+format()   -general change of format, for example 
+						to string if rules abided by
+getMaximumFractionDigits()
+getMaximumIntegerDigits()
+getMinimumFractionDigits()
+getMinimumIntegerDigits()
+
+++++++ typecasting
+
+chars are a primitive type in java
+chars are 16 bit unsigned (i.e. positive) integers  either in unicode ranging ints from 0-65,536. There is also the American ASCII 7 bit 0-127 ints for chars. chars are thus fundamentally also ints that are assigned to each of our human lang chars.
+
+This means we can convert chars to ints or vice versa using a CAST OPERATION:
+int i = (int)'a';
+System.out.println(i);
+>>> a is 97 in unicode
+
+typcasting ops are again ruled by the principle of no information loss. A char(16) can be converted to int (32bit) but not viceversa, there could be a loss of info if the int is too great sized.
+At least, it cannot be done via implicit cast. But we can "force" java into casting an into into char using explicit casting:
+int i = 97;
+c = (char)i;
+System.out.println(c);
+>>>>'a'
+
+
+NOTE that because of the underlying int values relating to each char, char's also have their own LEXICAL order. And they can be compared using the order comparators like > < =>  <= ! == on the basis that each of the letters of each characterset (for each language) will find itself in the human-lang order of higher or lower down the ranks (but with computers this is done using int assignments).
+
+/////////////Control Structures\\\\\\\\\\\\\\\\
+
+
+Usual loop structs. 
++++++ FOR LOOPS
+
+for each n from a to b{
+	System.out.println('bla');
+}
+
+loops can have a counter are usual, to ensure a max count of iterations
+
+//make the int for the ocunter 
+
+int count = 0;
+
+// then start the loop with the WHILE statement
+
+while (count<100){
+	System.out.println('bla');
+// DONT FORGET THE INCREMENT
+	count++
+}
+//NOTE the same can be achieved with a FOR loop in a more concise way:
+
+for (int count = 0; count<100; count++)
+	System.out.println('bla');
+In formal syntax this loop has:
+1.an INITIALISER (int count = 0) 
+2. a loop entry condition/Or also known as a loop BOUND (count<100) - i.e. is max count is condition met?
+3. an updater, after the condition is met and the consequent action is undertaken (System.out...) then we update(count++)
+ 	
+NOTE the indentation is a stylistic reminder for us to  associated what is indented within the loop structure is equivalent to: {
+}
++++++ NESTED LOOPS
+a loop within a loop can achieve recursion:
+NOTE that this time we will need the {to place the nested loop inside the nesting one}
+
+for (int row = 1; row<=4; row++){
+// 4 rows max
+			for(int col = 1; col<=9; col++)
+//9 columns max
+				System.out.println(col*row + '\t');
+print out (i.e. fill in the content box) with output of col vs. row and add a tab space
+THIS IS THE NESTED LOOP- IT MUST BE FULFILLED FIRST BEFORE...
+			System.out.println();
+// NEXT CONDITION which is to go down one row
+}	
+
+++++COND LOOPs
+
+The WHILE stucture
+
+typical cond loop is using the IF-ELSE qualifiers:
+
+while(int n = 1; n<100; n++){
+		if (n % 2){
+			n / 2;
+		}
+			else{
+				n * 2 
+			}	
+	System.out.println(n + '\n'); 
+}
+>>>>
+2
+1
+6
+2
+10
+3
+12
+4
+14
+5
+18
+6
+etc..
+
+
+
+The DO-WHILE stucture 
+
+basically like while but with pre-determning action following the loop calculus 
+basic syntax:
+
+1. initialise vars...
+
+2. DO elemeent construct:
+do {
+	ACTION TO BE DONE;
+}
+3. while element construct:
+	while{
+		CONDITION TO BE FULFILLED BEFORE DOING
+	}
+
+The SWITCH-BREAK structure 
+
+instead of laborious multiple else-if loops following one another we can deploy a switch structure:
+
+switch (triggerExpression){
+	case variableValue1Condition:
+		parameters/actions to be done;
+	case variableValue2Condition: 
+		parameters/actions to be done;		
+	case variableValue3Condition:
+		parameters/actions to be done;			 
+}
+
+example:
+
+int i = 2;
+
+switch(i){
+	case 1: 
+		System.out.println('i=1');
+	case 2: 
+		System.out.println('i=2');
+	case 3: 
+		System.out.println('i=3');
+	default: 		
+}
+
+/////////////// STRINGS\\\\\\\\\\\\\\\\\\\\\\
+
++++++
+
+java.lang.Object
+			||
+java.lang.String class: 
+- collection of char data
+- thus a type of data structure, like an array
+
+usual rules for instantiating a string from String class:
+String string1 = new String('');
+String string1copy = String(string1);
+String string0 = new String('');
+string0 = 'What/''s up?';
+
+//concatenation:
+
+String string3 = new String(string1 + string2 + 'Hey! ' + string0);
+System.out.println(string3.concat(string1));
+>>>  Hey! What's Up 
+
+//auto typecast to string if we add a double or float or int concatenated to string:
+
+System.out.println('One plus one = ' + 1 + 1);
+>>> One plus one = 11
+
+but if we add a parentheses() then the ints/doubles/floats will undergo a math operation and then be concatenated (rememeber () takes precedence):
+System.out.println('One plus one = ' + (1 + 1));
+>>> One plus one = 2
+
+++++ converting data to string form
+
+String.valueof() is a String class function converting primitive types to string
+
+String intVal = String.valueof(233);
+String trueBool = String.valueof(true);
+String pi = String.valueof(Math.PI);
+
+
++++++searching a string:
+
+indexOf() and lastIndexOf()  are String class methods to find an indexPos of a string char/substring being sought.
+
+indexOf() searches longString for the first hit on a passed char or subString from left to right 
+whereas lastIndexOf() searches longString for the first hit on a passed char or subString from right to left
+
+we can pass various args to these:
+
+public int indexOf(int arg1CharacterSought, int arg2StartIndexPos);
+public int indexOf(int arg1SubString, int arg2StartIndexPos);
+
+public int lastIndexOf(int arg1CharacterSought, int arg2StartIndexPos);
+public int lastIndexOf(int arg1SubString, int arg2StartIndexPos);
+
+so with the indexOf() we can pass the char that we are looking for and the default start will  be indexPos 0 on the longString. But we can override this with arg2 which will start us off on a later longString indexPos (going right to left so positive ints used lik 2, 5, 19)
+
+If we go right to left with lastIndexOf, it's the same as above but this time we pass negative indexPos values since we are going from end of the longString's char array: -1 will be last char of longString, -3, -6 etc.
+
+The output is always an int which is indexPos of the place where our sought char is or where our sought subString begins.
+
+using a while loop to keep a search going and mixing this with a simple algo that will "reset" every search to the indexPos after every "hit" for the subString search, we can create a looped search to find a passed subString inside a longString with the resulting output being a count of how many times subString is found followed by a separator (:) and the list of indexPos where the subString startingIndexPos instances are found on longString
+
+public String keywordSearch(String longString, String subString){
+	String indexPosResults = '';
+	int hitCount = 0;
+	int indexPosInt=longString.indexOf(subString);
+		while (indexPosInt != -1){
+//solong as end of longString hasn't been reached
+			++count; //note preincrement here, to keep 
+			the count for every hit
+			indexPosResults = indexPosResults + 
+			indexPosInt + ' , ';
+// we build the list by adding whatever is found on the list (which starts off as empty '' string) and then adding the indexPosition hit number then followed by a comma to separate each position index number of each hit on our indexPosResults.
+			indexPosInt = longString.indexOf(subString, 
+			indexPosInt + 1);
+//now we continue the search. Note we use the arg2 of indexOf method to place our new starting position of the longString parse at the next indexPos after the previously found indexPosInt
+		}
+
+indexPosResults = 'We found your searched for keyword' + count + 'times at the following indexPos locations(starting count at 0): ' + indexPosResults;
+}
+
+
++++++ java.lang.StringBuffer
+NOTE because strings are immutable in situ, this means that when searching longStrings for subStrings, there is a good deal of resource consumption.
+when we construct a loop and algorithm for searching a longString to find and return every iteration of a soughtSubString, then remember that every string hit output (resultStr above) will be a fresh copy of the original/preceding resultStr because the original/preceding resultStr is IMMUTABLE. The built-in garbage collector will eventually clear out all the orphan objects which are these earlier copies of resultStr but this doesn't happen immediately.
+
+A way to avoid this waste of resources is to use the StringBuffer class and its methods.
+
+the utility of the StringBuffer class is that it holds functions that allow for modification of a string before it is actually astring object. A string buffer object is essentially a "string in the making" with the data being buffered/held while we process it. 
+Thus functions like .append() .setCharAt() and .insert() allow us to make in-situ changes to the string buffer object before it can be finally converted to a final actual string object using the String class' .toString() method. So the above loop can be repeated here but with a StringBuffer object:
+
+public String buffKeywordSearch(String longString, String subString){
+	StringBuffer indexPosResults = new StringBuffer(); //create StringBuffer object
+	int hitCount = 0;
+	int indexPosInt=longString.indexOf(subString);
+		while (indexPosInt != -1){
+			++count;
+			indexPosResults.append(indexPosInt + ' , ';
+			indexPosInt = longString.indexOf(subString, 
+			indexPosInt + 1);
+		}
+	indexPosResults.insert(0, 'We found your 
+	searched for keyword' + count + 'times at the 
+	following indexPos locations(starting count at 
+	0): ';
+//and now convert the buff to string:
+	return indexPosResults.toString();
+}
+
+++++++ char extraction 
+the charAt() and substring() String class methods is useful for simply deleting (by hack, since direct in situ changes are not possible) or extracting a char from longString (into a new string/char)
+
+template is:
+
+public int charAt(int indexPos);
+public String substring(int arg1StartIndexPos, int optArg2EndIndexPos); 
+//if no end is specified, the default is the end of the longString
+
+String longString = 'like whatever dude';
+firstChar = longString.charAt(0);
+lastChar = longString.charAt(-1);
+subString1 = longString.substring(5);
+subString2 = longString.substring(0,9);
+	System.out.println(firstChar);
+	System.out.println(lastChar);
+	System.out.println(subString1);
+	System.out.println(subString2);
+>>>l
+	 e
+	 whatever dude
+	 like what
+	 //note that secondArg will need the indexPos of the following char to capture the one we want (position 9 even though the t on what is at 8)
+
+we can also use indexOfto parse longString and then pass that int position as a delimiter to tell substring() method where to cut off each substring instances of longstring:
+
+String longString = 'Premier League Football clubs are the following: Arsenal, Tottenham Hotspur, Aston Villa, Southampton, Manchester City, Manchester United, Liverpool, Fulham, Portsmouth';
+
+here we can pass ',' as arg1 of substring() method to isolate each club name. then with a bufferstrings construct from above and a while loop, we can reconstruct longString into a simple list of clubs.
+
+
+In contrast, the charAt() method is particularly useful if we want to parse a string char by char in a loop, for example if we want to encrypt text.
+
+NOTE there is a typical error with looped counts called the OFF BY ONE ERROR, which happens if we use the string.length() method as the "total" count of a string and then use a loop that finishes at string length. The problem is caused because the final char in any string is at indexPos -1.  so any looped that has indexCount <= string.length() will run into this issue.
+
+java sends an Out Of Bounds exception if this happens.
+
+
+another use of charAt is as a way of counting the number of chars that recur in a longString. This is often used in text analysis tools, such as anti-spam tools since they will parse the longString email for certain recurring chars.
+by craeting a custom method that we can call countChar, we can deploy a for loop, conditioned by a if condition that uses the charAt() method:
+
+public int countChar(String longString, char charIWant){
+	int count = 0;
+	for (int i = 0; i < longString.length(); i++)
+		if(longString.charAt(i) == charIWant)
+			count++;
+	return count;
+}
+
+the String class also has a .reverse() meth which simply reverses a passed string: java -> avaj
+
+.capitalise() capitalises the first char of a passed string.
+to convert the entir string to lower or upper case, we have toLowerCase() or toHigherCase(). Note, these last two can also pick out specific indexPos'd chars to capitalise a specific char, or range of chars within a string.
+
+other useful String class methods are:
+.startswith(String arg1PrefixSubStringToCheck, int optArg2IndexPosOffsetForPrefixStart);
+.endswith() - same as above but suffix.
+.trim() - cuts out any white spaces in the string.
+
+
++++ comparing strings
+
+a strict comparator is:
+public boolean equals(Object objectNameLikeStringName);
+
+this is a double like == comparator that also takes into account the case status.
+
+public boolean equalsIgnoreCase() 
+does the same but ignores upper/lower case status
+
+another comparator is:
+
+public int compareTo(String arg1StringToCompareAgainst);
+
+
+++++ StringTokenizer
+
+this is in the java.util package as a separate class.
+it splits up a string into tokens/segments demarcated by delimiters which can be white space or any other char
+the StringTokenizer() method will return the tokenized string passed as Arg1
+
+The default delimiter is white space. so simply writing :
+
+StringTokenizer JRRToken = new StringTokenizer('Hey what is up my brudda');
+
+will consol'out:>>>
+Hey 
+what
+is 
+up
+my 
+brudda
+
+an optional arg2 can give a custom delimiter or set of delimiters which can be escape chars or chars like: \b || \n || \t || u || b || o || ; || ? || !
+
+the hasMoreTokens() will give us a boolean true return if more tokens outlined in arg2 remain in arg1longString and
+nextToken() fetches and returns each token as each of them are parsed
+they can be used together as a loop with hasMoreToken checking if there are more tokens left and nextToken pumping out each hit.
+
+
++++GUI string formatting
+
+Note that with the GUI the awt.Graphics class holds a range of methods that allow for neatening up and presenting strings on the GUI. 
+Among these are: 
+
+g.setFont(Font(String arg1FontName, String arg2StatuslikePLAIN/ITALIC/BOLD, int arg3FontSize));
+
+
+another one is drawString:
+
+g.drawString('stringToWrite(String arg1fontName, string arg1Status, int arg3Size)', int pixelFirstCharHorizontalPos, int pixelFirstCharVerticalPos);
+  
+
+////////////////// ARRAYS\\\\\\\\\\\\\\\\\\\\
+
+arrays as usual in J
+
+base0 start indexPos as usual 
+
+for referring/fetching an array's elements, the general rule is: arrayName [subSelector]
+
+subSelector can be a direct indexPos OR it could be an operation, or a reference to a properly scoped var that has been defined to have an int value:
+
+public class ArrayExample{
+		public int v1 = 2;
+		public int v2 = 3;
+		public array arrayOne = [1,2,3,4,5,7,8];
+
+		public.static.void.Main(Strings[]args){
+			
+			System.out.println(arrayOne[0]);
+			System.out.println(arrayOne[4]);
+			System.out.println(arrayOne[v1]);    //i.e 2 indexPos
+			System.out.println(arrayOne[v2+v1]); //i.e 3 + 2 = 5 indexPos						
+		}
+}
+>>> 1
+		5
+		3
+		7	
+
+NOTE the following are not acceptable as selectors:
+FLOATS/DOUBLES || STRINGS || NEGATIVE INTS || OUT OF BOUNDS INDEXPOS || CHAR
+
+
+++++ declaring arrays in Java
+
+Arrays are basically equivalent to objects in Java BUT THEY ARE NOT DRAWN from the OBJECT UBERCLASS. They are a separate set of elements/objects that are generated in an array collection and which are stored via REFERENCE rather than being copied directly to-from memory. In this they are similar to object memory storage in Java (i.e. pass by reference storage in which the reference creates a placeholder variable impression of an object which is only carved out a memory space upon being filled with meaning/value) - any further references to the originally defined reference (first initialised variable mapped/referring to that carved out mem space value) will simply be further 'pointers' pointing to the selfsame reference-value pairing. 
+
+BUT arrays DO NOT inherit nor can they pass on inheriting traits to objects/from objects. NOTE also that, regardless of the mapped pass-by-reference system for storing array elements's values in memory, the we WE access them is always via an indexPos reference (even though in reality arrays are not an indexed-based mapping system but rather keyName-value referencing).
+REMEMBER ALSO THAT the ARRAY ITSELF IS AN OBJECT: I.e. ARRAY IS ONE OBJECT, it's various (sub)-elements are further objects collected together 
+Finally also, arrays can only store ONE TYPE of values (string, ints etc) within one array among its elements - no mixing of values. When first initialised, the array is just the one ARRAY object on its own, of indeterminate length and content type. When the array's content type (i.e. the type of array elements) is declared, then these element objects are generated but their value is NULL(on the stack). Only when assigned are they given their carved out mem-space (on the heap)
+
+Like with C# when assigning a primitive (int/double/float) then there is a fixed memory storage size value. In contrast, with customs (like strings) the value is null automatically since it can stretch to whatever the human input is 
+
+They can be one, two or multi-dimensional (arrays-within-arrays) 
+
+To declare one dimension array:
+
+type name[] = new type[indexPosNum];
+example:
+int intArray[] = new int[20]; //0-19 indexPos int array created 
+
+NOTE if we want, we can both declare and assign simultaneously- this is mostly useful for small arrays:
+
+String stringArray[] = {'element1','element2','three','four',};
+
+NOTE if we want to calculate/use the length of the array, we must deploy the .LENGTH inbuilt var related to arrays NOT the length() method, which is specific to STRINGS. 
+intArray.lenght would give us its length of 20 indices... Remember also the danger of forgetting that even if there are 20 indexPos, they START AT 0 so any count up to 20 will be wrong, the count must always append a -1 to it to REFER TO THE ACTUAL INDEXPOS. THIS IS CALLED the OFF-BY-ONE ERROR
+
+as usual, refering is by indexPos.
+
+NOTE that when assigning array element values, or even arrays themselves, we are not limited to the primitive/custom types. For example, if we have a class defined and this class already has object/vars that have values, we can create an array based on that class and map those var values to array elements within that class array:
+
+ClassName varObject1 = new ClassName('value1');
+ClassName varObject2 = new ClassName('value2');
+ClassName varObject3 = new ClassName('value3');
+
+ClassName arrayName = new ClassName[indexRangeInt];
+
+arrayName[indexPos0] = varObject1; 
+arrayName[indexPos1] = varObject2;
+arrayName[indexPos2] = varObject3;
+ 
+
+we can loop assignments:
+
+for (int i = 0; int < arrayName.length; i++)
+	arrayName[i] =  i+1;
+
+
+NOTE importantly that, if we declare an array that we then want to deploy within the scope of the MAIN METHOD (args or argv), for example to printout to console or to have input, then WE MUST DECLARE THAT ARRAY A STATIC VAR- referencing a non-static var in a static method will throw an exception
+
+Combining this can lead to some quite useful deployments. For example a looped character frequence analyse (presumably fed the longString to be parsed):
+
+public class freqAnalyse{
+	private charAppearArray[];//initialisedAsArray
+	private charFreqArray; //initialise undefined
+	
+ 	public AnalyseFreqContainerClass(){
+ 		charFreqArray = 
+ 	 	
+ 		}
+}
+
+
++++++ Insertion sorts 
+
+A method contained within the SORT SUPERCLASS that contains an algo parsing through the array and re-order. Basically, it goes through two array elements at a time and evaluates the two elements one agains the other. It works almost as if the array was split into two sub-arrays, one original array and a new one which is the sorted array. 
+
+Starting from indexPos0 and going through the n+1 element against n, the array sorts whichever is higher/lower according to the given sorting algo.
+Actually this sort mechanism is basically founded on nested loops. the OUTER LOOP SELECTOR goes through the ORIGINAL ARRAY with a indexPos1 to indexPos -1 through the array i.e. through every elements beyond indexPos0 until end of array. this picks out each array element as currently seleted elements.
+ 
+But the inner loop actually permanently loops within the newly created sorting structure, comparing whichever currently selected indexPos is available via the outer loop against all of the already sorted indexPos values that are judged to be < (greater than) currently selected IndexPos. Once this inner loop is done determining this further contrast of the newly created sorting structure then the sort continues via OUTER LOOP to the next selection of a indexPos value, ongoing until the outerLoop selector reaches -1 end of original array.
+
+NOTE that, as with everything in Java, the insertionSort() method is also an object method instance of a broader super class , the SORT SUPERCLASS
+
+
++++++ Selection sort
+
+This is another inbuilt SORT SUPERCLASS sorting algo meth() .This sort method creates a placeholder for the smallest and largest elements of the array that it directly compares as against one another. 
+
+Whenever a compared element is found to be smaller than the previously smallest element theb the sort algo will declare this element to be the newly-found smallest element.
+NOTE that this smallest value element is attached to a COUNT placeholder var value which takes a +1 increment every time a freshly compared element is parsed. The inmner loop busies itself checking the values of the (newly)smallest vs. biggest element value- and whenever the frehsly compared element is not found to be the smallest yet , and also the count placeholder has not yet reached the end of the array i.e. last base0 indexPos+1, then the currently compared element  'Swaps' i.e. it jumps the value of the one element into that of another element while storing the value of that other element in a temporary placeholder element within the array.  The temporary element need to exist in memory (and must be coded into any selection sort) because otherwise, the varios references to the various values would be overwritten in the proces (and the other element's compared value would be lost) 
+
+++++++ Passing by Value VS. Passing by reference
+
+Remember that PRIMITVE TYPES (ints, double, floats) are stored by STACK-based pointer references to objects in managed-heap memory.BUT they ARE FUNDAMENTALLY predictable in memory size i.e. in teh number of bytes needed to store, say, an int (32 bits) or a long (64 bits).  In contrast to this, HUMAN-determined custom types of arbitrary size, like STRINGS or ARRAYS/LISTS/DICTIONARIES, are unpredictable and thus stored AS NULL-POINTED OBJECTS: the NULL POINTER PLACEHOLDER ON THE STACK, the INDETERMINATE SIZE OBJECT on the MANAGED HEAP (until definition) 
+
+THIS IS IMPORTANT BECAUSE, in terms of scope and persistence, passing a primitive variable within the scope of a method (whether public or not) will pass the VALUE of that method. 
+
+In other words, because they have a fixed memory value, the engine holds their (potential and actual) value within the STACK. Thus a 32 bit int will have the 32 bit space AUTOMATICALLY ALLOCATED ON THE STACK WHEN INSTANTIATED REGARDLESS OF WHAT THE ACTUAL INT VALUE will be determined to be. 
+
+Thus, when we 'pass' or refer to a primitive (int, long, short, double, float, const) then we are actually DIRECTLY REFERRING to its VALUE on the stack, not to its PLACEHOLDING POINTER REFERENCE to a value held on the managed-heap 
+SO within the scope of a method, ANY ALTERATION TO THIS VALUE of the primitive var WILL NOT AFFECT THE FUNDAMENTAL STACK-STORED VALUE of that primitive var. IT WILL ONLY TEMPORARILY (WITHIN THE METH() SCOPE) change that value. Exiting the scope of the meth() and calling that primitive var will return whatever was the initially stored value on the stack (i.e. original, pre-meth() entanglement value).
+
+IN CONTRAST TO THIS strings and arrays (strings are actually arays of single-char strings anyways), are OBJECTS and thus value-stored fundamentally on the managed-heap. ANY CHANGES TO THE ARRAY'S OVERALL(i.e. array object itself) or INTERNAL (i.e. array elements individually) values WILL PERSIST OUTSIDE OF THE METH() scope.
+ 
+
+++++++ sequential search algo
+
+this is a slower approach which goes through each array element one at a time and checks if the sought value is contained within that element.
+sequentialSearch() is an inbuilt method, alongside binarySearch() of the Search inbuilt  superclass
+
+sequentialSearch is just the usual simple loop of checking each element, incrementing every time the value is not == the one we are looking for (the 'key' placeholder)
+
+++++++ binary search algo
+
+This other search algo is avaialble as an option IF we have already sorted out the array elements' values in asc or desc order. Since the array is now ordered by value. 
+The binary search is a FASTER divide-and-conquer approach that takes the full array, halves it, searches for the sought value in one half and then the next half if the value is not yet found on each iteration. 
+This is a more efficient approach but needs a sorted array.
+
+++++++ DUAL DIMENSION ARRAYS (simple NESTED ARRAYS)
+
+this type of array simple requires further nested arrays as the elements of the super-array
+
+Simple we declare it with two [][] markers after  the named title of the super-array object. Then, to define the number of super-array elements and these elements' respective sub-array elements, we simply add our intIndexPos count within the brackets:
+
+double superArray [][] = new double[3][5];
+//creates a super array of 3 elements, each of which are sub-arrays of 5 elements (all in double types):
+
+superArray 	
+			[0] 		 ,       [1] 		 ,    	[2]
+[0][1][2][3][4],[0][1][2][3][4],[0][1][2][3][4] 
+DOUBLE values ONLY 
+
+to refer to the super-array element's sub-array elements, we simply use the [superArrayElementIndexPos][subArrayElementIndexPos] markers
+
+++++++ MULTI-DIMENSIONAL ARRAYS (complex nested arrays)
+For multidimensions (as many levels down as needed) we just add an extra [] for every further level of array. 
+
+NOTE that a short hand method for declaring and intialising dual/multi dimensional arrays exists. this is the array initialiser form:
+
+int intSuperArray[][] = {{1,2,2},{,4,5,6}};
+//equivalent to 
+int intSuperArray[][] = new int[][];
+intSuperArray[0] = [1,2,2];
+intSuperArray[1] = [4,5,6];
+
+string multiStrArray [][][] = {{'sub-string1.1','substring1.2','etc'},{},{}};
+
++++++ POLYMORPHIC SEARCH
+One issue with writing search algorithms is that we have to re-write them every time we need to re-adapt them to a new type array - an int-based search will not work for a double based search.
+Polymorphism can help with this.
+To do so, we use the inbuilt Java wrapper classes that define these types, like the Integer wrapper class or Double Wrapper class. We use these in conjunction with another hard-coded Java component, the java.lang.Comparable interface class which contains the compareTo() abstract method. this method is implemented by all of the wrapper classes (int, double float etc
+
+compareTo() takes an two objects of the same type and compares them, returning a positive, negative or 0 int to give an answer about whether object1 is greater than, lesser than or equivalent to object 2:
+
+if(obj1<obj2) then obj1.compareTo(obj2) <0
+if(obj1.equals(obj2)) then obj1.compareTo(obj2) ==0
+if(obj1>obj2) then obj1.compareTo(obj2) >0
+
+because we consider these as OBJECTS, then we can create an general COMPARATOR METH that we can then deploy to different type arrays (ints, doubles, longs etc):
+
+public void genericCompare(Comparable[] array){
+	Comparable temp; // temp var for compare
+	for (int a=1; a<array.length; a++){
+		temp = array[i]; //absorb indPos val to temp					
+			int b;//initialise the comparato placehold
+			for (b=a-1; b>=0 && 		
+			array[b].compareTo(temp)>0; b--)
+				array[b+1] = array[b];		
+			array[b+1] = temp;
+	}
+}
+
++++++java.util.Arrays.sort()
+
+the best sorting algos are available anyway via the Java utilities packages and other imports
+For example, to polySort two arrays, all we have to do is import util and pass the arrays to the sort() meth within Arrays class:
+
+import jave.util.*
+
+java.util.Arrays.sort(array1Name);
+java.util.Arrays.sort(array2Name);
+
+
++++++ java.util.Vector
+
+this class is useful because it provides a construct for a special type of mutable-sized array. regular arrays, once declared and defined, have a fixed size access by indexPos. But a vectored array will mutably change size according to filling up of elements when the original array size is extinguished. 
+Inevitably, this is more resource heavy due to ongoing indexing/re-indexing and relevant mem allocation
+
+NOTE the vector class/method doesn't take any primitives (ints, doubles etc). So any primitives need to be converted to a wrapper object equivalent via their various Wrapper class methods.
+
+
+//////////////EXCEPTIONS\\\\\\\\\\\\\\\\\\\\\
+
+Usual exception reporting mechanisms... TRY-THROW-CATCH
+
+Like anything else in JAVA exceptions are also set up as a set of inheriting/inheritor (super/sub)-classes. Basic structrure is:
+								
+								 -------								
+								|OBJECT|
+								 -------
+								//    
+		   			-------	 									
+				  |THROWABLE| 	
+   					-------
+							 ||
+					 ----------  
+					|EXCEPTION|
+					 ----------
+	//			// 	 || 			\\     \\   \\
+						 ---------			OTHER EXCEPTIONS
+						|  RUNTIME|
+						|EXCEPTION|
+						 ---------
+NOTE RUNTIME EXCEPTIONS ARE CONSIDERED TO BE UNCHECKED EXCEPTIONS == THIS MEANS THAT THE JRE WILL NOT AUTOMATICALLY THROW THESE EXCEPTIONS- THE THROW CONSTRUCT IS UP TO THE PROGRAMMER 
+
+NOTE that the CHECKED exceptions are those exceptions which are inbuilt and based on certain excpected potential faults/errors. For example, any BufferredReader.readLine() meth will have checked exceptions built in if, for example the file stream doesn't read correctly,
+								||
+===============================================
+		||    ||   ||   ||  ||   ||    ||   ||    ||
+		Arith Aray Clas Ill Ill Indx  Neg  Null  Sec
+		Metic Str  Cast Arg Mon OutBd Aray Point exc
+										||				||	  ||
+										||				||    \\  pointer
+EG: /by0           Wrong    string   \\ ref. not
+								   arg		  or array || mapped				
+											      indexPos || correct
+											      outside  || to mem
+											      range    || object	
+										//        ||     ||  
+									 //         ||     || 		
+					       Num		    Array     ====Str
+					       Format	    Indx          Indx
+					       Excep		 OutBd	        OutBd
+
+EG:             illegal     array 								
+								format      indexPos
+							  for a num   outside
+											      range
+											
+											
++++++++ OTHER IMPORTANT EXCEPTIONS:
+
+FileNotFound -
+
+
+METHOD     		EXCEPTION 				REASON
+valueOf(String)
+					NumberFormatException
+													String not a double
+parseInt(String)
+					NumberFormatException
+													String not an int													
+String(String)
+					NullPointerException
+													String != NULL			
+indexOf(String)
+					NullPointerException
+   												String != NULL
+lastIndexOf(String)
+					NullPointerException
+													String != NULL																
+charAt(indexPosInt)
+					StringIndexOutOfBoundsException
+											Int not a valid indexPos			
+substring(indexPosInt)
+					StringIndexOutOfBoundsException
+											Int not a valid indexPos
+substring(indexPosIntStart, indexPosIntEnd)
+					StringIndexOutOfBoundsException
+											Int not a valid indexPos			
++++++++
+The usual throw construct exists. 
+NOT that, even if an exception is a CHECKED one, that will still need us to tell the java engine how to respond to picking up on such an exception. By using the THROW construct, we can tell the JRE how to handle such exceptions.That's known as DECLARING an exception. 
+
+Generally, it is good practice to declare an exception for EVERY function/method that contains some action relating to activities that need checked exceptions, such as buffering, or InputOutput.
+EVERY means EVERY. So, for instance, if we had an IO method that requires a throw on an IOException, then the MAIN METHOD IMPLEMENTING RUNTIME EXCUTION OF THAT DEFINING METHOD MUST ALSO HAVE IT'S OWN THROW BLOCK:
+
+import java.io.*;
+
+public class definingMeth{
+//instance the var
+	BufferedReader input = new BufferedReader(new 	
+	InputStreamReader(System.in));
+//thedefining methd needs THROW to tell compiler
+	public void execRead() throws IOExecption {
+		String inputString = input.readLine();
+	}
+}
+///RUNTIME EXEC ALSO NEEDS THROW
+public static void Main (String argv[]) throws 
+												IOException{
+		definingMeth instance = new definingMeth;
+		definingMeth.execRead();
+}
+
+UNCHECKED EXCEPTIONS are not checked by the Java Compiler and relate mostly to RUNTIME EXEC. Thus very difficult to detect at compilation time Thus, UNCHECKED- they are not checked by Java and do not need a THROWS statement for the programme to run (despite risk of errors).
+When errors do occur, they are handled by default error handlers, except if we decide to make our own custom throws for them  
+
+
+++++++The Exception class
+
+The java.lang.Exception class holds two constructor meths() for throwing and cathing excepts. It is itself inheriting from java.lang.Throwable, a class with more parameters and methods relating to exceptions - like printStackTrace() and getMessage()
+
++++++++ Throw-Try-Catch
+
+basically, THROW deals with setting out which exception is to looked out for and optionally, can whichever exception instance is deployed can take a customised message as Arg1 of its constructor meth (inherited from the Throwable Superclass.
+
+TRY relates to testing if the programme being deployed gets a hit on the Thrown exception. basically, try is just a 'umbrella' function block, covering what is otherwise the normal functions/parameters of the programme.
+ 
+CATCH relates to WHAT TO DO if a thrown exception is caught by the Java parser- we can make a reference to the custom error message outlined in the Throw block, and also can deploy other Throwable superclass methods like printStackTrace() and we can tell the system to exit without further action ( System.exit(0); )
+
+A benefit of Java is that the fact that the MAIN METHOD RUNTIME EXEC CLASS is the starting point of running the programme means that we can locate any execution and expectation of exception handling within this main method. This leaves other classes in the source code uncluttered- with only throw statements required and potentially, outlining the specific exception and any specific output message we would like to focus on.
+NOTE by deploying THROW we are just telling the engine to BOLO for the named exceptions.
+
+When running the programme, as Java parses through the compilation code, if it finds information that is matching the THROWN exception, then it exits the parsing and goes to the next relevant CATCH block (held in the runtime class's MAIN method scope alongside the normal runtime code which is covered by a TRY statement)
+
+The CATCH block works like a normal function block except the methods it defines are exceptions and the consequences of catching them (like prinitng a stackTrace) There can be multiple exceptions outlined in a single catch block that are mapped to a try block of code BUT THE ORDER OF THEIR APPEARANCE IN THE CATCH BLOCK IS IMPORTANT BECAUSE JAVA PARSER LOOKS FOR FIRST MATCHING HIT AS IT GOES DOWN THE CODE AFTER A RELEVANT EXCEPTION IS THROWN. If a more generic catch clause comes BEFORE a more specific one, it will shadow over it and be the one caught and executed by Java, put the specific ones first, then the general ones.
+
+
+The generic structure is: 
+
+START COMPILATION CODE...
+Class1{
+conditionalStatement:
+	throw new ExceptionClassName(OptArg1Message);
+...
+}
+class2{
+GeneralStatements...
+throw new ExceptionClassName(OptArg1Message);
+....
+}
+END COMPILATION CODE...
+RUNTIME EXEC
+START RUNTIMECLASS {
+	PSVM {
+		try {
+			normal Execution code here...
+			...
+		}
+		catch(Exception1Name exceptInstName) {
+			statementst to be executed like:
+			System.out.println(
+			exceptInstName.getMessage());
+			exceptInstName.printStackTrace();
+			System.exit(0);
+		}
+		catch (Exception2Name exceptInstName) {
+			etc..
+		}
+		finally {
+			The finally block is for stuff to run
+			WHETHER OR NOT AN EXCEPTION HAS BEEN
+			THROWN AND CAUGHT... i.e. steamroll ahead
+			in this block.
+		}
+	} 
+}
+END OF RUNTIME EXEC
+
+NOTE the following rules apply structurally:
+
+1. A TRY block must be followed by a single or series of CATCh blocks
+2. THrow statements in compile code will BOLO both checked and unchecked (runtime) excepts But the unchecked ones don't need explicit catching on the programmer's behalf.
+3. in a throw statement scope, the type of exception outline must match one dealt with in a RUNTIME Catch block ALSO a throw statemetn must be within the DYNAMIC SCOPE of the relevant TRY block OR it must be a THROW statement attached to a method or constructor whose (super)class/interface already has a builtin throw clause of its own that is dealing with the exception that's being thrown (i.e. it inherits the scope for throwing the exception from the class whose instance it is being attached to by our own throw statement in compilation code).
+
++++++++ DYNAMIC VS STATIC SCOPE
+
+Essentially, dynamic scope is any type of scope that allows for CHANGEABLE statuses, whereas the astatic  scope will relate to a status that is FIXED.
+An example of dynamic scoping is any main method() that concerns itself with multiple inter-related, and mostly static, compilation blocks/clauses.
+FUNDAMENTALLY, dynamic scope MUST ALWAYS BE RELATING TO SOME KIND OF RUNTIME EXECUTION BECAUSE BY ITS VERY NATURE, the choice must exist, based on human inputs or conditional loops, for example between multiple potential statuses to be run and consol'd/returned to main memory.
+
+Within a typical block of source code, for instance, the functions and clauses held in the compilation section above will tend to be  STATIC because they relate to fixed values/vars, conditions etc. The lower section dealing with RUNTIME can (but don't have to) instead be DYNAMIC- because they provide a choice between multiple potential statuses.
+
++++++++ Exception StackTracing
+
+Java's architecture comes with an inbuilt self-note-taking ability that it can release with the printStackTrace() function attached to the THROWABLE superclass.
+The stack trace printout basically goes 'backward in time' from the DYNAMIC main method being called backwards through the various STATIC methods that preceded it in an effort to find where an EXCEPTION that's been highlightedi n the TRY block has now been CAUGHT in the runtime execution.   
+
+The reason a stack trace can even be printed, is vecause the STATIC method blocks THEMSELVES are treated as if they were members of a kind of META-STACK (at runtime) over and above the 'standard' stack that deals with the vars and static function's scope contents. 
+So when the main meth executes and has a printStackTrace() instruction attached to it, it will go back through the record of these various static methods that have been executed as members of this 'meta'-stack during runtime, in an effort to find where the exception that caused exit/consol'd out warning occured (i.e. in which of these (meta-)stack elements / static method/function blocks
+ 
++++++++ Robust Design Principles
+
+Not all exceptions are the same: some may have more gravity than others and thus the behaviour of our programme when dealing with them will also differ:
+1) Known/handleable exceptions
+- these are known by Java's engine and can be left to handle by it - for example, a unchecked runtime exception 
+
+2) Fixables
+- in this case, we can BOTH FIX the exception and keep the runtime going 
+
+3) Unfixable But Stoppable
+we can have a response that logs the exception but also we must END the programm's runtime exec - i.e we can't fix it during runtime and have to debug the code
+
+4) Unfixable & Unstoppable
+
+With this error we cannot fix it during runtime AND in fact we have to keep runtime running because this error cannot stop the programme. 
+In some cases terminating runtime can have very negative consequences, for instance loss of data- or in extreme cases- a mission-critical or dangerous outcome as in the case with engineering or any kind of kinetic situation
+
+Generally a good practice to limit data's interaction with a programme in order to encourage a limited scope for intrusion, bugging, alteration etc. I.E. FILTERING INPUT and DEFENCE IN DEPTH/ FAILSAFES 
+
+In certain cases, the error is not significant enough to cause a termination of runtime, or to warrant any termination of the CORE PROGRAMME. For example a simple mistaken input (for example the type of input being put in) can be fixed while the programme continues to run, for example by throwing an error message to the user and asking them to fix their input. Many such minor potential mistakes can be foreseen and pre-coded 
+this pre-coding is called DEFENSIVE DESIGN.
+
+A simple example of this within a GUI  context might be the following: an INT-ONLY input field constructor that is inheriting it's respective constructor methods from  the JTextField class within AWT superclass. The field is instantiated, takes a size variable that determines the size of the input box and throws a possible failure to enter an int as a NumberFormatException. Then, in the second part of the code, the try and catch blocks outline the execution of the excpetion (if an int fails to be entered) which is basically a warning message dialog box that asks user to enter correct type(int). It finished with a finally block that REPAINTS() - a method inherited from the AWT classes that calls on the JRE to relaunch the paint() method that drew up the int-only input form again:
+
+import javax.swing.*;
+
+public class IntOnlyEntry extends JTextField{
+	public IntOnlyEntry(){
+		super() //refering to extended superclass 
+						//constructor meth()
+	}
+	public IntOnlyEntry(int boxSize){
+		super(boxSize);
+	}
+
+	public int fetchInput throws 
+												NumberFormatException {
+		return Integer.parseInt(getText());
+		// fetch the human inputted text and return 	
+		the integer that can be parsed (throw the 
+		exception in case it can't be parsed) 
+	}
+}
+//That's the constructor, but now we have the block relating to OUTPUT (including exception output):
+
+public void outputEvent (outputEvent event){
+	try{
+		userInputInt = IntOnlyEntry.getInt();
+		confirmationMsg = 'The number you have 
+		entered is: ' + userInputInt + '. Is that 
+		correct?' ;
+	}
+	catch (NumberFormatException numXcpt){
+		JOptionPane.showMessageDialog(this, 'Sorry, 
+		the entry must be an integer. Please try 
+		again.'); 
+		//note THIS is this numXcpt instance of 
+		numberformatexception class.
+	}
+	finally{
+		repaint(); //repaint meth deployed in any 
+		case whether success or fail
+	}
+}
+
+NOTE it may not always be the best policy to fix potential or actual exceptions. For example we can use ENVELOPPING DESIGN principles to have our user interactions 'absorb' any potential or actual issues. For example, let's say we had users inputting two string values into an array. We expect only two strings to be inputted, but we want to absorb the possibility of more than two - although we might want to put a limit on just how many extra strings to absorb.
+So what we could do is set up an initial string array that takes the user input as the intiial data structure BUT we may want to add a looped addition of further string elements to be 'absorbed' into the string array WITH A LIMIT OF up to seven total array elements:
+
+//we'll make this a private array since it is only for data purposes limited to our programme:
+
+private void inputStringArrayConstructor (String usrStrIn) {
+//throw in a try covering this array constructor 
+//block to catch any case of having passed more 
+//than the two expected strings.	
+	try {
+		initUsrStrArr[count] = usrStrIn;
+	}
+	catch (ArrayIndexOutOfBoundsException 
+	arrIdxExcpt) {
+	if 
+		String modUsrStrArr[] = new String[]
+	}
+}
+
+COME BACK
+
+
+Generally, however, it is not a good idea to have such absorbing/envelopping exception response design for 2 reasons:
+1. If the inputs are not fitting into the originally designed spaces, this is a fault of poor design and 
+2. this has security implications due to the possibility of abusing this open-ended (absorbing) structure.
+
++++++++ CUSTOM EXCEPTIONS
+
+As with any other inbuilts (which are fundamentally objects/class instances themselves in Java), we can also construct our own custom-built exception classes.
+
+To do so, we EXTEND the Exception superclass into our custom class and then deploy the usual inheritance-based nomenclature- for example the SUPER keyword to refer to the inheritee superclass - in this case the Exception one. We do this, for example, if we want to deploy the getMessage() meth from EXCEPTION:
+
+public class IntOutOfRangeException extends Exception {
+	public IntOutOfRangeException (int Bound){
+		super('The input exceeds the bound: ' + Bound);	
+	}
+}
+
+We can then deploy our custom exception instance inside the 'normal' class coding in order to throw for any potential exceptions that we have defined ourselves.
+
+								
+//////////////////STREAMS\\\\\\\\\\\\\\\\\\\\
+
+Usual input-output concepts in J as with P or C#
+
+Broadly file/data handling falls into a DATA HIERARCHY which follows a broad pattern of:
+							DATABASE
+								 ||	
+								FILE(S)	
+								 ||	
+								RECORD	
+								 ||
+								FIELD	
+								 ||
+								BYTES
+								 ||
+								BIT (STREAM)
+								
+Portability is an important consideration in the way the document's bit-representations can be decoded by different environments- for example, TXT file format is very widely decodable thanks to widespread availability of ASCII-decoding programmes/software
+
+Surprisingly, BINARY DATA FILES (BIN) are not as portable. That's because the format and type of encoding of the bits can differ significantly from environment to environment. Different environments and even different programming languages have different ways of encoding even a small piece of data such as an INT primitive type. 
+That's one of the reasons for JAVA's VIRTUAL MACHINE, converting bits to bytecode that becomes platform independen -the same thing is achieve with C# and other virtual machine-based langs. It enforced uniformity by creating an extra-layer between the assembly language and machine-language(the virtual machine language).
+
++++++++ I/O CLASS STRUCTURE
+
+In Java, the IO classes/inbuilt meths mostly derive from two abstract classes: InputStream{} and OutputStream{}
+
+Prominent sub-classes  are: Writer{} and Reader{}
+
+Full structure below:
+
+							OBJECT UBER CLASS
+										||					
+===============================================		
+    ||        ||		||		   ||			  ||
+INPUTSTREAM	READER FILE	OUTPUTSTREAM WRITER
+|| 					|| 					|| 					 ||
+|=ByteArray |=BuffdRdr	|=ByteArrOut |=BuffdWri  
+||InputStrm ||   ||			||Stream 		 ||
+||					||LneNumRdr	||					 ||
+||					||					||           ||
+|| 					||ChrArrRdr || 					 ||
+|=FileInput |= 					|=FileOutStrm|=ChrArrWr  
+||Stream    ||					||					 ||
+|| 					|| 					|| 					 ||
+|=FilterInp |=InpStrmRdr|=PipedOutput|=OutStrWr 
+||Stream   	||	  ||		||Stream     ||
+||					||		||		||					 ||
+|| ||  \\		||FileReader||           || 
+|| ||   \\	||					||				   ||
+||Buffd Data||          ||           ||
+||Inp   inp ||          ||           ||
+||Strm  Strm||	        ||           ||
+|| 					|| 					|| 					 ||
+|=ObjInput  |=PipedReadr|=ObjctOutput|=PipedWri  
+||Stream    ||          ||Stream     ||
+|| 					|| 					|| 					 ||
+|=PipedInp  |=StrgReader||			     |=PrntWrit  
+	Stream    	          ||			     ||
+	 						 					|| 					 ||
+	          	 					|=FilterOut	 |=StrgWrit  
+													Stream
+											//   ||     \\
+										 //    ||      \\
+								DataOutput BuffdOut Filter
+								Stream		 Stream   Writer
+
+
+NOTE - FILTERING refers to making modifications to data when the data is in transit (I/O)
+
+BUFFERING is one type of filtering in which  data is stored in a large chunk of memory which takes in significant numbers of bytes into it when transferring (usully for slow or easily overloaded inputs like  a network or other streams). The temporarily held buffer data is then, chunk-by-chunk retrieved by a programme to be interpreted/acted upon- this aspect is usually very quick (since it's local-to-local comms).
+
+Output buffs are the same except in reverse.
+
+As usual, in Java we can also create custom classes for filtering/buffering according to our custom requirements. In this way, we can 'piggyback' onto existing I/O classes but then add our own custom needs, this is part of the CODE REUSE ELEMENT OF OOP.
+
++++++++ Designing a GUI Text File READER/WRITER
+
+
+For the GUI design, we will use the javax.swing classes: JFrame -Display JText Area
+								-Controls JPanel
+										-Prompt JLabel
+										-Input JTextField
+										-ReadFile JButton
+										-WriteFile JButton
+
+NOTE When dealing with text files, it is important to deploy the special chars that signify text document locations to the I/O buffer/filter which parses/loops through the data read/write op. This includes the \n newline and, in Java, the \eof end of file markers.
+
+++++ file input
+
+To data write TO the file, we need to connect an output stream toward the file object, and possibly loop some aspects of writing. Also the stream must be closed when writing is finished.
+if a sameName/Type file object already exists, then opening the output stream will DESTROY EXISTING data (overwrite). Otherwise a new file object is created
+
+Choosing which type of Writer Subclass object we should deploy for writing is a matter of judgement based on examining the Java doc.
+For example for the purposes of the GUI write/reader, the FileWriter class seems well suited since it is design for text file output. It inherits, via the OutputStreamWrite superclass, the write() method from the further up Writer gigaclass.
+
+
+Now we can prepare the writing component of our programme, BUT we must remember to include it into a TRY-CATCH block structure, in case there is some error in input-output streaming. In this case, the IOException class, within the Exception superclass, is well suited to this:
+
+private void wrTxtFile(JTextArea txtDisp, 		
+											 String fileNme){
+	try{ 
+		FileWriter fileStrmOut = new FileWriter 
+														(fileNme);
+		fileStrmOut.Write (txtDisp.getText());
+		fileStrmOut.close();	
+	}			 
+	catch (IOException e){
+		txtDisp.setText('IO Error: ' + getMessage() 
+										 + '\n');
+		e.printStackTrace();
+	}		 
+}
+
++++file output
+
+Again, we need to consider what the right output class is. Here we also need to think about what methods we need to write, because multiple classes and multiple methods exist that enable use to grab the text on the display to write to a TXT file. In fact, in some cases several classes can be used in conjunction - for example, if we want to write any type of text to our file, we will need to combine two classes: PrintWriter because it has a print(String...) method that we need but we also must inherit from FileOutputStream's samename method which will allow us to create the actual data stream. So our custom writeToDisp object will be an instance of the PrintWriter class and  will write the raw data files VIA the FileOutputStream co-inherited meth which will be placed as print() meth's arg1. This embedded FileOutputStream meth will take its own arg1 as the file data to be read and printed to display:
+
+PrintWriter writeToDisp = new PrintWriter(new 
+										FileOutputStream(fileNme));
+writeToDisp.print(display.getText());
+writeToDisp.close();
+//remember to close filestream.
+
++++reading from a text file
+
+Again there is a process of choice regard super-class to be deployed.
+In terms of a method, we will need one that grabs the filename data and pumps it into the JTextArea.
+Here we are using some kind of superclass within the READER gigaclass- since we are reading from the file to display. FileReader and BufferedReader seem relevant. 
+FileReader does have a constructor but the problem is that if we go up the hierarchy to its overseeing class, InputStream Reader, we see that it only has a read() method which is intended to read ints ONLY (i.e. bitwise reading). InputStreamReader and its child FileReader don't have a readLine() meth for strings.
+
+BufferedReader, on the other hand, DOES have a readLine() meth AND its constructor method that creates an instance of it takes as it's arg1 some kind of Reader gigaclass - whether it is a BufferedReader or any other class inheriting from Reader gigaclass). So in fact, since FileReader is a grandchild of Reader gigaclass, we can place it in arg1 of our instanced BufferedReader constructor.
+Together again, the FileReader deals with the raw bits by using the read(int ... ) meth, in which we will put in the text file as the arg1, and the BufferedReader will read that FileReader int stream as a string one line at a time via readLine() thus also buffering output.
+
+But we don't want to have the text displayed one line at a time for our human reader. So we can create a simple loop that checks if our instance of the BufferedReader class' implementation of its readLine() meth has reached the end of the file. We know when this is reached because readLine() returns a NULL value when the end of the filestream reading is achieved. So we create a negative ! condition for reaching null, and until that is reached by our parse through the read file data, then we print out one line out at time by using display.append (since we are in GUI environment not console). The reader thus looks like this:
+
+BufferedReader grabTxtFile = new 
+							 BufferedReader(BufferedReader(new 
+							 FileReader(fileNme)));
+
+String oneLine = grabTxtFile.readLine();
+	while (oneLine != null){
+		display.append(oneLine + '\n');
+			oneLine = grabTxtFile.readLine();
+	}
+
+However, we are not done because we need to wrap this into an IOException TRY-Catch block, as with the wrTxtFile previously. So with the Try-catch structure:
+
+private void GrabTxtFile(JTextArea txtDisp, String fileNme){
+
+	try{
+		BufferedReader grabTxtFile = new 
+							 BufferedReader(BufferedReader(new 
+							 FileReader(fileNme)));
+		
+		String oneLine = grabTxtFile.readLine();
+			while (oneLine != null){
+				display.append(oneLine + '\n');
+					oneLine = grabTxtFile.readLine();
+		  }
+	}
+
+	catch(FileNotFoundException f){
+		txtDisp.setText('Error_File_Not_Found: ' + 
+										fileNme + 'could not be 
+										found \n');
+	}
+	catch(IOException e){
+		txtDisp.setText('IO Error: ' + 
+										e.getMessage() + '\n');
+		e.printStackTrace();
+	}		 
+}
+
+
++++++++ text file input
+An alternative to the above method for grabbing raw byte data  and reading it out to the display would be one that uses just the raw FileReader byte output stream via its read() method, unlike the above construct which converted the byte stream from FileReader read() to a txt string via the BufferedRead's readLine() meth.
+
+We can cut through this dual inherited class use by simply designing an algo that will convert the read() raw data - which is actually read as bytes but also then turned into unicode int coding- into chars. All we need is a conversion loop that takes each unicode int sequence and reveals the relevant char that they are assigned to. That way, char-by-char, and using only one inherited class(FileReader) method(read()), we an make our file reader faster:
+
+int oneChar = grabTxtFile.read();
+	while (oneChar != -1){
+		display.append(char(oneChar) + '');
+			oneChar = grabTxtfile.read();
+	}
+
+//NOTE that instead of NULL this time, the -1 intPost is the marker of an end of file (eof) event).
+//the append meth takes arg 1 as a char() conversion of each of the unicode byte ints being parse and adds an empty string - to make sure spaces between chars remain the same. any actual whitespaces in the file being read will be kept because they also have a respective unicode code that will be translated into whitespace char by char().
+
+++++++read/write from/to binary
+NOTE we can also use the above construct to read from binary data.
+
+A difference is the superclasses of filestreamers (input and output) to be inherited from. With output, some child of OutputStream is likely useful, probably FileOutputStream if we plan to grab and parse binary data and then output to a non-binary file. One limitation with the FilOutputStream is that it has a method for write() in general but this deals with int and byte primitives only- it doesn't allow writing to strings/chars/doubles. DataOutputStream does allow these broader types being written to the output file - it has several methods for each type. So, as before, we will have to combine these two superclasses in inheriting their methods. And as usual, we'll throw an IOException in case something goes wrong.
+
+For reading binary we need a child from InputStream and again the FileInputStream superclass is interesting But, again, we need to combine it with another of InputStream's children because it doesn't have a broad read() method, only a self-name FileInputStream grabbing bytes. So, we use the DataInputStream superclass alongside it, piggybacking FileInputStream as its arg1 and passing that one the fileNme we need to have read. 
+
+One issue here is how to catch the end of the file read. Instead of Null or -1, we use an EOFException which will terminate the reading/parsing loop because it will be thrown as soon as binary data is no longer available to be read. 
+
+NOTE that this EOFException has to be CLEARLY UNDERSTOOD TO BE A PLACEHOLDER FOR STOPPING THE READING STREAM- it is not A REAL EXCEPTION. So because of this, AFTER THIS PLACEHOLDER EOFEXCEPTION HAS BEEN DEPLOYED TO STOP THE STREAM, WE NEED TO OFFICIALLY CLOSE IT WITH CLOSE() METHOD.
+ONLY THEN CAN WE DEPLOY THE CATCH BLOCK FOR REAL EXCEPTIONS RELATING TO THE READING TRY BLOCK
+
++++++++ Object Serialisation
+
+This refers to reading and writing whole OBJECTS. This is enabled in the java.io package which allow the reading/writing of such meta-size data (in contrast to binary or even chars/strings) relatively smooth.
+
+Unlike Reader and Writer gigaclasses, here we deal with the Serializable gigaclass. 
+FOR AN OBJECT TO BE SERIALIZED it must somehow inherit membership from a serializable class. the Serializable gigaclass is itself actually just a flagger interface, it's purpose is just to flag out any sub-classes/objects that are serializable under its umbrella. We can make an class/object serializable, therefore, simply by declaring that class/object to IMPLEMENT serializable gigaclass.
+
+Within the Serializable gigaclass we find the ObjectOutputStream and ObjectInputStream superclasses. BUT we will need to combine this with the raw FileInputStream and FileOutputStream superclasses (within Reader and Writer gigaclasses) as usual - because we need these for the raw binary input/output, which then can be converted to reading/writing to whole objects with the above object superclasses.
+NOTE that with an object, we don't need to be dealing with an 'external' file- we can have a single class that BOTH defines what the object's template of data/info is AND deployed a ObjectOutput/Read ObjectInput/Write meths via the THIS keyword - refering to its own instance. Whenever we construct an instance of such an object class, we can thereby define and write/read those data points of that object.
+The utility of an object is therefore this 'self-contained' aspect making it quite functional. Note another, more complex object schema, can have many different objects alls being cross-referenced from a 'root' object that holds an array of serialized objects
+
+Simple Object schema (in this case creating a student object template):
+
+import java.io.*;
+
+public class StdntRcrd implements Serializable{
+	private String fullNme;
+	private int yrCohort;
+	private char grade;
+	
+	public StdntRcrd() {} 
+//CONSTRUCTOR METHOD for ObjectOutputStream
+	
+	public StdntRcrd(String fullNme, int yrCohort, 
+									 char grade){
+		fullNme = fullNmeIn;
+		yrCohort = yrCohortIn;
+		grade = gradeIn;
+	}
+//definition of individual values for ObjectInputStream	
+
+public void wrObjToFile(FileOutputStream objOut) 	
+												throws IOException{
+		ObjectOutputStream objOutStrm = new 	
+										ObjectOutputStream(objOut);
+		objOutStrm.writeObject(this);
+		objOutStrm.flush();                       
+	}
+
+public void rdObjFrmFile(FileInputStream
+		           objInStream) throws IOException, 			
+            						ClassNotFoundException{
+		ObjectInputStream objInStrm = new 	
+											ObjectInputStream(objIn);
+		stdntRcrd n = 
+						(stdntRcrd).objInStrm.readObject(); 		
+			this.fullNme = n.fullNme;
+			this.yrCohort = n.yrCohort;
+			this.grade = n.grade;
+
+		public String toStrg(){
+			return fullNme + '\n' + yrCohort + '\n' +
+						 grade;
+		}
+	}
+
+}
+
++++++++ the loner FILE class
+
+You noticed earlier that the java.io.file superclass sits on its own. It's purpose is to pre-empt failed reading from files because of FileNotFound Exception (due to an excepted file not being located in a relevant directory).
+The File class provides a platform-independent representation of an OS's directory and file information.
+The path is the destination toward a sub-directory/file
+When a programme is running, it by default has its current directory to be considered that which is relevant to it -so any files within that shared directory can be referred to by name only. Any files in that a sub-directory held by this shared directory will need a shorthand path like /subdirectoryName/fileNme.txt
+Unix uses / but Windows uses / and \
+
+The above example is one of relative filepaths.
+
+Absolute fp is total position of directories from root directory (root in unix, C in windows)
+
+File class comes in here because it offers means to validate file names/paths before any such file is attempted to be read by a programme. It also contains methods for checking if a file is even readable ahead of any attempt at executing a reading/writing of it.
+We can run a File-class based check on a file for read OR write (for example to check that a name is appropriate using canWrite() meth).
+Here is an example of a readable/corrupted file check:
+
+private boolean isReadableFile(String fileNme){
+	try{
+		File exmndFile = new File(fileNme);
+			if (!exmndFile.exists())
+				throw (new FileNotFoundException(filenme 
+																+ 'not found');
+			if(!exmndFile.canRead())
+				throw (new IOException('File ' + fileNme 		
+												 + ' is not readble.' ))
+		return true;
+	}		
+	catch(FileNotFoundException f){
+		System.out.println('Error: The file ' + 
+								 fileNme + ' was not found \n');
+		return false;
+	}
+	catch(IOException e){
+		System.out.println('I/O Error ' + 
+												e.getMessage() + '\n');
+		return false;
+	}
+}
+
++++++++javax.swing.JFileChooser
+
+This is a Swing superclass that allows us to navigate files/directories in a GUI environment.
+It creates the familiar pop-up window allowing us to navigate a system's directories and to choose a file to open. Example:
+
+JFileCHooser tFilePickens = new JFileChooser();
+
+int dialogInteraction = 
+							tFilePickens.showOpenDialog(this);
+
+	if (dialogInteraction == 
+									JFileChooser.APPROVE_OPTION) {
+		File chosenFile == 
+								 tFilePickens.getSelectedFile();
+			//HERE WE INSERT THE FILE READING CODE - 
+			IE READ DATA (BYTE/CHAR-BY-CHAR/LINE-BY-
+			LINE)FROM FILE (AND FIRST MAKE A FILE-		
+			CLASS BASED CORRUPTION CHECK IF WE WANT)
+		String fileNme = chosenFile.getName();
+		display.setText('You are opening ' + 
+										fileNme);
+	}
+	else
+		display.setText('You didn\'t select any 
+										file');
+
+//////////////RECURSION\\\\\\\\\\\\\\\\\\\\\
+
++++++++General principles
+recursive funcs use up more mem that for loops / iterators
+
+Two core elements of recursive func writing: -
+-divide-and-conquer breakdown of big problem into multiple smaller problems to be dealt with one at a time and 
+-self-similarity i.e. self-referentiality
+
+NOTE that not-only are functions recursive, but arg/paras can also be recursive. For example, in keeping track of a recursion's progress a recursive para/arg is useful since it keeps being called as the 'bookmark' of the recursive and changing method calls on a recursive method stack.
+
+The method stack is recursive because the other arg, either arg2, 3 or whatever, and a related recursive para within the function block, will be re-calling the function on itself BUT this time with whatever changes have occured since the last call. This means recursive stacked methods are not identical, but rather memory-based copies of changed versions of themselves after each recursive iteration.
+
+A final point to note is that, like any loop, a recursive function will need, usually at the beginning of the function block, some kind of 'exit parameter' being defined, otherwise it will keep looping or throw out an exception if it runs out of material to be going through recursively. This is often nicknamed the BOUND -i.e. the end of the recursive iterations.
+A few more general points before examples.
+Like all functions, standard or recursive there is a LIFO stack principle being applied in memory- last in, first out. The ultimate recursive function iteration is the first one to be returned, and so on and so forth until the bound is reached.
+
++++++ Examples
+
+ - recursive printing of a string 
+// following example is function printing passed arg1 string. parameter in function details exit bound and this is followed by a parameter defining a placeholder indexPos char for noting progress before next iterative recursive call on the self-same recursive function, this time with whatever is left of the string being place in arg1 : 
+
+public void recurStrg(String strg){
+	//exit para
+	if (strg.length() == 0)
+		return; // if empty string OR recursive
+							 iterations reach limit 
+	else {
+//pumpout first char of this iteration
+		System.out.print(strg.charAt(0));
+//now recur for substring remainer (using substring method with arg1 starting indexPos set at indexPos 1 from the preceding iteration i.e. whatever remains of original string after last recursive call).		
+		recurStrg(strg.substring(1));
+	}
+}
+ - recursive reverse print of a string
+// following is the above but done backwards. still works just the LIFO stack reverses the process in memory. Note in this case, since we countdown from the last string element, we don't need an if else structure because the end is reached (either empty string or finished recursive iterations) when we fulfill the condition set by the  greater than 0 bound operator. 
+
+public void rvrseRecursStrg(String rvrsStrg){
+	if (rvrsStrg.length() > 0) {
+		rvrsRecursStrg(rvrsStrg.substring(1));
+		System.out.print(rvrsStrg.charAt(0));
+//reverse the process
+	}
+}
+ - Parsing through string and translating it one char at a time
+// following takes arg1 longString followed by arg2Char1 and arg3Char2 which placehold the original char and replacement char respectively. The function body holds the usual initial exit bound parameter, which is simply the whole lenth of the longString having been reached, while the remained two conditional para loops set out recursive calls on the self-same function (with every iteration now starting the original parse longString at indexPos1 - i.e. next char down) but depending on whether the trigger arg2Char1 has been caught while parsing at the 0 indexPos of the string (for every iteration). If not trigger is hit, then it simply undergoes the recursive function call.
+
+public static  String recrsvTransFunc(String 
+			longStrg, char trigChar, char replcChar){
+		if (longStrg.length() == 0)
+			return longStrg;
+		else if (longStrg.charAt(0) == trigChar) {
+			return replcChar +
+				recrsvTransFunc(longString.subString(1), 
+				trigChar, replcChar);
+	 	}	
+		else {
+		return 
+				longStrg.charAt(0) + 		
+				recrsvTransFunc(longString.subString(1), 
+				trigChar, replcChar);
+		}  
+	}
+ - parsing through an array searching for a hit
+// following shows going through an array sequentially, looking for a hit with arg1 holding startIndexPos element of the array, and whichever remaining array elements form the body for every iteration of the recursive search:
+
+first meth: strtIndxPos  = 0 	Body = 1 -9
+iteration			 indexPos    0| 1	2	3	4	 5	6	 7	8	 9	  10								
+					 				value		 2	5	9	1 23 2	18 3	1	165	 129
+second meth:    strtIndxPos = 1 	Body = 2 -9
+iteration 			indexPos    0 1|2	3	4	 5	6	 7	8	 9	  10								
+					 			   value		2	5	9	1 23 2	18 3	1	165	 129
+third meth:       strtIndxPos = 2 	Body = 3 -9
+iteration			  indexPos    0 1	2|3	4	 5	6	 7	8	 9	  10								
+					 			   value		2	5	9	1 23 2	18 3	1	165	 129
+etc...
+
+
+private int search(int arr[], int strtIndxPos, int key){
+	if (strtIndxPos == arr.length){
+		return -1;
+	}
+//search failed	
+	else if (arr[strtIndxPos] == key){
+		return strtIndxPos;
+	}
+//search hit result with first array element start indexPos	
+	else {
+		return search(arr, strtIndxPos + 1, key);
+	}
+//recursive call but starting 1 indexPos further down array
+}
+  
+ - recursive sort through Int array.  
+// following is an example of reverse indexPos-body sequencing algo- the reverse of the above. IIt would be particularly useful, for instance, with a sorting of an int array by lowest to greatest. 
+NOTE remember the issue of the OFF BY ONE ERROR- if we forget to end the array with N-1 (because we start at base0 so for a 10 element array, we remove -1 to get to last element indexPos which is 9 for computer).
+Here, instead of an strtIndxPos, we'll need an endIndxPos to represent the placeholder of the final array element which progressively gets whittled down.
+also within this algo, there is the use of the array's inbuilt findMax function, which returns the highest value array element. Every time we find a highest value array, we push it to the last position. this happens on every recursive iteration, and every time we then whittle down the endIndxPos by -1 
+The loop finished when we hit 0
+
+private void sortIntArr(int arr[], int endIndxPos){
+	if (endIndxPos > 0){
+		int topArrElmnt = findMax (arr, endIndxPos);
+		swap(arr, endIndxPos, topArrElmnt);
+			sortIntArr(arr, endIndxPos -1);
+	}
+}
+
+++++++ Information hiding 
+
+This relates to the human-front facing problem of recursive functions. The problem occurs because humans aren't used to base 0 counts so having a front-facing input that expects one of hte recursive function args to give a base 0 starting point for one of the string/array/whatever parsing recursive function isn't realistic and will cause problems. 
+A simple solution to this issue to to create simply 'holding' function that presents itself to the front-facing input interface while calling the recursive one with a base0 starting arg 'cooked in' already by the programmer.
+That's an example of information hiding from the less-than-optimal humans in order to ensure smoothness of interaction. In fact, we can create both the front-facing public human interface function AND the private recursive function inside one class altogether as shown below:
+
+public class ArrSrch {
+//first public facing meth/func	
+	public int rcrsvSrch(int arr[], int key){
+		return rcrsvSrch(arr, 0, key); //indexPos0
+																	//cooked in
+	}
+	private int rcrsvSrch(int arr[], int 
+											strtIndxPos, int key){
+		if (strtIndxPos == arr.length){
+			return -1;
+		}
+		else if (arr[strtIndxPos] == key] {
+			return strtIndxPos;
+		}
+		else {
+			return rcrsvSrch (arr, strtIndxPos + 1, 
+												key);  
+		}
+	}
+//runtime execution 
+	public static void main(String args[]){
+//init & define array
+		int numArray[] = {0,24,12,4,1,35,15};
+//init_ instance of class
+		ArrSrch arraySearcher = new ArrSrch();
+			for (int i = 0; i <= 40; i++) {
+				int srchRslt =
+					 arraySearcher.rcrsvSrch(numArray, i);
+				 if srchRslt != -1 {
+				 	System.out.println(i + 'caught at ' +
+				 										 srchRslt); 
+				 }
+				 else { 
+				 	System.out.println(i + ' not found');
+				 }
+			}
+	}
+}
+ 
+ 
+++++++ Recursion in graphics
+
+++++++Tail recursion
+
+++++++javax.swing.JComboBox
+
+
+//////////////NETWORKING \\\\\\\\\\\\\\\
+
+java comes with networking tools in its java.net package
+among its default defined classes are:
+
+URL - for interaction with URIs and serving up/download WWW domains
+SOCKET - for host comms
+SERVERSOCKET- for server side comms
+
+
+					JAVA.NET STRUCTURE:
+
+			JAVA.IO						  JAVA.LANG
+				||									  ||
+	 EXECPTION							 	OBJECT
+=================   ==========================
+||  	 || 	|| ||   ||    ||    ||     ||   ||lfrm	prtcl || sckt	dtgrm dtgrm Inet Servr	||
+url				 //	 ||		Pckt  sckt	addr Sckt		||
+					//	 ||														//
+		======	  //\\		 =====================
+	//\\		 bind	 \\		//	||  ||           \\	
+unkn unkn 			//\\ Sckt URL	URLEmbedded  URL
+host Srvce	 	 //  \\											connct
+						Cnnct NoRoute							      ||
+									 ToHost								HTTP URL	
+																				 Connect
+
+of course Java uses the applets structure to have a comms emplacement on  thue server side
+
+
++++++ java.net.URL
+url's in the java mind is simply a string the URL superclass under the OBJECT gigaclass has a method that takes a string(the url) and opens a network conn based on this DNS direction.The relevant exception here is MalformedURL:
+
+URL url; // instantiate a url object without 
+					  definition]
+try{
+//define our url object by passing a string to its inbuilt string-to-DNS lookup meth:
+	url = new URL(https://www.google.com/);
+}
+//always network within a try-catch structure if network/human input fails
+catch(MalformedURLException MalURLExcpt){
+	System.out.println('Sorry, you typed an 
+											incorrect address: ' + 
+											url.toString()
+										);
+}
+
++++++ applet class
+
+the java.applet.Applet class allows the deployment of apps on the server side- served up to the clients.
+
+Among its methods are various GUI-related meths via javax.swing.JApplet
+
+Example of an applet (that cycles through slides fetching one at a time with a timer to save on network buff):
+
+import java.awt.*;
+import javax.swing.*;
+import java.net.*;
+
+public class SlidesApplet extends JApplet{
+	public static final int WIDTH=300, HEIGHT=200;
+//define size of the applete window - note w and h are CONSTANTS
+	private static final in IMGSROTA = 3;
+//declare the rotation of images cycled
+	private Image[] imgsSlides = new 
+															 Images[IMGSROTA]
+//create an Images array, fill it with rotations 3 i.e. 0,1,2
+	private Image crrntImg = null;
+	private int nxtImg = 0;
+// set up starting points for rotations
+
+	public void paint(Graphics obj){
+//create the graphics object which will sit on the JApplet window
+		obj.SetColor(getBackground());
+// set the background of this object to whatever the current image's background is - if supported- if it isn't support it returns null (no backgroun).
+		obj.fillRect(0,0,WIDTH, HEIGHT); 
+//specifies the rectangle size and scope of the image object- in this case, 0,0 means start from top-left and give me full width and height of the entire JApplet (via same constants)		
+			if (crrntImg != null){
+// if the current image selection isn't null - i.e. if this is not the starting image
+				obj.drawImage(crrntImg, 10, 10, this);
+//redraw immage and seems to replace it while using this keyword for width height specs and sets 10,10 px from top-left position for where image is to be drawn.
+			}	
+	}	
+	public void nxtSlide(){
+		crrntImg = imgsSlides[nxtImg];
+		nxtImg = (nxtImg + 1) % IMGSROTA; 
+		repaint();
+	}
+//COMEBACK
+	public void init(){
+		for (int i = 0; i < IMGSROTA; i++){
+			imgsSlides[i] = 
+								getImage(getCodeBase(),'slides/
+												 images/img' + i + 
+												 '.jpg'
+												);
+		}
+//COMEBACK	
+		Thread timer = new Thread(new Timer(this)); 
+			timer.start;
+		setSize(WIDTH, HEIGHT);	
+//this is reference to the timer Thread class below - which sets up the timer.
+	}	
+}
+
+public class Timer implements Runnable{
+	private SlidesApplet applet;
+//instances a slidesapple instance
+	public Timer(SlidesApplet app){
+links this slides applet instance to the applet object in this time class.	
+		applet = app;	
+	}
+	public void run(){
+ 		try{
+			while(true){
+				applet.nxtSlide();
+					Thread.sleep(5000);
+//sets out the 3 second sleep for the applet object in this class after executing the nxtSlide() method in neighbouring SlidesApplet class above.
+			}
+		}
+		catch(InterruptedException expt){
+					System.out.println(expt.getMessage())
+		}
+	}
+}
++++++Another applet example - home viewer app
+COMBEACK
+
++++++ SIMPLE Server-Client comms
+
+a socket is a simple comms channel allowing two programmes to communicate through a network via a protocol which sets out rules and behaviour of comms. A port is a port of entry on the host computer allowing a socket entry for a connection to be established. Ports below 1024 are reserved for system/OS purposes but above that, programmes can use them although some as suggested for particular uses.
+The host sends a server a request (syn) which the server replies with an acknowledgemetn (ack) datapack upon which the host starts the connection via the designated port- which creates a socket session.
+Sockets on the client and server side each have one input-one output stream.
+
+the server side actually has a socket that is set to a kind of resting mode which will awake whenever it recieved that syn request from some host somewhere on a network. Basic server example:
+
+Socket socket;
+ServerSocket port;
+	try{
+		port = new ServerSocket(1054, 5);
+//arg1 is the port 1054 arg2 is backlog i.e. how many pending client connects can exist		
+		socket = port.accept();
+//accept syn request via ackknowledgement ack.		
+	}
+	catch(IOException excpt){
+		excpt.printStackTrace();
+	}
+
+On the client side all that is needed is a socket(arg1URLString, arg2PortNumber) constructor requesting to connection. If the server side gives acknolwedgemnet, then the client will syn connect and the socket IO streams will be connected. Anything we want the client's programme to do vis-a-vis that IO stream can be dealt with in the space between the opening and the final closing statement of our socket connection constructor meth: 
+
+Socket connect;
+	try{
+		connect = new 
+					Socket('mydomain.com.directory', 1054)
+		
+		// doo stuff here with programm while 
+		connection open	
+		}
+		connect.close();
+	catch(IOException IOexcpt){	
+			IOexcpt.printStackTrace();	
+		}	
+		catch(UnknownHostException hostExcpt){	
+			hostExcpt.getMessage()
+			hostExcpt.printStackTrace();
+		}	
+		
++++++OOP reusable generic server root class
+Although the above templates DO HAVE DIFFERENCES BECAUSE they reflect two different sides of the network conversations, there are other elements that can be abstracted since BOTH THE SERVER AND CLIENT ARE DOING/NEEDING THE SAME THING.
+We can apply OOP principles of reuse, inheritance, polymorphism and compartmentalisation for example, on the way the sockets deploy the IO streams themselves, because BOTH the SERVER and HOST need the same core IO stream methods one for input, one for output.
+Below is a string-Input Output socket stream abstract class that inherits from the Thread gigaclass. Much like a file input-output reading stream this one takes apart byte-by-byte the data being streamed and converts them to chars one-by-one before appending them together to a finished string.
+
+import java.io.*;
+import java.net.*;
+
+public class ClientServer extends Thread{
+	protected InputStream inStrm;
+	protected OutputStream outStrm;
+//note it's protected because we want instances to deploy/inherit this abstract class but not be able to change the vars.
+		protected String rdFrmSckt(Socket sckt) 
+		  											throws IOException {
+			inStrm = sckt.getInputStream();
+			String scktInStrg = '';
+//instance the socket in string without anything			
+			char chr;
+				while ((chr = (char) inStrm.read()) != 
+																					'\n'){			
+					scktInStrg = scktInStrg + chr + '';
+				return scktInStrg;
+				}
+		}
+//that's the abstract rdFrmSckt method. Now the output wrToSckt meth
+
+		protected wrToSckt(Socket sckt, String 
+															 scktOutStrg) 
+											 throws IOException{
+		outStrm = sckt.getOutputStream();
+			if(scktOutStrg.charAt(
+												scktOutStrg.length()-1
+												)!= '\n'){
+				scktOutStrg = scktOutStrg + '\n';
+			}
+			for (int i = 0 ; i < scktOutStrg.length(); 
+					 i++){
+				outStrm.write(scktOutStrg.charAt(i));
+			}																		 
+		}
+}
+
++++++Servlets
+
+servlets are java programs running on the server side
+they udnertake some type of processing task and serves that up to the client. It is hosted on the cloud, thus it doesn't necessitate any Java/bytecode on the user's host machine. They use less data since they communicate to the server, and can hook into a database.
+
+The main library is: javax.servlet 
+Basic servlet example:
+
+import java.io.*;
+import java.text.*;
+import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http*;
+
+public class BasicServlet extends HttpServlet{
+
+	public void doGet(HttpServletRequest request,
+						   		HttpServletResponse response)
+					throws IOException, ServletException{
+//the doGet is inherited from HttpServlet superclass and is java's way of transferring a page via HTTP GET. NOTE that in this case we are overriding the default doGet() method in order to define the contents of what a GET request from a client's browser to our server-based servlet will serve up for them.	
+	response.setContentType('text/html');
+//this is the object instance of the HttpServletResponse class which has been called in Arg2 of the doGet overriden constructor method. The arg1 request is a default HTTP[GET] request that the servlet EXPECTS TO THE RECIEVE FROM A CLIENT'S BROWSER ARRIVING AT OUR DOMAIN.
+		PrintWriter prtOut = response.getWriter(){
+//PrintWriter is an inbuilt class for string output stream objects
+			prtOut.println('<html>');
+			prtOut.println('<head>');
+			prtOut.println('<title> Simple Servlet
+										 </title>');
+			prtOut.println('</head>');
+			prtOut.println('<body>');
+//etc... the contents of our page
+			prtOut.println('</body>');
+			prtOut.println('</html>');
+		}
+	}
+}
+
+//////////////Data Structures \\\\\\\\\\\\\\\
+
+Some data structures like arrays are STATIC becuase they are fixed in main memory for the duration of runtime execution.
+Other types of data like VECTORS are DYNAMIC and can thus change during runtime - growing or shrinking.
+
++++++ Linked Lists
+
+linked lists are actually used widely- for example a simply assignation statement like 
+	JButton butt = new JButton(); 
+is a kind of link-based reference passing.
+
+
+In Java, the linked lists are data structures that create self-referential objects that contain a refernece to an object of the same class. usually, in Java, these self-referential objects are called NODES. For instance below, we see a node that has a name variable being defined and a self-referenced instruction to refer to the next Node - which is what it itself is. Thus it is a kind of recursive object instantiation. 
+
+A clear benefit of this data structure is that it can provide for very large-scale but self-contained objects being instantiated with a set of instructions to instantiate the next such object upon completion of its own instantiation.
+An example of a class of linked-list objects being defined and instantiating the next such instance of that Node class is :
+
+public class Node {
+	private Object data;
+	private Node next;
+
+	private Node (Object obj);
+
+	private void setData(Object obj);
+	private Object getData();
+
+	private void setNext(Node link);
+	private Node getNext();
+}
+
+
+an example of the utility of a linked-list construct is made evident, for instance, through its use to create a dynamic phone book. We use the same principle of the Node template class, and combine with getter and setters. We finish the class outline with  setNext and getNext meths - these are recursively referential - with the setNext basically traversing the linked-list data structure as it is being dynamically instantiated, and finding the last element of the linked-list array, ready to create a new name-phoneNum node at that point. The getNext then picks up from the setNext and returns whatever number has been setNext'd
+
+public class PhoneBookNode {
+
+	private String name; // instnce name sub-objct
+	private String phoneNum; //nstnc numbr sub-objct
+	private PhoneBookNode next; //recursive 
+								  reference to class 
+								  for pointing to 
+								  object instances 
+								  of the 
+								  PhoneBookNode
+//CLASS DEFINES THE LINKED LIST OBJECT CONSTRUCT:
+	public PhoneBookNode(String nme, String fne) {
+		name = nme;
+		phoneNum = fne;
+// NOTE WE SET THE LINKED LIST OBJECT AT STANDSTILL BY MAKING NEXT METH a NULL VALUE AT THIS STAGE. IF SOMEONE CALLS getNext AT RUNTIME, THEN NEXT SUCH OBJECT WILL BE FETCHED FROM LIFO DATA STRUCTURE.		
+		next = null;
+	}
+//NOW SETTER AND GETTER TO FILL DATA INTO STRINGS:
+
+	public setData(nme, fne){
+		name = nme;
+		phoneNum = fne;
+	}
+
+	public getData(){
+	    return 'Name:' + name + ' ' + 'Phone 
+	    Number:' + phoneNum ;
+	}
+
+//toString meth - to output gotten data to a string format for whatever use required
+
+
+	public toString(){
+		return 'Name:' + name + ' ' + 'Phone
+		Number:' + phoneNum;
+	}
+
+//setNext getNext:
+
+	public void setNext(PhoneBookNode, nxtFneNum){
+		next = nxtFneNum;
+	}
+	
+	public PhoneBookNode(getNext){
+		return next;
+	}
+} 
+
+That's the compilation side- making the class object for the phone number node available. If we were to create such nodes, we would include the following for runtime execution:
+
+PhoneBookNode node1 = new PhoneBookNode('David 
+   							   Axios', '019247248');
+PhoneBookNode node2 = new PhoneBookNode('Katye 
+   							  Harper', '023452348');
+etc...
+
+If we wanted to specifically outline, instead of implicitly, the setting of the next node via this declaration, we could do so using the setNext() meth from the template: 
+PhoneBookNode node3 = new PhoneBookNode('Jim Jam', 
+										'021381948');
+node2.setNext(node3);
+
+But this model has a clear limitation in the sense that it depends on a somewhat clear understanding of our phone book's structure, which only it's programmer would be aware of. Instead, we can design an interface class for allowing more natural interaction with this template class.
+
+A second class to interact and fill/manipulate the instances of the templated class will need to be created:
+
+public class PhoneBookInstance{
+	private PhoneBookNode head;
+
+	public PhoneBookInstance(){
+		head = null //start with empty list
+	}
+	public boolean  isEmpty(){
+		return head == null; // sets poss of 
+								emptyList
+	}
+	
+	public void insert(PhoneBookNode node){ }
+	public String getPhoneNum(String name){ }
+	public String rmvPhoneNum(String name){ }
+	public void print() { }
+}	
+
+NOTE that the four methods declared but undefined in this template class relate to the CRUD(Create, Read, Update, Delete) methods often used in database interchange.
+So to define each of these methods, we can take following constructs below:
+
+++++INSERT
+to insert, we will need to manipulate the HEAD's position to TRAVERSE through the elements of the list's array elements. 
+We set a basical conditional to check if we even need to traverse anything (if list is empty), and then if so, we traverse through the array with a while loop:
+
+public void insert (){
+	if (isEmpty()){
+		head = newNode;
+	}
+		else {
+			PhoneBookNode crntNode = head;
+			while (){
+				crntNode = crntElmnt.getNext();
+				curntNode.setNext(newNode);
+			} 		
+		}
+}
+
+
+++++PRINT
+
+public void print(){
+	if (isEmpty()){
+		System.Out.println('Empty List');
+	}
+	PhoneBookNode crntNode = head;
+		while (crntNode! = null){
+		System.Out.println(crntNode.toString());
+			crntNode = crntNode.getNext();
+		}
+}
+
+++++READ/FETCH/Lookup
+
+public String getPhoneNum(String name){
+	if (isEmpty()){
+		return 'Sorry phonebook is empty';
+	}
+	   else {
+		   PhoneBookNode crntNode = head;
+		   while((crntNode.getNext() != null)&&
+			    (!crntNode.getName().equals(name))){
+  		      		crntNode = crntNode.getNext();
+				if(crntNode.getName().equals()name){
+					crnt = crnt.getNext();
+				}
+				else{
+					return 'No such phone record.';
+				}
+			}
+   	   }
+}
+
+++++DELETE
+
+public rmvPhoneNum (String name){
+	if (isEmpty()){
+		return 'Sorry phonebook is empty';
+	}
+PhoneBookNode crntNode = head;
+PhoneBookNode prvNode = null;
+	if	(crntNode.getName().equals(name)){
+		head = crntNode.getNext();
+		return 'Removed' + crntNode.toString() + 
+			   'from the phone book';
+	}
+		while((crntNode.getNext() != null)&&
+			    (!crntNode.getName().equals(name))){
+			prvNode = crntNode;
+			crntNode = crntNode.getNext();
+		}	
+			if (crntNode.getName().equals(name)){
+				prvNode.setNext(crntNode.getNext());
+					return 'removed' +
+					crntNode.toString() +
+					'fromrecords';
+			}
+// NOTE THAT HERE, WE ARE LITERALLY JUST 'HOPPING' OVER THE RECORD MARKED FOR DELETION- THE GARBAGE COLLECTOR WILL AUTO-DELETE IT LATER- DIFFERENT TO C & C++ DIRECT MEMOERY MANAGEMENT.
+			else {
+				return 'No such record to remove.';
+			}	
+}
+	
++++++ ABSTRACTION VIA AN ADT
+
+just as we abstracted when creating the phonebook template class earlier, we could go EVEN ONE FURTHER LEVEL UP IN ABSTRACTION and create a generic ABSTRACT list OBJECT DATA TYPE - which could be deployed under POLYMORPHIC circumstances as needed.#
+
+Here however, we will need a few more considerations
+about the kind of meths() we'll need at this abstracted level.
+We also have to consider INFORMATION HIDING, since this ADT can be deployed in varied context including ones in which security and robustness become important. The general principle is to use the PRIVATE access mods for our initial DATA-related vars at the outset of the class, and then the methods that CRUD this data are public, and thus can be inherited into this ADT gigaclass' inheriting polymorphically-implemented superclasses
+An example of an ADT template:
+
+public class Node extends Object{
+//PRIVATE-ACCESS-MOD'D VARS
+	private Object ndeData ;
+	private Node nde ;
+	
+//CONSTRUCTOR METH()
+	Public Node(Object obj){ 
+		ndedata = obj;
+		nde = null;
+	}
+	public void setData (Object obj){
+		ndeData = obj ;
+	}
+
+//CRUD METHS()
+	public Object getData(){
+		return ndeData;
+	}
+	public String toString(){
+		return ndeData.toString();
+	}
+
+	public void setNext(Node nxtNde){
+		next = nxtNde;
+	}
+	public Node getNext(){
+	return next ;
+	}
+}
+
+Evidently, if we wanted to, we can also create an abstracted LIST ADT:
+
+public class List{
+
+//PRIVAT'D PLACEHOLDRS FOR SECURITY IN INHERITANCE
+
+private Node head;
+//LIST CONSTRUCTOR METH
+	public generateList(){
+//set the head position at NULL value
+		head = null;
+	}
+	public boolean isEmpty() {
+//method to check if we're dealing with empty list
+		return head == null;
+	}
+// ENTIRE LIST CONSOL'D OUT - note the void meth since all we are doing is reading out the list element:
+
+	public void print(){
+//check if empty ...	
+		if(isEmpty()){
+			System.Out.println('No records found');
+		}
+		else {
+//don't forget to set node to currentListHeadPos.
+			Node crntNde = head;
+			  while(crntNde != null) {
+ 		    	System.Out.println(crntNde
+ 		    	.toString());
+//jump to next after consol'd out
+ 		      		crntNde = crntNde.getNext();
+			  }
+		}	
+	}
+//INSERT NEW HEAD AT FRONT OF LIST (FIRST IN) - ALSO KNOWN AS A STACK PUSH()
+	public void inAtFront(Object obj){
+		Node newNde = new Node(obj);
+		newNde.setNext(head);
+		head = newNde;
+	}
+//HEAD REACHES END OF THE LIST ARRAY, THEN INSERTS THERE A NEW NODE (LAST IN) - AKA A QUEUE'S ENQUEUE()
+	public void inAtEnd(){
+		if (isEmpty()){
+			head = new Node(obj);		
+		}
+		else {
+			Node crntNode = head;
+				while(crntNode.getNext() != null){
+					crntNode = crntNode.getNext();
+					crntNode.setNext(new Node(obj)); 
+				}		
+		}
+	}
+// HEAD SKIPPED TO NEXT ITEM, HEAD IS FIRST OUT - ALSO KNOWN AS A STACK POP() or a LIST DEQUEUE()
+	public Object outAtFront(){
+		if (isEmpty()){
+			System.Out.println('Nothing found');		
+			return null;
+		}
+		else{
+//AUTO-START AT BEGINNIGN OF THE LIST WITH NODE AND CREATE A CONTAINER FOR EXTRACTION 
+			Node frstNde = head;
+//NOW MOVE LIST POINTER TO NEXT ELEMENT
+			head = head.getNext();
+//NOW WE GRAB THE ONE THAT USED TO BE FIRST 
+BUT REMEMBER WE ARE EXTRACTING THE DATA- NOT THE UNDERLYING NODE ITSELF.
+			return frstNde.getData();
+		}
+	}
+// HEAD HITS LIST LIMIT  -  LAST OUT
+	public Object outAtEnd(){
+			if (isEmpty()){
+				System.Out.println('Nothing found');		
+				return null;		
+			}
+//Check for a single-element list: 			
+				else if(crntNode.getNext == null){
+					head = null;
+					return crntNode.getData();
+				}
+					else{
+//ran the checks, now we know there is a full list. 
+
+//Now we create a previous Node placeholder container. it's role will be to set the starting point of a null value 'node' image for the purposes of the while loop going through the list's elements:
+						Node prvNode = null;
+//while loop looks for the last node in list so long as we don't hit that null value represented by the prev node image:
+							while(crntNode.getNext 
+								  != null){
+//Now we've hit the end of the list, we assign the current node value to the previous node placeholder (which is placeholding the end null position of our list array):
+								prvNode = crntNode
+//meanwhile, the current node will now jump ahead to the next to find an ACTUAL NODE with actual value and we EXTRACT IT TO THE crntNode variable:
+								crntNode = 
+								crntNode.getNext();
+							}
+//now the placeholder also jumps up one and sets that value to null, wiping out what was it's ACTUAL underlying node data which will be garbage collected: 
+						prvNode.setNext(null);
+// and finally, we come back to our crntNode variable, and consol' out it's relevant data
+						return crntNode.getData();
+					} 			
+	}
+}
+
++++++ GENERICS
+
+the purpose of a generic is to essentially notify the Java engine that a swathe of collection members are going to be of particular type like a <string> <int> or <double> or <bool> etc 
+we use that <> generics denotation to signal the type of the collection and before it we must declare the collection type i.e array, vector etc.. example: 
+
+Vector<String> myStrgVectr = new Vector<String> ();
+	myStrgVectr.addElement('one');
+	myStrgVectr.addElement('two');
+	myStrgVectr.addElement('three');
+
+There are two benefits to deploying the generics in this context. 
+First: we force type checking on element inclusion, any element not in the right type will throw an exception.
+Second: the underlying type of these generic'd elements will be specifically of their type i.e. string or primitive type or whatever, rather than defaulting to the Object uberclass.
+
+

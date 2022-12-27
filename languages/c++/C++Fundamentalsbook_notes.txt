@@ -1,0 +1,627 @@
+
+/**************************C++***********************************/
+Based on C++ Fundamentals by Richard Halterman (Online: no publisher, 2018).
+/*****************************SIMILARITIES AND DIFFERENCES TO OTHER OOPs**********/
+C++p has certain characteristics that align it with other well known Object-Oriented
+Programming languages such as Java, Python, Vanilla C. this includes:
+    - universal usable modular programs thanks to the objects "speaking" to one
+    another.
+    -C++ supports data abstraction- the creation of class-type objects from some
+    objects in order to outline more general rules and characteristics.
+    -data encapsulation that allows for access modifiers.
+    -inheritance
+    -polymorphism.
+
+C++ has certain unique characteristics distinguishing it from Java and vanilla C.
+Among these are:
+    -proximity to the machine language itself- unlike the virtualised Java that
+    uses the intermediary of the Bytecode- C and C++ both keep "clean" and thus
+    achieve slightly faster compilation times and moreover, it is more manoeuvrable
+    toward the machine's processors, I/O devices etc. That's why most operating
+    systems are written in C and a lot of robotics or complex math programming is
+    done with C++.
+
+/*****************************FUNCTIONALITY***************************************/
+
+C++ objects are written by combining the use of both global functions and member
+functions. The global functions are essentially tied to reserved keywords. For
+instance, the classic main function is, as is the case with Java, reserved and
+intended for outlining the main method/function of the C++ source code.
+In contrast, the member functions are more customizable- they can actually be
+sourced from pre-exxisting libraries (where they are uploaded and stored by
+other coders) or they can be programmed directly.
+When libraries or files are to be included in the object, this is denoted at the
+beginning of the document using the #include demarcator.
+
+/*****************************BASIC COMPONENTS*********************************/
+
+When a method/function is outlined, this is followed by the curly brackets to
+include the parameters and relevant data to the method. For instance:
+
+int main()
+{
+  cout << "Hello World" << endl;
+  return 0
+}
+
+Here, the int is a reserved keyword denoting the type data the method concerns
+itelf with. the main reserved keyword denotes the main method, followed by the
+parentheses that demarcate a method being introduced. The curly brackets outline
+the scope or content of the method.
+The cout reserve keyword stands for "console out" equivalent to sout in Java.
+The two << << arrows denote the beginnig and end of data to be put out by the
+cout.
+endl denotes the end of the line. The ; is used at the end of each line except for
+a method line or some other lines (like the first #include line).
+
+Or, to give another example of a simple cout program:
+
+#include <iostream>
+
+int main() {
+  std::cout << "This is a simple C++ line!/n";
+}
+
+Here, the #include line outlines a call to the C++ preprocessor- which has a set of
+services that can be called upon ahead of processing the human written source code.
+the include asks the preprocessor to call upon a library or set of libraries with
+information about specific routines that are to be used in the method. In this case
+the iostream library is one which can handle I/O  like printing to console (COUT).
+
+The std::cout element included in the main method is actually a member of this
+iostream library and is not part of the core of the C++ language.
+
+Next the int outlines the data type of the method and the brackets signal the
+method declaration. the curly brackets signal the componets or BODY of the method.
+The semicolon is required at the end of the statements (but not the method since
+that is only begind declared). NOTE: it signals the end of the statement and thus
+anything prior to the semicolon declaration can be considered by the compiler as
+part of the elements/information/declarations within the statement.
+
+The << element is essentially an isntruction asking the compiler to insert
+whatever follows it into the cout object that is being constructed (for I/O output)
+
+
+/***********Variables and Values *********/
+
+With respect to variables, C++ is statically typed and strict, and therefore the
+compiler will produce an error if a new variable is declared without specifying
+its type.
+C++ also requires a variable's type to be static during its lifetime, meaning-
+so long as that variable is not overwritten or re-assigned (include to null status)
+then that variable must retain the originally declared type.
+
+Like java, the equals symbol signifies attribution of value (or attachment) not
+is a. the == symbol is what translates to is equivalent to.
+
+C++ has two formats for attibuting a value to a variable. For instance, here, the
+int variable x will be given a numerical integer value of 10 in two differnet
+ways. NOTE : The variable is declared and assigned a value before the method's
+parameters are declared:
+
+Format 1:
+#include <iostream>
+
+int main() {
+  int x{10};
+  std::cout << x << '\n';
+}
+
+Format 2:
+#include <iostream>
+
+int main() {
+  int x=10;
+  std::cout << x << '\n';
+}
+
+
+the same statement within a method can declare multiple sequential variables
+when a variable is declared without a value being assigned, it will simply
+be created in memory but not "initialised" NOTE however, that the variable
+type always must be declared even in the case of a variable that is not
+initialised.
+The usual rules apply to banned variable names (i.e. certain symbols, reserved
+keywords etc.)
+
+The same variable options also apply in C++ as with Java, the oshort, long, etc.
+However, one different aspect is that prefacing an integer with the keyword
+unsigned means that the compiler will consider that number scale as positive
+numbers only- not the negative numbers. so unsigned long will be equivalent to
+a long but not including the negative numbers usually pertaining to longs.
+
+ANother typical variation is the floating point or floats. These work like in
+java. Doubles and floats are both floating point numbers although the Double has
+more  precision and more extent of numerical expression.
+
+constants are declared using the const keyword. The constant is declared and is
+assigned to memory as a fixed and determined value until such a time that the
+coder decides to reassign it. However, reassignment needs to be done using the
+const declarator. THus:
+
+#include <iostream>
+
+int main() {
+  const PI = 3.1416
+  std::cout << "Pi is equal to:" << PI << \n;
+}
+
+But, changing Pi using a simple variable assignemtn will not overide the constants
+EG:
+
+#include <iostream>
+
+int main() {
+  double PI= 5.5
+  std::cout << "Pi is now equal to" << PI << \n;
+}
+
+This one will break the compiler because pi cannot be overwritten unless a const
+is declared.  NOTE the const is declare in capital letters by convention.
+
+
+Like Java and python, the char declarative declares a character value. chars
+are enclosed with single quote markers '' as opposed to strings denoted with "".
+
+/**********************************ENUMERATED TYPES***************************/
+
+The enum declarator is a kind of type/clas array. It allows a class/type to be
+declared while a set of possible variants of such a class are listed according to
+their values.
+eg:
+enum Color {Purple, Magenta, Turquoise};
+
+One issue that emerged from the use of such simple class arrays was that enum
+content could clash. For instance:
+
+enum Personality {Tough, Stubborn, Kind, Jealous};
+enum Quality {Soft, Tough, Malleable};
+
+Here the two tough elements are clashing. However, a fix to this was released
+it requires the clear declaration of an enumerated class or enum class.
+For instance:
+
+enum class Personality {Tough, Stubborn, Kind, Jealous};
+enum class Quality {Soft, Tough, Malleable};
+
+when referring to one of these particular values from within a enumerated class,
+for instance when are writing the content (or the body) of the function, we have
+to declare it in relation to the enumerated class. This is done similarly to
+CSS by using a double colon ::
+For instance:
+
+NOTE THIS EXAMPLE IS FLAWED
+#include <iostream>
+
+int main() {
+  enum class Color {Blue, Purple, Green, Red};
+  enum class Weight {Heavy, Light, Average};
+  enum class Intelligence {Advanced, Average, Mediocre};
+  std::cout <<"Your chosen character, John, has " << Intelligence::Average <<\n
+            <<"intelligence. He also has a " << Color::Blue <<\n
+            << "sword. His weight class is: " << Weight::Heavy <<\n;
+}
+
+/**************************AUTO TO INFER TYPE AND SAVE TIME********************/
+
+C++ can infer variable types by preceding the variable declaration with the
+auto reserved keyword. For instance:
+
+#include <iostream>
+
+int main {
+  auto pi = 3.14759 ;
+  std::cout << "This is an example of Auto infererence using the number pi" <<\n
+  "which is " << pi << "." <<\n;
+}
+
+The auto keyword allows for the compiler to workout which of the various potential
+variable types the user is referring to. However, simply listing an unclear variable
+without content, such as for example the letter x or a, would be illegal and not go through.
+
+/****************************EXECUTION CONTROL*********************************/
+
+BOOLEANS
+
+Precede statement assigning variable with bool reserved keyword.
+variable can be true or false when being executed.
+
+#include <iostream>
+
+int main {
+
+bool entranceGranted = true, entranceDenied = false;
+
+std::cout << "Would you like to grant entrance to this user? Type y or n:" <<\n;
+std::cin << input;
+if (input = y)
+  std::cout << "This user has gained entrance" <<\n;
+  entranceGranted;
+else if (input = n)
+  std::cout << "This user's entrance was denied" <<\n;
+  entranceDenied;
+else
+  std::cout << "Sorry, incorrect input- try again" << ;
+}
+
+
+combined as above with if, else if options the boolean conditions outline posisble
+outcomes.
+
+COMPLEX BOOLEANS
+]When multiple booleans are combined together beyond the simple true-false dichotomy
+this is considered deploying a multiple boolean construction.
+
+Boolean and relational expressions are all drawn from simple algebra (in order of precedence):
+
+Highest precedence is assigment (a = 43, x = "string")
+    then the basic relational booleans assigning relative values:
+        == is equal to
+        < lesser than
+        > greater than
+        <= less or equal to
+        >= greater or equal to
+    then the logical booleans led by the right associative:
+        != not equal to
+    then followed by the left associative:
+        && logical and
+        || logical or
+
+Complex booleans can be constructed on a mutliple stage process. For instance:
+
+bool b;         /*assigns boolean value to variable a*/
+int x = 10;     /*assigns integer x value of 10*/
+int y = 20;     /*assigns integer x value of 20*/
+
+
+now we can see that because boolean b has a boolean property, it will be evaluated
+acoridng a simple true or false condition on the basis of how it relates, in a more
+relational and logical way, to the other values (in this case the integers):
+
+b = (x==10);     TRUE
+b = (y!=20);     FALSE
+b = (x == 10 && y == 20)  TRUE
+b = (x == 30  && y == 20)  FALSE
+b = (x == 30 || y == 20)  TRUE
+b = (y == 10  || x = 20)   FALSE
+b = (x != 10 || y! = 20)  FALSE
+
+Note the short-circuit evaluation that is occuring with the || and && operators-
+this is due to the way in which the variables have to have at least one of them
+logically coherent or all fails/works/
+
+
+NESTED CONDITIONALS
+
+
+Booleans can be combined with if - else conditionals to created arbitrarily complex
+nested conditionals. These can essentially created multiple "hoops" to jump through
+for a set of conditions to be met. For example:
+
+
+#include <iostream>
+
+int main {
+  int value;
+  std::cout << "Please enter a number 1 and 10";
+  std::cin >> value;
+  if (value >= 1)
+    if (value <= 10)
+      std::cout << "Well done, that's good";
+    else
+      std::cout << "Sorry, pick a number again";
+}
+
+
+Nested conditions basically frame a series of statements under multiple or one aggregate if
+condition. There can also be an else condition, if the if condition needs to be
+given a special condition.
+
+Note that there can also be multiple nested if and if-else conditions followed by statements
+nested one within another. Using this technique of multi-level nesting also allows for
+multi-way or multi-level if and if-else statements.
+
+NOTE : Be careful when designing complex structures like these because they can quite quickly
+get out of hand. The logics can start intertwining... ALso, using more of these conditionals
+and booleans will actually use up processor and main memory activity- thus making the program
+more intensive and slower.
+
+ITERATION
+
+Iteration is similar to the conditionals but repeats an activity for the duration that the
+if or boolean condition is met.
+      WHILE KEYWORD
+One way to ensure this done is using the while keyword. By writing while, we tell the program
+that , so long as the conditiosn outlined in the program hold true (a type of conditional boolean),
+the action that is stated must be enacted. The moment it no longer holds true, then the action is to
+be stopped.
+NOTE once can define a boolean as a statement other than true or false and thereafter add the underlying
+value as true/false. Thus: bool loopFinished = true; // stop the loop, loop isn't finished
+                           bool loopNotFinished = false; //continue loop, loop isn't finished
+
+Using the while statement can allow for a certain way to create conditions that exclude certain
+character types or inputs in order to put an end to the loop. On the other hand, using the correct
+inputs can bring forth the right outcomes by having the correct process implemented.
+
+For instance a simple loop that adds numbers so long as the user inputs integers. If the
+user puts in a non-integer character, then the loop will quit. As can be seen, there can be a process
+to warn or tell the user to input a character such as "q" for quit:
+
+#include <iostream>
+
+int main() {
+  int input, sum = 0;
+  std::cout << "Enter a number to sum up, type 'q' to end the list:";
+  while (std::cin >> input)
+      sum += input;                                 /* here the cin sum is required to be an integer that's why putting in the q will result in a break of the loop.*/
+  std::cout << "Sum = " << sum << '\n';
+}
+
+
+Even with this relatively basic boolean conditional as the core of the conditional loop iteration
+there is a capacity to write a relatively complex program that, for instance, runs through
+a checklist before providing answers to the user:
+
+#include <iostream>
+
+
+int main() {
+  std::cout << "Hello, welcome to this troubleshooter.\n";
+  char choice;
+  bool done = false;                                            // providing option of choice but not yet finished with loop
+    while(!done) {                                            // while we are not done loop this...
+      std::cout << "Is the computer making a sound, is the fan running, are there lights on?\n"
+                  << "select an option y (for yes) or n (for no)\n";
+      std::cin >> choice;                                     // choice takes on the char y or n as the loop drops down per the conditions
+          if (choice == 'n')  {                               // NOTE rememebr single char uses single quote ''
+            std::cout << "Is the computer plugged in? (y/n):";
+            std::cin >> choice;
+              if (choice == 'n') {
+                std::cout << "Plug it in.\n";
+              }
+          }
+          else {
+            std::cout << "Is the power plus on the \"on\" position? (y/n)\n";
+            std::cin >> choice;
+              if (choice == 'n') {
+                std::cout << "Make sure the computer is plugged in";
+                std::in >> choice;
+              }
+          }
+      else {
+      std::cout << "Sorry, this will need technical support. Contact our hotline at\n
+                    this number 555-7230-HELP. Thank You.\n";
+      }
+    }
+
+  }
+
+Using a BREAK keyword will immediately tell the program to break the loop and THus
+can be useful when deployed in combination with a particular conditional.
+NOTE it is considered better practice to keep the code elegant and logical, avoiding overuse of
+the break escape funciton - because it can clutter the code and in particular it can
+lead to oversights regarding the logical entry and exit points of the logical conditional loops.
+HOWEVER, using the break keyword can sometimes be very useful, especially with respect to the need to conserve
+memory use.
+
+GOTO
+
+Unlike Java, C++ has a goto function.goto allows the sub-loops to be suddenly broken and taken to a
+specific place in the source code. This allows for more complex, inter-operative conditional loops.
+BUT, it should be used sparingly - again, due to potential for overcomplexity, mistakes and failing to
+logically close opened standard loops.
+
+CONTINUE
+
+This is similar to the break keyword, although in this case it tells the program to ignore
+all of the source code that follows and go straight back up to the relevant loop condition That
+is being examined within the frame that it is deployed. If that condition is found to be false, it
+continues whatever loop conditions were established before its deployment.
+If the condition is true, then it breaks free of this loop and goes to the next frame/section of the
+source code.
+NOTE like break, use of continue is mostly discouraged since the same functionality can be achieved without
+deploying continue.
+
+An important use of continue is for infinite loops but note that this can often be done in error
+causing waste of memory use or causing the program to "hang" and the user becomes stuck.
+
+
+NOTE that just like Java, C++ also limits the scope of variables to the blocks that are being
+engaged. Therefore, if there is a variable being initialized within a block of a function, then
+that var is only applicable within that block and with respect to that function.
+General variables can have general scopes - for instance those that are initialized within the
+int main method and main body of the program. Also NOTE that just like Java, two vars with the
+same name can be initialized within the same source code so long as they are isolated within
+their general or local blocks
+
+
+FURTHER CONDITIONALS
+
+Other conditional statmetns can be written inccluding:
+ -switch
+    - General format is:
+          - int (main) {
+            std::cout << "Please enter a number from 1 to 5:" //whatever main method functions and paramenters are needed
+            std::cin >> number
+            ...                                             // here you could include std::cout or std::cin
+                switch (number *value) {                   //value here could be the input of the user for instance
+                  case  *integral constant1: (this is also known as the "case label")
+                    statement sequence1
+                    break;                                  // break keyword is option but actually required in order to make sure control flow is
+                                                            correct. otherwise, the program will check if case 1 is the case but then just move
+                                                            forward to case 2, case 3- when the break statement is there it "pulls the program" out of the
+                                                            local blocks back to the general body.
+                  case  *integral constant2:                // integral constant will be, for instance, an input value
+                                                            // NOTE IMPORTANTLY the case label is FORBIDDEN from being a
+                                                            non-CONST value. In other words it can be a literal value or a const symbolic value
+                                                            but it must be constant. non-const value types like string, char etc are not accepted.
+                    statement sequence2
+                    break;                                  // break temporarily breaks the switch to start next option
+
+                  and so on until...                          // continue with as many switch values as reuqired
+                  default:                                  // just like the break keyword, the default keyword "pulls out" the program from the local blocks- in
+                                                            this case, if the local case options have beenextinguished and not fulfilled any conditions.
+                    default statement sequence              // which can include a limited if-else statement for instance. or sever if-elses//
+                   }
+            }
+ -conditional operator
+
+ -do-while
+
+
+ -for ...
+
+Switch statements have two limitations in contrast to the if-else statements:
+  1. there is a need for the switch statement needs to be an integral expression.
+      Meaning that it is an integral numbered list of options or at least a literal values list of options
+      being switched i.e. in example above, case 1, case 2, case 3, etc.... is equivalent to what an if-else statement
+      would list as : if (x == 1) then... if (x == 2) then ...
+  2. Remember there is a limit on non-const variable types when outlining the case labels.
+
+NOTE Switch statemtn is more limited but uses up less memory since it relies on integral constants instead of
+customised vars .
+
+CONDITIONAL OPERATORS
+In C++ there is a simpler form that syntactically expresses simple if-else conditionals. it can do so by way
+of reducing the relatively more complex form of the if-else statements into a single line statement.
+
+This is done using the following syntax:
+(conidition)? expression1 : expression2;
+
+for example the simple if-else can be constructed as a cond-op single liner:
+
+if (z != 0)
+    x = y/z;   // computes so long as z = more than 0
+else
+    x = 0;    //avoids program error by providing 0 value in case of z=0
+
+BECOMES:
+
+x = (z !=0) ? y/z : 0;    // simpler version for time saving
+
+DO-WHILE
+
+Simple is based on a while loop .... so long as the WHILE condition is true, then the loop
+is fulfilled and continues. When the condition is broken, the loop breaks. Syntax:
+
+do
+  statement
+
+while
+  (condition);
+
+
+In reality, using a simpler while - else construct will save time and memory for the algos since the
+while option in this case will be only top-checking, not bottom-checking as well (since the do instruction will
+take up the top-checking instruction and then the while will be taking up a bottom-checking instruction).
+
+FOR STATEMENT
+
+The for statement takes the following syntax
+
+for (intialization; condition; modification)
+    statement
+
+for (variable is INITIALIZED-make sure to give it an easy to track name like "count";
+     CONDITION is outlined - i.e. variable is given an initial condition or state / value
+     there is a MODIFICATION that changes the variables value/initial condition - usually this
+     will deploy the addition or substraction operators i.e. ++ or --)
+
+THe loop variable can be declared at the point of initialization. In which case, the variable becomes
+tied to the loop and thus the var becomes locally scoped to the loop's body (and thus the same var by
+same name can be reused in the source code outside of this local scope)
+
+Condition is boolean - it is checked BEFORE execution of the FOR loop body
+
+Modification loops the for condition with whatever modifying element it is deploying (for instance a
+simple ++ count modifier)  until the condition is satisfied (i.e. the condition boolean switches from
+true to false). Then loop breaks. NOTE a simple loop may deploy an auto operator like
+++, --, (and) && or   (or) || (not)! for instance but the modification element can actually be more
+complex:
+
+for (double d = 1000);
+      d >= 1;
+        std:cin >> d) {         // NOTE be careful not to end the for function's (args) with an ;
+                                  because it will detach the { parameters}
+        PARAMETERS/ BODY
+        }
+
+Any and even all parts of the for statement's elements (initialization, condition, modification and
+body/parameters) can be ignored.
+
+If the for statement is lacking initialization then the for statement needs to be initialized elswhere
+or it simply won't run.
+
+If the for statement is lacking the condition element then the default condition of TRUE will apply.
+if there is no BREAK or GOTO keyword, then an infinite loop ensues.
+
+Again, if there is a lacking modification element, then another part of the source code must enact the
+modification element.
+
+Ignoring the parameters of the for statment (by omitting any consequential content in the straight brackets)
+will result in an empty loop that achieves nothing. ALthough this is a shortcut way of achieving a slowdown
+in processors executing the program, especially if many of them are deployed, this is generally not encouraged
+as a practice because it is non-portable (different computers will produce different slowdown speeds) and ALso
+may even encourage an error from the compiler which just decides to skip the loop entirely.
+
+For and whil loops are fundamentally interchangeable as in Java.
+
+/****************************FUNCTIONS*********************************/
+As with java, the funciton is a core element of the source code that is re-usable and
+which is fundamentally block-based.
+As with Java, the function can deploy (arguments) and certain pre-written libraries with
+pre-written function prototypes can be imported using hte #include <*libraryName> style.
+As with Java, aa void function funamentally returns a 0 as a successful return on the main method
+executing it- it is therefore useful for such things as printing statements to the console.
+
+Example:
+
+#include <iostream>
+#include <cmath>
+another popular one is #include <algorithm>
+another one is #<ctime>
+<cctype>  deals with character types, upper case lower case etc.
+<cstdlib> c standard library
+
+functionName(parameters)
+
+note that some pre-written function prototypes imported (for example sqrt for square root calculation, do
+not require arguments. Some imported functions actually prohibit arguments- for example the rand core function
+which generates a pseudorandom number under pre-defined conditions. srand will produce another empty parameter
+function generating a string of random numbers Another prominent example is the exit pre-written function)
+
+Just as with Java, fucntions can be overloaded via multiple parameter types.
+
+Fucntions have the standard syntax :
+
+value TYPE declaration of the function computation  | NAME of the function  | ARGUMENTS including type of the value that is required for the function  and name of this value
+EG:
+double square_root(*args double x) {
+Body of the function
+}
+NOTE functions are the building blocks of the source code. They are intended to created blocks of code for compilation
+which is essentially object and class construction followed by execution, which enables to objects to be animated and take actions.
+
+Functions can thus be more connstructive or executable. In the case that a function executes based on the constructed information that
+an earlier function has set out, the way that these functions' parameters (their "content") are given from construction to executable is
+called "PARAMETER PASSING". Parameter passing is the process of "PASSING" the construction funcitons parameters (it's characteristic info)
+to the executable function which makes "use" of them.
+
+
+
+/****************************EXECUTION CONTROL*********************************/
+
+
+
+
+/****************************EXECUTION CONTROL*********************************/
+
+
+
+
+/****************************EXECUTION CONTROL*********************************/
+
+
+
+
+/****************************EXECUTION CONTROL*********************************/
